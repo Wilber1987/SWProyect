@@ -1,0 +1,22 @@
+body{
+   
+}
+.CardStyleComponent,
+ .CardStyleComponent thead, 
+ .CardStyleComponent tbody,
+  .CardStyleComponent tfoot{
+    display: block;
+   
+}
+.CardStyleComponent tr{
+    display: block;
+    width: 90%;
+    margin: 10px;
+    border: 1px solid #888888;
+    border-radius: 0.2cm;
+    overflow: hidden;
+    padding: 10px;
+}
+.CardStyleComponent tr td{
+    display: inline-block;
+}
