@@ -21,7 +21,7 @@ function OnLoad() {
 }
 function StartMonsterList(){
     var Table = CreateTable({TableId:"TableData", CardStyle:true});
-    let ApiUrlUpdate =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
+    let ApiUrlUpdate =  "http://localhost/SWPROYECT/PHPApi/ApiSWPostUpdateMonster.php";
     let ApiUrlCreate =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     let ApiUrlDelete =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     let ApiUrlSelect =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
@@ -42,7 +42,6 @@ function StartMonsterList(){
     xhr.open('GET', url)
     xhr.addEventListener('load', (data) => {
         const dataJSON = JSON.parse(data.target.response); 
-        //console.log(dataJSON.Monsters);    
         DrawTable(dataJSON.Monsters, Config)
         Body.appendChild(Table);       
     })

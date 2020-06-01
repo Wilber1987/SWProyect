@@ -393,7 +393,11 @@ function UpdateElement(Data) {
       prop = Object.keys(Data.DataElement)[index];
       ArrayObject[prop] = GetObj(prop).value;
     }    
-    DrawTable(ArrayList,Data.Config,Data.TableId);
+    if (Data.Config.Options.EditOptions.ApiUrlUpdate) {
+        UpdateArrayForApi(ArrayObject,Data.Config, Data.TableId);
+    }else{
+        DrawTable(ArrayList,Data.Config,Data.TableId);
+    }    
     if (Data.Config.FormName) {
         modalFunction(Data.Config.FormName)
     } else{       
@@ -438,3 +442,19 @@ function  FilterArrayForApi(Param, Config, TableId){
     })
     xhr.send() 
 }
+
+function  UpdateArrayForApi(UpdateObject, Config, TableId){    
+    var url =  url = Config.Options.EditOptions.ApiUrlUpdate;
+    var xhr = new XMLHttpRequest(); xhr.open("POST", url, true); 
+   // xhr.setRequestHeader("Content-Type",  'multipart/form-data');//application/json
+    xhr.setRequestHeader("Content-Type",  'application/json');//application/json
+    xhr.onreadystatechange = function(data) { 
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
+        {        
+            var dataJson = JSON.parse(data.target.response); 
+            DrawTable(ArrayList, Config, TableId);
+        } 
+    } 
+    xhr.send(JSON.stringify(UpdateObject));
+}
+
