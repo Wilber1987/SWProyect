@@ -23,13 +23,14 @@ function StartMonsterList(){
     var Table = CreateTable({TableId:"TableData", CardStyle:true});
     var Config = {
         Table: Table,
-        Options: true,
-        Show: true  
+        Options: {
+            Show: true, ShowOptions:{Modal: "ShowData"}  , Edit: true
+        },
     };
     let xhr
     if (window.XMLHttpRequest) xhr = new XMLHttpRequest()
     else xhr = new ActiveXObject("Microsoft.XMLHTTP") 
-    url = "http://localhost:8820/SWPROYECT/PHPApi/ApiSWGetMonster.php";
+    url = "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     xhr.open('GET', url)
     xhr.addEventListener('load', (data) => {
         const dataJSON = JSON.parse(data.target.response); 
@@ -37,6 +38,5 @@ function StartMonsterList(){
         DrawTable(dataJSON.Monsters, Config)
         Body.appendChild(Table);       
     })
-    xhr.send()   
-    
+    xhr.send() 
 }

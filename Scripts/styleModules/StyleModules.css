@@ -18,5 +18,40 @@ body{
     padding: 10px;
 }
 .CardStyleComponent tr td{
-    display: inline-block;
+    display: block;
+}
+
+
+
+
+/*MODAL STYLES*/
+
+.ModalContent {
+    opacity: 0;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    width: 100%;
+    position: fixed !important;
+    top: 0px !important;
+    left: 0px !important;
+    bottom: 0px !important;
+    transition: all linear 1s;
+    box-shadow: 0 0px 1px 0px #000;
+    z-index: 200 !important;
+    overflow-y: auto;
+    padding-bottom: 50px;   
+}
+
+.Container {
+    display: block;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 50px;
+    background-color: #fff;
+    width: 70%;
+    max-height: 800px;
+    overflow-y: auto;
+    padding: 20px;
+    min-height: 200px;
+    border-radius: 5px;
 }

@@ -1,7 +1,8 @@
 <?php
     header("Access-Control-Allow-Origin: *");
     $pMysqli = new mysqli('localhost','root','','sw_proyect');   
-    $query = "SELECT id, name, element, archetype, base_stars, can_awaken, leader_skill  FROM monster";   
+    $query = "SELECT id, name, element, archetype, base_stars, can_awaken, leader_skill 
+         FROM monster Limit 20";   
   
     $JsonArray = array();
     if ($pMysqli->multi_query($query)) { 
