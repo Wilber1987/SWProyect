@@ -1,8 +1,15 @@
 <?php
     header("Access-Control-Allow-Origin: *");
-    $pMysqli = new mysqli('localhost','root','','sw_proyect');   
+    $pMysqli = new mysqli('localhost','root','','sw_proyect');
+    if(isset($_GET["param"])){
+        $Param =  $_GET["param"]; 
+    }else{
+        $Param = "";
+    }
+
     $query = "SELECT id, name, element, archetype, base_stars, can_awaken, leader_skill 
-         FROM monster Limit 20";   
+         FROM monster 
+         where name like '%$Param%' Limit 20";   
   
     $JsonArray = array();
     if ($pMysqli->multi_query($query)) { 

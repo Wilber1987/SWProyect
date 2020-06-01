@@ -21,10 +21,18 @@ function OnLoad() {
 }
 function StartMonsterList(){
     var Table = CreateTable({TableId:"TableData", CardStyle:true});
+    let ApiUrlUpdate =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
+    let ApiUrlCreate =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
+    let ApiUrlDelete =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
+    let ApiUrlSelect =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     var Config = {
         Table: Table,
         Options: {
-            Show: true, ShowOptions:{Modal: "ShowData"}  , Edit: true
+            ApiSelect: {ApiUrlSelect : ApiUrlSelect, ResponseName: "Monsters"},            
+            Show: true, 
+            ShowOptions:{FormName: false} ,
+            Edit: true,
+            EditOptions:{FormName: false, ApiUrlUpdate: ApiUrlUpdate}
         },
     };
     let xhr

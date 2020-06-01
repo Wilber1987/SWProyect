@@ -59,9 +59,9 @@ function DrawTable(List, Config, TableId = null) {
         tbody = document.querySelector("#" + TableId + " tbody");
     }
    
-    if (tbody.parentNode.querySelector("tOptions")) {        
+    if (tbody.parentNode.querySelector("tOptions").innerHTML == "") {        
         var tOptions = tbody.parentNode.querySelector("tOptions");
-        tOptions.innerHTML = "";
+        //tOptions.innerHTML = "";
         var input = CreateInput({type:"text", placeholder:"Search"});  
         var BTNinput = CreateInput({type:"button", value:"Search"});      
         input.addEventListener('change',
@@ -163,26 +163,31 @@ function DrawTable(List, Config, TableId = null) {
 function FilterInList(ArrayList, Param, Config, TableId) {
    if (Param != "") {
         var ListArray = ArrayList.filter(
-            element => element.name == Param
+            element => element.name.includes(Param)
         );
-        DrawTable(ListArray, Config, TableId);
+        if (ListArray.length == 0) {
+            if(Config.Options.ApiSelect.ApiUrlSelect){
+                FilterArrayForApi(Param, Config, TableId)
+            }
+        }else {
+            DrawTable(ListArray, Config, TableId);
+        }      
    }else{
         DrawTable(ArrayList, Config, TableId);
    }
 }
-function ShowElement(Data){   
-
+function ShowElement(Data){  
     var Form;  
-    if (Data.Config.FormName) {
-        Form = document.getElementById(Data.Config.FormName).querySelectorAll(".FormControl"); 
-        if(Data.Config.FormName){
+    if (Data.Config.Options.ShowOptions.FormName) {
+        Form = document.getElementById(Data.Config.Options.ShowOptions.FormName).querySelectorAll(".FormControl"); 
+        if(Data.Config.Options.ShowOptions.FormName){
             var UpdateData = {
                 Index:Data.Index,
                 Config:Data.Config,
                 DataElement:Data.DataElement,
                 TableId:Data.TableId
             }           
-            var control = GetObj(Data.Config.FormName).querySelector(".BtnUpdate");
+            var control = GetObj(Data.Config.Options.ShowOptions.FormName).querySelector(".BtnUpdate");
             control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
         }   
         var index = 0;
@@ -211,7 +216,7 @@ function ShowElement(Data){
             } 
             index++;
         } 
-        modalFunction(Data.Config.FormName)      
+        modalFunction(Data.Config.Options.ShowOptions.FormName)      
     }else{     
         CreateShowForm(Data);
     }  
@@ -255,16 +260,16 @@ function InicializeShowTable(Config) {
 
 function EditElement(Data) {  
     var Form;  
-    if (Data.Config.ShowFormName) {
-        Form = document.getElementById(Data.Config.FormName).querySelectorAll(".FormControl"); 
-        if(Data.Config.FormName){
+    if (Data.Config.Options.EditOptions.FormName) {
+        Form = document.getElementById(Data.Config.Options.EditOptions.FormName).querySelectorAll(".FormControl"); 
+        if(Data.Config.Options.EditOptions.FormName){
             var UpdateData = {
                 Index:Data.Index,
                 Config:Data.Config,
                 DataElement:Data.DataElement,
                 TableId:Data.TableId
             }           
-            var control = GetObj(Data.Config.FormName).querySelector(".BtnUpdate");
+            var control = GetObj(Data.Config.Options.EditOptions.FormName).querySelector(".BtnUpdate");
             control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
         }   
         var index = 0;
@@ -293,7 +298,7 @@ function EditElement(Data) {
             } 
             index++;
         } 
-        modalFunction(Data.Config.FormName)      
+        modalFunction(Data.Config.Options.EditOptions.FormName)      
     }else{     
         CreateForm(Data);
     }      
@@ -383,9 +388,10 @@ function CreateShowForm(Data) {
 
 
 function UpdateElement(Data) {   
+    ArrayObject = ArrayList.find(element => element.id_ = Data.DataElement.id_);
     for (let index = 0; index < Object.keys(Data.DataElement).length; index++) {
       prop = Object.keys(Data.DataElement)[index];
-      ArrayList[Data.Index][prop] = GetObj(prop).value;
+      ArrayObject[prop] = GetObj(prop).value;
     }    
     DrawTable(ArrayList,Data.Config,Data.TableId);
     if (Data.Config.FormName) {
@@ -415,4 +421,20 @@ function modalFunction(DivModal) {
       ventanaM.style.opacity = 0;
       ventanaM.style.pointerEvents = "none";
     }
+}
+
+
+//CRUDDDDDDDD 
+function  FilterArrayForApi(Param, Config, TableId){
+    let xhr
+    if (window.XMLHttpRequest) xhr = new XMLHttpRequest()
+    else xhr = new ActiveXObject("Microsoft.XMLHTTP") 
+    //AJUSTAR A API
+    url = Config.Options.ApiSelect.ApiUrlSelect + "/?param=" + Param;
+    xhr.open('GET', url)
+    xhr.addEventListener('load', (data) => {
+        const dataJSON = JSON.parse(data.target.response);
+        DrawTable(dataJSON[Config.Options.ApiSelect.ResponseName], Config, TableId);
+    })
+    xhr.send() 
 }
