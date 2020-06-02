@@ -8,6 +8,7 @@ body{
     display: block;
    
 }
+
 .CardStyleComponent tr{
     display: block;
     width: 90%;
@@ -19,7 +20,39 @@ body{
 }
 .CardStyleComponent tr td{
     display: block;
+    margin: 5px;
 }
+.CardStyleComponent tr td label{
+    font-weight: bold;
+}
+.CardStyleComponent tr td[name=img]{
+   float: left;
+   height: 150px;
+   width: 150px;
+   border: #3c7ffc solid 2px;
+   border-radius: 0.2cm;
+   overflow: hidden;
+}
+.CardStyleComponent tr td img{    
+    height: 150px;
+    width: 150px;
+ }
+.toptions input[type=text]{
+     width: calc(75% - 10px);
+     margin: 0px;
+     padding: 5px;
+     display: inline-block;
+     border: #aaaaaa solid 1px;
+ }
+.toptions input[type=button]{
+    width: calc(25% - 10px);
+    margin: 0px;
+    padding: 5px;
+    border: #3c7ffc solid 2px;
+    display: inline-block;
+}
+
+
 
 
 
@@ -42,7 +75,7 @@ body{
     padding-bottom: 50px;   
 }
 
-.Container {
+.ContainerForm {
     display: block;
     overflow: hidden;
     margin: auto;
@@ -55,13 +88,34 @@ body{
     min-height: 200px;
     border-radius: 5px;
 }
+.GroupForm{
+    width: 100%;
+    margin: 10px;
+    overflow: hidden;
+}
+.GroupForm div {
+    float: left;
+    width: calc(50% - 10px);   
+    margin: 5px;
+    overflow: hidden;
+}
+.GroupForm div input {   
+    display: block;
+    width: calc(100% - 10px);
+    border: none;
+    border-bottom: 2px solid #3c7ffc;
+    padding: 5px;
+}
 @media(max-width: 600px){  
     .ModalContent {  padding-bottom: 0px;  }
-    .Container { 
+    .ContainerForm { 
         width: calc(100% - 40px);
         height:  calc(100% - 40px);
         margin-top: 0px;
         border-radius: 0px;
         max-height: 2000px;        
+    }
+    .GroupForm div {
+        width: calc(100% - 10px);   
     }
 }

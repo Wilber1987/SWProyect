@@ -9,11 +9,8 @@ class ConfigTable{
     constructor(Config) {        
         this.Table = Config.Table;
         this.Options = Config.Options;
-        this.Del = Config.Del;
-        this.Edit = Config.Edit;
-        this.Show = Config.Show;
-        this.Select = Config.Select;
-        this.FormName = Config.FormName;
+        this.CardStyle = Config.CardStyle;  
+        this.TableContainer = Config.TableContainer;      
     }
 }
 function CreateStringNode(string) {
@@ -22,7 +19,7 @@ function CreateStringNode(string) {
 }
 function CreateInput(Data) {
     var InputForRT = document.createElement("input");
-    InputForRT.className = Data.class;
+    InputForRT.className = Data.className;
     InputForRT.type = Data.type;
     if ( Data.type != 'text') {
         InputForRT.value = Data.value;
@@ -61,7 +58,7 @@ function DrawTable(List, Config, TableId = null) {
    
     if (tbody.parentNode.querySelector("tOptions").innerHTML == "") {        
         var tOptions = tbody.parentNode.querySelector("tOptions");
-        //tOptions.innerHTML = "";
+        tOptions.className = "toptions";
         var input = CreateInput({type:"text", placeholder:"Search"});  
         var BTNinput = CreateInput({type:"button", value:"Search"});      
         input.addEventListener('change',
@@ -96,7 +93,7 @@ function DrawTable(List, Config, TableId = null) {
     for (var i = 0; i < ArrayList.length; i++) {
         var row = tbody.insertRow(i);
         for (var Propiedad in ArrayList[i]) {        
-          if (Propiedad.includes("id")) {
+          if (Propiedad.includes("id_")) {
             var TdForRow = document.createElement("td");
             TdForRow.style.display = 'none';
             TdForRow.setAttribute('name', Propiedad);
@@ -104,14 +101,36 @@ function DrawTable(List, Config, TableId = null) {
             row.appendChild(TdForRow);
           } else if (Propiedad.includes("img")) {
             var TdForRow = document.createElement("td");
-            TdForRow.style.display = 'none';
+            //TdForRow.style.display = 'none';
             TdForRow.setAttribute('name', Propiedad);
             TdForRow.append(CreateStringNode(`<img src="${ArrayList[i][Propiedad]}"></img>`));
             row.appendChild(TdForRow);
-          } else {
+          }else if (Propiedad.includes("video")) {
+            var TdForRow = document.createElement("td");
+            TdForRow.style.display = 'block';
+            TdForRow.style.width = '100%';
+            TdForRow.setAttribute('name', Propiedad);
+            TdForRow.append(CreateStringNode(
+                `<iframe style="widht:100%;" src="${ArrayList[i][Propiedad]}"></iframe>`
+            ));
+            row.appendChild(TdForRow);
+          } else if (Propiedad.includes("hiddenList")) {
+            var TdForRow = document.createElement("td");
+            TdForRow.style.display = 'none';
+            TdForRow.setAttribute('name', Propiedad);
+            TdForRow.append(CreateStringNode(
+                `<hidden  value="${ArrayList[i][Propiedad]}">`
+            ));
+            row.appendChild(TdForRow);
+          } 
+          else {
             var TdForRow = document.createElement("td");
             TdForRow.setAttribute('name', Propiedad);
-            TdForRow.innerHTML = ArrayList[i][Propiedad];
+            if (Config.CardStyle == true) {
+                TdForRow.innerHTML =  Propiedad + ": <label>" + ArrayList[i][Propiedad] + "</label>";
+            }else {
+                TdForRow.innerHTML = "<label>" + ArrayList[i][Propiedad] + "</label>";
+            }
             row.appendChild(TdForRow);
           }
         }
@@ -158,12 +177,24 @@ function DrawTable(List, Config, TableId = null) {
             }
            row.appendChild(tdForInput);
         }
-    }      
+    }   
+    if (Config.TableContainer) {
+        GetObj(TableContainer).append(Table);
+    }   
 }
 function FilterInList(ArrayList, Param, Config, TableId) {
    if (Param != "") {
-        var ListArray = ArrayList.filter(
-            element => element.name.includes(Param)
+        // var ListArray = ArrayList.filter(
+        //     element => element.name.includes(Param)
+        // );
+        var ListArray = ArrayList.filter(function (element) {
+                //element => element.name.includes(Param)
+                for (var key in element) {
+                    if (element[key].includes(Param)) {
+                        return element;                                                
+                    }
+                }
+            }
         );
         if (ListArray.length == 0) {
             if(Config.Options.ApiSelect.ApiUrlSelect){
@@ -311,10 +342,10 @@ function CreateForm(Data) {
     FormContainer.className = 'ModalContent';
     FormContainer.id = "TempForm";
     var Form = document.createElement('div');
-    Form.className = 'Container';
+    Form.className = 'ContainerForm';
     var Header = document.createElement('div');
     var ControlContainer = document.createElement('div');
-    ControlContainer.className = 'GrupForm';   
+    ControlContainer.className = 'GroupForm';   
     for (var Prop in Data.DataElement) {
         var DivContainer = document.createElement('div');
         var ControlLabel = document.createElement('label');
@@ -330,7 +361,7 @@ function CreateForm(Data) {
         ControlContainer.append(DivContainer);
     }
     var ActionsContainer = document.createElement('div');
-    ActionsContainer.className = 'GrupForm';
+    ActionsContainer.className = 'GroupForm';
     var InputSave = CreateInput({type:'button',value:'Guardar'});
     var UpdateData = {
         Index:Data.Index,
@@ -356,18 +387,45 @@ function CreateShowForm(Data) {
     FormContainer.className = 'ModalContent';
     FormContainer.id = "TempForm";
     var Form = document.createElement('div');
-    Form.className = 'Container';
+    Form.className = 'ContainerForm';
     var Header = document.createElement('div');
     var ControlContainer = document.createElement('div');
-    ControlContainer.className = 'GrupForm';   
+    ControlContainer.className = 'GroupForm';   
     for (var Prop in Data.DataElement) {
         var DivContainer = document.createElement('div');
         var ControlLabel = document.createElement('label');
-        ControlLabel.innerText = Prop +": ";
-        var ControlInput = document.createElement('label');
-        ControlInput.id = Prop;
-        ControlInput.innerText = Data.DataElement[Prop];
-        ControlInput.className = 'FormControl';
+        ControlLabel.innerText = Prop +": ";         
+        if (Prop.includes("img")) {
+            ControlLabel.style.display = 'none';
+            var ControlInput = document.createElement('img');
+            ControlInput.id = Prop;
+            ControlInput.src = Data.DataElement[Prop];
+            //ControlInput.className = 'FormControl';
+        }else if (Prop.includes("video")) {
+            ControlLabel.style.display = 'none';
+            var ControlInput = document.createElement('iframe');
+            ControlInput.id = Prop;
+            ControlInput.src = Data.DataElement[Prop];
+            //ControlInput.className = 'FormControl';
+        }else if (Prop.includes("List")) {
+            ControlLabel.style.display = 'none';            
+            var ControlInput = CreateTable({TableId:Prop+"Table", CardStyle:true});
+            DivContainer.style.width = '100%';
+            DivContainer.className = 'Acordeon';
+            ControlInput.id = Prop;
+            //ajustar a la necesidad de la lista
+            var ConfigPropList = {
+                Table: ControlInput,
+                CardStyle: true,
+            } 
+            DrawTable(JSON.parse(Data.DataElement[Prop]), ConfigPropList)
+            //ControlInput.className = 'FormControl';
+        } else  {
+            var ControlInput = document.createElement('label');
+            ControlInput.id = Prop;
+            ControlInput.innerText = Data.DataElement[Prop];
+            ControlInput.className = 'FormControl';
+        }       
         if (Prop.includes("id_")) {
             DivContainer.hidden = true;
         }
@@ -375,7 +433,7 @@ function CreateShowForm(Data) {
         ControlContainer.append(DivContainer);
     }
     var ActionsContainer = document.createElement('div');
-    ActionsContainer.className = 'GrupForm';
+    ActionsContainer.className = 'GroupForm';
     var InputClose = CreateInput({type:'button',value:'Cerrar'});   
     InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");
     ActionsContainer.appendChild(InputClose);

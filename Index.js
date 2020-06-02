@@ -27,6 +27,8 @@ function StartMonsterList(){
     let ApiUrlSelect =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     var Config = {
         Table: Table,
+        CardStyle: true, 
+        TableContainer: false,
         Options: {
             ApiSelect: {ApiUrlSelect : ApiUrlSelect, ResponseName: "Monsters"},            
             Show: true, 
@@ -37,9 +39,8 @@ function StartMonsterList(){
     };
     let xhr
     if (window.XMLHttpRequest) xhr = new XMLHttpRequest()
-    else xhr = new ActiveXObject("Microsoft.XMLHTTP") 
-    url = "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
-    xhr.open('GET', url)
+    else xhr = new ActiveXObject("Microsoft.XMLHTTP")   
+    xhr.open('GET', ApiUrlSelect)
     xhr.addEventListener('load', (data) => {
         const dataJSON = JSON.parse(data.target.response); 
         DrawTable(dataJSON.Monsters, Config)
