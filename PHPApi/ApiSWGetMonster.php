@@ -6,13 +6,21 @@
     }else{
         $Param = "";
     }
-
-    $query = "SELECT id, name, element, archetype, base_stars, can_awaken, leader_skill , image_filename as img
-         FROM monster 
-         where name like '%$Param%' Limit 10";   
-  
+    $query = "SELECT id, name, 
+        element, archetype,
+        base_stars, can_awaken, 
+        leader_skill , image_filename as img,
+        max_lvl_hp,
+        max_lvl_attack,
+        max_lvl_defense,
+        speed,
+        crit_rate,
+        crit_damage,
+        resistance,
+        accuracy
+        FROM monster 
+        where name like '%$Param%' Limit 10";     
     $JsonArray = array();
-
     $result = $pMysqli->query($query);
     $JsonArray = array();
     foreach ($result as $row ) {
@@ -30,11 +38,19 @@
         }else{
             $jsonObject["leader_skill"]= "null";
         } 
+        $jsonObject["base_hp_hiddenInTable"] = $row['max_lvl_hp'];                     
+        $jsonObject["base_attack_hiddenInTable"] = $row['max_lvl_attack'];
+        $jsonObject["base_defense_hiddenInTable"] = $row['max_lvl_defense'];
+        $jsonObject["speed_hiddenInTable"] = $row['speed'];
+        $jsonObject["crit_rate_hiddenInTable"] = $row['crit_rate'];
+        $jsonObject["crit_damage_hiddenInTable"] = $row['crit_damage'];
+        $jsonObject["resistance_hiddenInTable"] = $row['resistance'];
+        $jsonObject["accuracy_hiddenInTable"] = $row['accuracy'];
+
         $IdMonster =  $jsonObject['id_'];
         $queryVideos = "SELECT id_video, url_video, categoria ,id_monster FROM tbl_videos where id_monster = $IdMonster and categoria = 'RTA'";
         $resultVideos = $pMysqli->query($queryVideos);
         $JsonArrayVideos = array();
-        //foreach ( $c->query('SELECT user,host FROM mysql.user') as $fila ) {
         foreach ($resultVideos as $fila ) {
             $jsonObjectVideo = array(); 
             $jsonObjectVideo['categoria'] = $fila['categoria'];
@@ -44,7 +60,7 @@
 
            $JsonArrayVideos[] = $jsonObjectVideo;
         } 
-        $jsonObject["hiddenList"]= json_encode($JsonArrayVideos);               
+        $jsonObject["RTA_List_hiddenInTable"]= json_encode($JsonArrayVideos);               
 
         $JsonArray[] = $jsonObject;
     }     

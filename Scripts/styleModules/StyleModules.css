@@ -6,17 +6,21 @@ body{
  .CardStyleComponent tbody,
   .CardStyleComponent tfoot{
     display: block;
+    position: relative;
    
 }
 
 .CardStyleComponent tr{
-    display: block;
-    width: 90%;
+    display: inline-block;
+    width: 30%;
     margin: 10px;
     border: 1px solid #888888;
     border-radius: 0.2cm;
     overflow: hidden;
     padding: 10px;
+    max-width: 300px;
+    height: 250px;
+    position: relative;
 }
 .CardStyleComponent tr td{
     display: block;
@@ -51,9 +55,58 @@ body{
     border: #3c7ffc solid 2px;
     display: inline-block;
 }
+.CardStyleComponent .TdOptions{
+    display: block;
+    width: calc(90% - 20px);
+    text-align: center;
+    margin-top: 10px;
+    clear: left;
+    position: absolute;
+    bottom: 0;
+    margin: 10px;
+}
+
+@media(max-width: 600px){  
+    .CardStyleComponent tr{     
+        width: 90%;     
+        max-width: 90%;  
+        display: block; 
+    }
+}
+
+/* BOTONES */
+
+.BtnAlert, .BtnPrimary, 
+.BtnSuccess, .BtnSecundary
+ {
+    margin: 5PX;
+    font-weight: bold;
+    border:none;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    min-width: 100px;   
+    border-radius: 0.15cm;
+
+}
 
 
-
+.BtnPrimary {
+    color: #fff;
+    background-color:#007bff;
+}
+.BtnAlert {
+    color: #fff;
+    background-color: #dc3545;
+}
+.BtnSuccess {
+    color: #fff;
+    background-color: #28a745;
+}
+.BtnSecundary {
+    color: #fff;
+    background-color: #17a2b8;
+}
 
 
 
@@ -93,18 +146,31 @@ body{
     margin: 10px;
     overflow: hidden;
 }
-.GroupForm div {
+.GroupForm div{
+    float: left;
+    width: calc(50% - 10px);   
+    margin: 5px;
+    overflow: hidden;
+    max-width: 200px;
+}
+.GroupForm .divControl {
     float: left;
     width: calc(50% - 10px);   
     margin: 5px;
     overflow: hidden;
 }
-.GroupForm div input {   
+.GroupForm .divControl input {   
     display: block;
     width: calc(100% - 10px);
     border: none;
     border-bottom: 2px solid #3c7ffc;
     padding: 5px;
+}
+.ImageDetail{
+    width: 98%;    
+    border: 2px solid #3c7ffc;
+    overflow: hidden;
+    border-radius: 0.2cm ;
 }
 @media(max-width: 600px){  
     .ModalContent {  padding-bottom: 0px;  }
@@ -115,7 +181,7 @@ body{
         border-radius: 0px;
         max-height: 2000px;        
     }
-    .GroupForm div {
+    .GroupForm .divControl {
         width: calc(100% - 10px);   
     }
 }

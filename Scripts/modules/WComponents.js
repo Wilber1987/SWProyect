@@ -114,7 +114,7 @@ function DrawTable(List, Config, TableId = null) {
                 `<iframe style="widht:100%;" src="${ArrayList[i][Propiedad]}"></iframe>`
             ));
             row.appendChild(TdForRow);
-          } else if (Propiedad.includes("hiddenList")) {
+          } else if (Propiedad.includes("_hiddenInTable")) {
             var TdForRow = document.createElement("td");
             TdForRow.style.display = 'none';
             TdForRow.setAttribute('name', Propiedad);
@@ -136,8 +136,9 @@ function DrawTable(List, Config, TableId = null) {
         }
         if (Config.Options) {
             var tdForInput = document.createElement("td");
+            tdForInput.className = "TdOptions";
             if (Config.Options.Del) {
-                var InputForRT = CreateInput({type:'button',value:'Del'}); 
+                var InputForRT = CreateInput({type:'button',value:'Del',className: "BtnAlert"}); 
                 var DelData = {
                     Index:i,
                     Config:Config,
@@ -147,7 +148,7 @@ function DrawTable(List, Config, TableId = null) {
                 tdForInput.appendChild(InputForRT);            
            }
            if (Config.Options.Edit) {                          
-                var InputForRT = CreateInput({type:'button',value:'Edit'});
+                var InputForRT = CreateInput({type:'button',value:'Edit',className: "BtnPrimary"});
                 var EditData = {
                     Index:i,
                     Config:Config,
@@ -158,14 +159,14 @@ function DrawTable(List, Config, TableId = null) {
                 tdForInput.appendChild(InputForRT);                           
             }
             if (Config.Options.Select) {
-                var InputForRT = CreateInput({type:'button',value:'Select'});
+                var InputForRT = CreateInput({type:'button',value:'Select',className: "BtnSuccess"});
                 InputForRT.addEventListener('click',function(e) {
                     
                 })    
                 tdForInput.appendChild(InputForRT);               
             }            
             if (Config.Options.Show) {                
-                const InputForRT = CreateInput({type:'button',value:'Show'});  
+                const InputForRT = CreateInput({type:'button',value:'Show',className: "BtnSecundary"});  
                 ShowData = {
                     Index:i,
                     Config:Config,
@@ -196,9 +197,13 @@ function FilterInList(ArrayList, Param, Config, TableId) {
                 }
             }
         );
-        if (ListArray.length == 0) {
-            if(Config.Options.ApiSelect.ApiUrlSelect){
-                FilterArrayForApi(Param, Config, TableId)
+        if (ListArray.length == 0) {          
+            if(Config.Options){
+                if(Config.Options.ApiSelect){
+                    if(Config.Options.ApiSelect.ApiUrlSelect){
+                        FilterArrayForApi(Param, Config, TableId)
+                    }
+                }
             }
         }else {
             DrawTable(ListArray, Config, TableId);
@@ -293,7 +298,7 @@ function EditElement(Data) {
     var Form;  
     if (Data.Config.Options.EditOptions.FormName) {
         Form = document.getElementById(Data.Config.Options.EditOptions.FormName).querySelectorAll(".FormControl"); 
-        if(Data.Config.Options.EditOptions.FormName){
+        if(Data.hasOwnProperty(Config.Options.EditOptions.FormName)){
             var UpdateData = {
                 Index:Data.Index,
                 Config:Data.Config,
@@ -304,8 +309,7 @@ function EditElement(Data) {
             control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
         }   
         var index = 0;
-        for (var Propiedad in Data.DataElement) {
-            
+        for (var Propiedad in Data.DataElement) {            
             if (Form[index].tagName == "INPUT" || Form[index].tagName == "input") {
                 console.log(Form[index].tagName)      
                 if (Form[index].type != "button") {
@@ -348,6 +352,7 @@ function CreateForm(Data) {
     ControlContainer.className = 'GroupForm';   
     for (var Prop in Data.DataElement) {
         var DivContainer = document.createElement('div');
+        DivContainer.className = "divControl"
         var ControlLabel = document.createElement('label');
         ControlLabel.innerText = Prop +": ";
         var ControlInput = document.createElement('input');
@@ -394,10 +399,12 @@ function CreateShowForm(Data) {
     for (var Prop in Data.DataElement) {
         var DivContainer = document.createElement('div');
         var ControlLabel = document.createElement('label');
-        ControlLabel.innerText = Prop +": ";         
+        let PropDescription = Prop.replace("_hiddenInTable","");
+        ControlLabel.innerText = PropDescription +": ";         
         if (Prop.includes("img")) {
-            ControlLabel.style.display = 'none';
+            ControlLabel.style.display = 'none';            
             var ControlInput = document.createElement('img');
+            ControlInput.className = "ImageDetail";
             ControlInput.id = Prop;
             ControlInput.src = Data.DataElement[Prop];
             //ControlInput.className = 'FormControl';
@@ -411,6 +418,9 @@ function CreateShowForm(Data) {
             ControlLabel.style.display = 'none';            
             var ControlInput = CreateTable({TableId:Prop+"Table", CardStyle:true});
             DivContainer.style.width = '100%';
+            DivContainer.style.float = 'none';
+            DivContainer.style.display = 'block';
+            DivContainer.style.maxWidth = '100%';
             DivContainer.className = 'Acordeon';
             ControlInput.id = Prop;
             //ajustar a la necesidad de la lista
