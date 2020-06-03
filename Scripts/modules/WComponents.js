@@ -38,7 +38,11 @@ function CreateTable(Config) {
     if (Config.CardStyle === true) {
        Table.className = "CardStyleComponent";
     }else {
-        Table.className = Config.className;
+        if (Config.className) {
+            Table.className = Config.className;
+        }else{
+            Table.className = "TblForm";
+        }      
     }
     return Table;
 }
@@ -55,41 +59,36 @@ function DrawTable(List, Config, TableId = null) {
     }else {
         tbody = document.querySelector("#" + TableId + " tbody");
     }
-   
-    if (tbody.parentNode.querySelector("tOptions").innerHTML == "") {        
-        var tOptions = tbody.parentNode.querySelector("tOptions");
-        tOptions.className = "toptions";
-        var input = CreateInput({type:"text", placeholder:"Search"});  
-        var BTNinput = CreateInput({type:"button", value:"Search"});      
-        input.addEventListener('change',
-            function () {
-                FilterInList(List, input.value, Config, TableId);
+    if (tbody.parentNode.querySelector("tOptions")) {      
+        let Search = true;
+        if (Config.Options) {         
+            if (Config.Options.hasOwnProperty('Search')) {
+                Search = Config.Options.Search;
             }
-        )
-        BTNinput.addEventListener('click',
-            function () {
-                FilterInList(List, input.value, Config, TableId);
+        }
+        if (Search) {
+            if (tbody.parentNode.querySelector("tOptions").innerHTML == "") { 
+                var tOptions = tbody.parentNode.querySelector("tOptions");
+                tOptions.className = "toptions";
+                var input = CreateInput({type:"text", placeholder:"Search"});  
+                var BTNinput = CreateInput({type:"button", value:"Search"});      
+                input.addEventListener('change',
+                    function () {
+                        FilterInList(List, input.value, Config, TableId);
+                    }
+                )
+                BTNinput.addEventListener('click',
+                    function () {
+                        FilterInList(List, input.value, Config, TableId);
+                    }
+                )
+                tOptions.append(input, BTNinput);
             }
-        )
-        tOptions.append(input, BTNinput);
+        }        
     }
-   
     tbody.innerHTML = "";    
     //COMPONENTS OPTIONS
-    if (Config.Options) {
-        if (Config.Options.Del) {
-                   
-        }
-       if (Config.Options.Edit) {               
-                                  
-        }
-        if (Config.Options.Select) {
-                         
-        }            
-        if (Config.Options.Show) {                
-                                      
-        }       
-    }  
+     
     for (var i = 0; i < ArrayList.length; i++) {
         var row = tbody.insertRow(i);
         for (var Propiedad in ArrayList[i]) {        
@@ -108,10 +107,9 @@ function DrawTable(List, Config, TableId = null) {
           }else if (Propiedad.includes("video")) {
             var TdForRow = document.createElement("td");
             TdForRow.style.display = 'block';
-            TdForRow.style.width = '100%';
             TdForRow.setAttribute('name', Propiedad);
             TdForRow.append(CreateStringNode(
-                `<iframe style="widht:100%;" src="${ArrayList[i][Propiedad]}"></iframe>`
+                `<iframe style="width:100%;" src="${ArrayList[i][Propiedad]}"></iframe>`
             ));
             row.appendChild(TdForRow);
           } else if (Propiedad.includes("_hiddenInTable")) {
@@ -144,7 +142,8 @@ function DrawTable(List, Config, TableId = null) {
                     Config:Config,
                     TableId:TableId
                 }
-                InputForRT.setAttribute("onclick","DeleteElement("+JSON.stringify(DelData) +")");                              
+                AsigEventsDel(InputForRT, DelData)
+                //InputForRT.setAttribute("onclick","DeleteElement("+JSON.stringify(DelData) +")");                              
                 tdForInput.appendChild(InputForRT);            
            }
            if (Config.Options.Edit) {                          
@@ -154,15 +153,19 @@ function DrawTable(List, Config, TableId = null) {
                     Config:Config,
                     TableId:TableId,
                     DataElement:ArrayList[i]
-                }          
-                InputForRT.setAttribute("onclick","EditElement("+JSON.stringify(EditData) +")");
+                } 
+                AsigEventsEdit(InputForRT, EditData)         
+               // InputForRT.setAttribute("onclick","EditElement("+JSON.stringify(EditData) +")");
                 tdForInput.appendChild(InputForRT);                           
             }
             if (Config.Options.Select) {
                 var InputForRT = CreateInput({type:'button',value:'Select',className: "BtnSuccess"});
-                InputForRT.addEventListener('click',function(e) {
-                    
-                })    
+                SelectData = {           
+                    'sector': i,
+                    'holding': "", 
+                    'empresa': ""
+                }  
+                AsigEventsSelect(InputForRT, SelectData)
                 tdForInput.appendChild(InputForRT);               
             }            
             if (Config.Options.Show) {                
@@ -172,17 +175,51 @@ function DrawTable(List, Config, TableId = null) {
                     Config:Config,
                     TableId:TableId,
                     DataElement:ArrayList[i]
-                }             
-                InputForRT.setAttribute("onclick","ShowElement("+JSON.stringify(ShowData) +")");
+                }  
+                AsigEventsShow(InputForRT, ShowData)           
+                //InputForRT.setAttribute("onclick","ShowElement("+JSON.stringify(ShowData) +")");
                 tdForInput.appendChild(InputForRT);                               
             }
-           row.appendChild(tdForInput);
+            if (tdForInput.innerHTML != "") {
+                row.appendChild(tdForInput);
+            }
+          
         }
     }   
     if (Config.TableContainer) {
         GetObj(TableContainer).append(Table);
     }   
 }
+
+function AsigEventsDel(InputForRT, DelData){ 
+    InputForRT.addEventListener('click',
+        function() {
+            DeleteElement(DelData)           
+        }
+    )  
+}
+function AsigEventsEdit(InputForRT, EditData){ 
+    InputForRT.addEventListener('click',
+        function() {
+            EditElement(EditData)
+            //console.log(Data);
+        }
+    )  
+}function AsigEventsSelect(InputForRT, Data){ 
+    InputForRT.addEventListener('click',
+        function() {
+            console.log(Data);
+        }
+    )  
+}function AsigEventsShow(InputForRT, ShowData){ 
+    InputForRT.addEventListener('click',
+        function() {
+            ShowElement(ShowData)
+            //console.log(Data);
+        }
+    )  
+}
+
 function FilterInList(ArrayList, Param, Config, TableId) {
    if (Param != "") {
         // var ListArray = ArrayList.filter(
@@ -400,6 +437,9 @@ function CreateShowForm(Data) {
         var DivContainer = document.createElement('div');
         var ControlLabel = document.createElement('label');
         let PropDescription = Prop.replace("_hiddenInTable","");
+        PropDescription = PropDescription.replace("Table","");
+        PropDescription = PropDescription.replace("Card","");
+        PropDescription = PropDescription.replace(/_/g," ");
         ControlLabel.innerText = PropDescription +": ";         
         if (Prop.includes("img")) {
             ControlLabel.style.display = 'none';            
@@ -407,16 +447,19 @@ function CreateShowForm(Data) {
             ControlInput.className = "ImageDetail";
             ControlInput.id = Prop;
             ControlInput.src = Data.DataElement[Prop];
-            //ControlInput.className = 'FormControl';
+            DivContainer.append(ControlLabel,ControlInput);
+            ControlContainer.append(DivContainer);
         }else if (Prop.includes("video")) {
             ControlLabel.style.display = 'none';
             var ControlInput = document.createElement('iframe');
             ControlInput.id = Prop;
             ControlInput.src = Data.DataElement[Prop];
+            DivContainer.append(ControlLabel,ControlInput);
+            ControlContainer.append(DivContainer);
             //ControlInput.className = 'FormControl';
-        }else if (Prop.includes("List")) {
+        }else if (Prop.includes("ListTable")) {
             ControlLabel.style.display = 'none';            
-            var ControlInput = CreateTable({TableId:Prop+"Table", CardStyle:true});
+            var ControlInput = CreateTable({TableId:Prop+"Table"});
             DivContainer.style.width = '100%';
             DivContainer.style.float = 'none';
             DivContainer.style.display = 'block';
@@ -427,20 +470,60 @@ function CreateShowForm(Data) {
             var ConfigPropList = {
                 Table: ControlInput,
                 CardStyle: true,
+                Options: {
+                    Search: false
+                }
+            } 
+            //console.log(JSON.parse(Data.DataElement[Prop]));
+            DrawTable(JSON.parse(Data.DataElement[Prop]), ConfigPropList)
+            DivContainer.append(ControlLabel,ControlInput);
+            ControlContainer.append(DivContainer);
+        } else if (Prop.includes("ListCard")) {
+            ControlLabel.style.display = 'none';            
+            var ControlInput = CreateTable({TableId:Prop+"Table", CardStyle:true});
+            DivContainer.style.width = '100%';
+            DivContainer.style.float = 'none';
+            DivContainer.style.display = 'block';
+            DivContainer.style.maxWidth = '100%';
+            DivContainer.append(CreateStringNode(`
+                <div style="width:calc(100% - 20px); max-width:100%">      
+                    <label class="BtnPrimary" style="width:calc(100% - 30px);"  for="r${Prop}"> ${PropDescription}
+                    </label>
+                    <input type="radio" style="display:none" onclick="DisplayAcordeon(this.checked, 'Group${Prop}')" name="Opcion" id="r${Prop}">                    
+                </div>
+            `));
+            var DivContainerTable = document.createElement('div');
+            DivContainerTable.className = 'GroupFormAcordeon';
+            DivContainerTable.id = 'Group' + Prop;
+            
+            ControlInput.id = Prop;
+            //ajustar a la necesidad de la lista
+            var ConfigPropList = {
+                Table: ControlInput,
+                CardStyle: true,
+                Options: {
+                    Search: false
+                }
             } 
             DrawTable(JSON.parse(Data.DataElement[Prop]), ConfigPropList)
-            //ControlInput.className = 'FormControl';
-        } else  {
+            //DivContainer.append(DivContainerTable.append(ControlInput));  
+            DivContainerTable.append(ControlInput)          
+            DivContainer.append(ControlLabel,DivContainerTable);
+            ControlContainer.append(DivContainer);
+        }else  {
             var ControlInput = document.createElement('label');
             ControlInput.id = Prop;
             ControlInput.innerText = Data.DataElement[Prop];
             ControlInput.className = 'FormControl';
+            DivContainer.append(ControlLabel,ControlInput);
+            ControlContainer.append(DivContainer);
         }       
         if (Prop.includes("id_")) {
             DivContainer.hidden = true;
+            DivContainer.append(ControlLabel,ControlInput);
+            ControlContainer.append(DivContainer);
         }
-        DivContainer.append(ControlLabel,ControlInput);
-        ControlContainer.append(DivContainer);
+       
     }
     var ActionsContainer = document.createElement('div');
     ActionsContainer.className = 'GroupForm';

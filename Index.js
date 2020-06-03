@@ -11,6 +11,7 @@ function importarStyle(name) {
 }
 window.onload = OnLoad;
 importarScript("scripts/modules/WComponents.js");
+importarScript("scripts/modules/WComponentsTools.js");
 importarStyle("scripts/styleModules/StyleModules.css");
 //App scripts
 importarScript("DatabaseScripts/MonsterDatabase.js");
@@ -30,11 +31,13 @@ function StartMonsterList(){
         CardStyle: true, 
         TableContainer: false,
         Options: {
+            Search: true,
             ApiSelect: {ApiUrlSelect : ApiUrlSelect, ResponseName: "Monsters"},            
             Show: true, 
             ShowOptions:{FormName: false} ,
-            Edit: true,
-            EditOptions:{FormName: false, ApiUrlUpdate: ApiUrlUpdate}
+            Edit: false,
+            EditOptions:{FormName: false, ApiUrlUpdate: ApiUrlUpdate},
+            Select: false
         },
     };
     let xhr
