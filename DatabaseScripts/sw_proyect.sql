@@ -11,11 +11,32 @@
  Target Server Version : 100406
  File Encoding         : 65001
 
- Date: 02/06/2020 17:38:19
+ Date: 04/06/2020 11:52:57
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for build_monsters
+-- ----------------------------
+DROP TABLE IF EXISTS `build_monsters`;
+CREATE TABLE `build_monsters`  (
+  `id_build` int(10) NOT NULL,
+  `id_monster` int(10) NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id_build`) USING BTREE,
+  INDEX `bm`(`id_monster`) USING BTREE,
+  CONSTRAINT `bm` FOREIGN KEY (`id_monster`) REFERENCES `monster` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of build_monsters
+-- ----------------------------
+INSERT INTO `build_monsters` VALUES (1, 1, 'Build de prueba, util para esto y lo otro y lo otro', 'https://i.ibb.co/P6kX26L/build2.png');
+INSERT INTO `build_monsters` VALUES (2, 1, 'Build de prueba, util para esto y lo otro y lo otro', 'https://i.ibb.co/pJVVxbF/build3.png');
+INSERT INTO `build_monsters` VALUES (3, 1, 'Build de prueba, util para esto y lo otro y lo otro', 'https://i.ibb.co/KhsQtj4/build1.png');
 
 -- ----------------------------
 -- Table structure for monster
@@ -185,6 +206,15 @@ CREATE TABLE `rate_monster`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of rate_monster
+-- ----------------------------
+INSERT INTO `rate_monster` VALUES (1, 0, 'RTA', NULL);
+INSERT INTO `rate_monster` VALUES (1, 1, 'RTA', 10);
+INSERT INTO `rate_monster` VALUES (1, 1, 'Cairos', 10);
+INSERT INTO `rate_monster` VALUES (1, 1, 'Siege', 10);
+INSERT INTO `rate_monster` VALUES (1, 1, 'ArenaOfence', 10);
+
+-- ----------------------------
 -- Table structure for skill_leader
 -- ----------------------------
 DROP TABLE IF EXISTS `skill_leader`;
@@ -316,5 +346,10 @@ CREATE TABLE `users`  (
   `active` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idUser`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES (1, 'Seyfer', 'zaxscd', 'wilberj1987@gmail.com', '88078386', 'act');
 
 SET FOREIGN_KEY_CHECKS = 1;

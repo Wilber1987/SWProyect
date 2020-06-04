@@ -65,7 +65,37 @@
             $jsonObjectVideo['id_monster'] = $fila['id_monster'];
             $JsonArrayVideos[] = $jsonObjectVideo;
         }
+
+        $queryRates = "SELECT categoriaRate, AVG(Rate) as Rate 
+                       from rate_monster WHERE id_monster = $IdMonster GROUP BY categoriaRate";
+        $resultRates = $pMysqli->query($queryRates);
+        $JsonArrayRates = array();
+        foreach ($resultRates as $fila ) {
+            $jsonObjectRate = array(); 
+            $jsonObjectRate['id_monster'] = $IdMonster;
+            $jsonObjectRate['categoria'] = $fila['categoriaRate'];
+            $jsonObjectRate['Rate'] = $fila['Rate'];           
+            $JsonArrayRates[] = $jsonObjectRate;
+        }
+
+        $queryBuilds = "SELECT id_build, id_monster, descripcion as Descripcion, image as img 
+                        FROM build_monsters  WHERE id_monster = $IdMonster";
+        $resultBuilds = $pMysqli->query($queryBuilds);
+        $JsonArrayBuilds = array();
+        foreach ($resultBuilds as $fila ) {
+            $jsonObjectBuilds = array(); 
+            $jsonObjectBuilds['id_monster'] = $IdMonster;
+            $jsonObjectBuilds['id_build'] = $fila['id_build'];
+            $jsonObjectBuilds['Descripcion'] = $fila['Descripcion'];   
+            $jsonObjectBuilds['img'] = $fila['img'];           
+            $JsonArrayBuilds[] = $jsonObjectBuilds;
+        }
+
+        
+
         $jsonObject["STATS_ListTable_hiddenInTable"]= json_encode($jsonObjectFullSTATS);
+        $jsonObject["RATES_ListTable_hiddenInTable"]= json_encode($JsonArrayRates);
+        $jsonObject["BUILDS_ListCard_hiddenInTable"]= json_encode($JsonArrayBuilds);      
         $jsonObject["RTA_ListCard_hiddenInTable"]= json_encode($JsonArrayVideos);               
 
         $JsonArray[] = $jsonObject;
