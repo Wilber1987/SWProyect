@@ -15,13 +15,14 @@ importarScript("scripts/modules/WComponentsTools.js");
 importarStyle("scripts/styleModules/StyleModules.css");
 //App scripts
 importarScript("DatabaseScripts/MonsterDatabase.js");
+importarStyle("Styles/AppStyles.css");
 
 
 function OnLoad() { 
     StartMonsterList()
 }
 function StartMonsterList(){
-    var Table = CreateTable({TableId:"TableData", CardStyle:true});
+    var Table = CreateTable({TableId:"TableData", className : "CardStyleComponentSWMonster"});
     let ApiUrlUpdate =  "http://localhost/SWPROYECT/PHPApi/ApiSWPostUpdateMonster.php";
     let ApiUrlCreate =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";
     let ApiUrlDelete =  "http://localhost/SWPROYECT/PHPApi/ApiSWGetMonster.php";

@@ -109,7 +109,8 @@ function DrawTable(List, Config, TableId = null) {
             TdForRow.style.display = 'block';
             TdForRow.setAttribute('name', Propiedad);
             TdForRow.append(CreateStringNode(
-                `<iframe style="width:100%;" src="${ArrayList[i][Propiedad]}"></iframe>`
+                `<iframe style="width:100%; height:300px" 
+                allowfullscreen webkitallowfullscreen mozallowfullscreen src="${ArrayList[i][Propiedad]}"></iframe>`
             ));
             row.appendChild(TdForRow);
           } else if (Propiedad.includes("_hiddenInTable")) {
@@ -383,7 +384,7 @@ function CreateForm(Data) {
     FormContainer.className = 'ModalContent';
     FormContainer.id = "TempForm";
     var Form = document.createElement('div');
-    Form.className = 'ContainerForm';
+    Form.className = 'ContainerForm WScroll';
     var Header = document.createElement('div');
     var ControlContainer = document.createElement('div');
     ControlContainer.className = 'GroupForm';   
@@ -429,12 +430,13 @@ function CreateShowForm(Data) {
     FormContainer.className = 'ModalContent';
     FormContainer.id = "TempForm";
     var Form = document.createElement('div');
-    Form.className = 'ContainerForm';
+    Form.className = 'ContainerForm WScroll';
     var Header = document.createElement('div');
     var ControlContainer = document.createElement('div');
     ControlContainer.className = 'GroupForm';   
     for (var Prop in Data.DataElement) {
         var DivContainer = document.createElement('div');
+        DivContainer.className = "divForm";
         var ControlLabel = document.createElement('label');
         let PropDescription = Prop.replace("_hiddenInTable","");
         PropDescription = PropDescription.replace("Table","");
@@ -464,6 +466,7 @@ function CreateShowForm(Data) {
             DivContainer.style.float = 'none';
             DivContainer.style.display = 'block';
             DivContainer.style.maxWidth = '100%';
+            DivContainer.style.clear = "left";
             DivContainer.className = 'Acordeon';
             ControlInput.id = Prop;
             //ajustar a la necesidad de la lista
@@ -489,11 +492,13 @@ function CreateShowForm(Data) {
                 <div style="width:calc(100% - 20px); max-width:100%">      
                     <label class="BtnPrimary" style="width:calc(100% - 30px);"  for="r${Prop}"> ${PropDescription}
                     </label>
-                    <input type="radio" style="display:none" onclick="DisplayAcordeon(this.checked, 'Group${Prop}')" name="Opcion" id="r${Prop}">                    
+                    <input type="radio" 
+                    style="display:none" onclick="DisplayAcordeon(this.checked, 'Group${Prop}', '500px')" 
+                    name="Opcion" id="r${Prop}">                    
                 </div>
             `));
             var DivContainerTable = document.createElement('div');
-            DivContainerTable.className = 'GroupFormAcordeon';
+            DivContainerTable.className = 'GroupFormAcordeon WScroll';
             DivContainerTable.id = 'Group' + Prop;
             
             ControlInput.id = Prop;
@@ -526,12 +531,13 @@ function CreateShowForm(Data) {
        
     }
     var ActionsContainer = document.createElement('div');
-    ActionsContainer.className = 'GroupForm';
-    var InputClose = CreateInput({type:'button',value:'Cerrar'});   
-    InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");
+    ActionsContainer.className = 'GroupForm HeaderForm';
+    var InputClose = CreateInput({type:'button',value:'◄ Back', className: 'BtnPrimary'});   
+    InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");    
     ActionsContainer.appendChild(InputClose);
 
-    Form.append(Header,ControlContainer,ActionsContainer);
+
+    Form.append(ActionsContainer,ControlContainer);
     FormContainer.append(Form);
     document.body.append(FormContainer);
     setTimeout(function(){ modalFunction('TempForm');},100);    

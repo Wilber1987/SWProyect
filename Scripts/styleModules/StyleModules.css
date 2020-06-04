@@ -1,6 +1,3 @@
-body{
-   
-}
 /*tabla estilo card*/
 .CardStyleComponent,
  .CardStyleComponent thead, 
@@ -8,19 +5,19 @@ body{
   .CardStyleComponent tfoot{
     display: block;
     position: relative;
-   
+    text-align: center;
 }
 
 .CardStyleComponent tr{
     display: inline-block;
-    width: 30%;
-    margin: 10px;
+    width: 40%;
+    margin: 5px;
     border: 1px solid #888888;
     border-radius: 0.2cm;
     overflow: hidden;
     padding: 10px;
-    max-width: 300px;
-    height: 250px;
+    /* max-width: 300px;
+    height: 250px; */
     position: relative;
 }
 .CardStyleComponent tr td{
@@ -32,16 +29,17 @@ body{
     font-weight: bold;
 }
 .CardStyleComponent tr td[name=img]{
-   float: left;
-   height: 150px;
-   width: 150px;
+   float: none;
+   display: block;
+   margin: auto;  
+   width: 90%;
    border: #3c7ffc solid 2px;
    border-radius: 0.2cm;
    overflow: hidden;
 }
 .CardStyleComponent tr td img{    
-    height: 150px;
-    width: 150px;
+    height: auto;
+    width: 100%;
  }
 .toptions input[type=text]{
      width: calc(75% - 10px);
@@ -73,7 +71,7 @@ body{
     margin-bottom: 10px;
 }
 
-@media(max-width: 600px){  
+@media(max-width: 1000px){  
     .CardStyleComponent tr{     
         width: calc(100% - 20px);  
         margin-left: 0px;
@@ -107,6 +105,7 @@ body{
     display: inline-block;
     min-width: 100px;   
     border-radius: 0.15cm;
+    cursor: pointer;
 
 }
 
@@ -160,18 +159,24 @@ body{
     padding: 20px;
     min-height: 200px;
     border-radius: 5px;
+    position: relative;
 }
 .GroupForm{
     width: 100%;
     margin: 10px;
     overflow: hidden;
 }
-.GroupForm div{
+.GroupForm .divForm{
     float: left;
     width: calc(50% - 10px);   
     margin: 5px;
     overflow: hidden;
     max-width: 200px;
+}
+.HeaderForm{
+    width: 100%;
+    border-bottom: #808080 1px solid; 
+    height: 50px;
 }
 .GroupForm .divControl {
     float: left;
@@ -192,7 +197,7 @@ body{
     overflow: hidden;
     border-radius: 0.2cm ;
 }
-@media(max-width: 600px){  
+@media(max-width: 1000px){  
     .ModalContent {  padding-bottom: 0px;  }
     .ContainerForm { 
         width: calc(100% - 40px);
@@ -218,3 +223,31 @@ body{
     max-width:100%  !important;
     transition: all 1s ease 0s;    
 }
+.WScroll{
+    overflow-y: auto;
+}
+.WScroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+.WScroll::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
+}
+.WScroll::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+}
+.WScroll::-webkit-scrollbar {
+    width: 8px;  
+    height: 8px;   
+}
+
+.WScroll::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border-radius: 4px;
+}
+.WScroll::-webkit-scrollbar-track:hover,
+.WScroll::-webkit-scrollbar-track:active {
+    background: #d4d4d4;
+}
+

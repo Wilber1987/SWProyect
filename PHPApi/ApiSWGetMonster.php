@@ -86,8 +86,8 @@
             $jsonObjectBuilds = array(); 
             $jsonObjectBuilds['id_monster'] = $IdMonster;
             $jsonObjectBuilds['id_build'] = $fila['id_build'];
-            $jsonObjectBuilds['Descripcion'] = $fila['Descripcion'];   
-            $jsonObjectBuilds['img'] = $fila['img'];           
+            $jsonObjectBuilds['img'] = $fila['img'];   
+            $jsonObjectBuilds['Descripcion'] = $fila['Descripcion']; 
             $JsonArrayBuilds[] = $jsonObjectBuilds;
         }
 
