@@ -1,15 +1,24 @@
 function importarScript(name) {
     var s = document.createElement("script");
-    s.src = name;
+    s.src = URLactual + name;
     document.querySelector("head").appendChild(s);
 }
 function importarStyle(name) {
     var s = document.createElement("link");
-    s.href = name;
+    s.href = URLactual + name;
     s.rel = "stylesheet";
     document.querySelector("head").appendChild(s);
 }
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+    return "https://swproyect.000webhostapp.com/public_html/";
+    //return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+}
 window.onload = OnLoad;
+
+var URLactual = getAbsolutePath();
+
 importarScript("scripts/modules/WComponents.js");
 importarScript("scripts/modules/WComponentsTools.js");
 importarStyle("scripts/styleModules/StyleModules.css");
@@ -19,7 +28,7 @@ importarStyle("Styles/AppStyles.css");
 
 
 function OnLoad() { 
-    StartMonsterList()
+    StartMonsterList()   
 }
 function StartMonsterList(){
     var Table = CreateTable({TableId:"TableData", className : "CardStyleComponentSWMonster"});
