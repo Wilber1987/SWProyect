@@ -1,27 +1,27 @@
 function importarScript(name) {
     var s = document.createElement("script");
-    s.src = URLactual + name;
+    s.src = UrlPath + name;
     document.querySelector("head").appendChild(s);
 }
 function importarStyle(name) {
     var s = document.createElement("link");
-    s.href = URLactual + name;
+    s.href = UrlPath + name;
     s.rel = "stylesheet";
     document.querySelector("head").appendChild(s);
 }
 function getAbsolutePath() {
     var loc = window.location;
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-    return "https://swproyect.000webhostapp.com/public_html/";
+   // return "https://swproyect.000webhostapp.com/";
+    return  "";
     //return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
 window.onload = OnLoad;
+var UrlPath = getAbsolutePath();
+importarScript("Scripts/Modules/WComponents.js");
+importarScript("Scripts/Modules/WComponentsTools.js");
+importarStyle("Scripts/StyleModules/StyleModules.css");
 
-var URLactual = getAbsolutePath();
-
-importarScript("scripts/modules/WComponents.js");
-importarScript("scripts/modules/WComponentsTools.js");
-importarStyle("scripts/styleModules/StyleModules.css");
 //App scripts
 importarScript("DatabaseScripts/MonsterDatabase.js");
 importarStyle("Styles/AppStyles.css");
