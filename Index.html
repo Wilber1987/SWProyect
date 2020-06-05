@@ -6,5 +6,71 @@
     <title>Document</title>
     <script src="index.js"></script>
 </head>
-<body id="Body"></body>
+<body id="Body">
+    <input type="file" name="" id="fileimage">
+<script>
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result)
+            return reader.result;
+        };
+        
+        // reader.onerror = function (error) {
+        //     console.log('Error: ', error);
+        // };
+    }
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL();
+        return dataURL;
+    }
+
+      
+    function getBase64FromFile(img, callback){
+        let fileReader = new FileReader();
+        fileReader.addEventListener('load', function(evt){
+            callback(fileReader.result);
+        });
+        fileReader.readAsDataURL(img);
+    }
+
+    /* Seria usada de la siguiente manera */
+    
+    //var base64 = getBase64Image(document.getElementById("img"));
+    //console.log(base64);
+    function save() {
+        // var base64 = getBase64Image(fileimage.files[0]);
+        // console.log(base64);
+        var base64 = getBase64FromFile(fileimage.files[0], function(base64){
+           //return base64;
+           obj = {
+                id: 1,
+                Descripcion: "hola",
+                files : base64            
+            }
+            console.log(obj)
+            //getBase64(fileimage.files[0])
+            var url =  "http://localhost/SWPROYECT/PHPApi/ApiSWSetBuildMonster.php";
+            var xhr = new XMLHttpRequest(); xhr.open("POST", url, true);    
+            xhr.setRequestHeader("Content-Type",  'application/json');//application/json
+            xhr.onreadystatechange = function(data) { 
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
+                {   
+                } 
+            } 
+            xhr.send(JSON.stringify(obj));      
+        });      
+       // console.log(base64)      
+        // var files = getBase64(fileimage.files[0])
+        // console.log(files)
+                  
+    }
+</script>
+</body>
 </html>
