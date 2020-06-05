@@ -8,23 +8,4 @@
 </head>
 <body id="Body"></body>
 <input type="file" name="" id="fileimage">
-<script>
-    function save() {
-        obj = {
-            id: 1,
-            Descripcion: "hola",
-            files: fileimage.files[0]
-        }
-        var url =  "http://localhost/SWPROYECT/PHPApi/ApiSWSetBuildMonster.php";
-        var xhr = new XMLHttpRequest(); xhr.open("POST", url, true);    
-        xhr.setRequestHeader("Content-Type",  'application/json');//application/json
-        xhr.onreadystatechange = function(data) { 
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
-            {       
-             
-            } 
-        } 
-        xhr.send(JSON.stringify(obj));                
-    }
-</script>
 </html>
