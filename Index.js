@@ -12,7 +12,7 @@ function importarStyle(name) {
 function getAbsolutePath() {
     var loc = window.location;
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-   // return "https://swproyect.000webhostapp.com/";
+    //return "https://swproyect.000webhostapp.com/";
     return  "";
     //return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
@@ -25,7 +25,6 @@ importarStyle("Scripts/StyleModules/StyleModules.css");
 //App scripts
 importarScript("DatabaseScripts/MonsterDatabase.js");
 importarStyle("Styles/AppStyles.css");
-
 
 function OnLoad() { 
     StartMonsterList()   
@@ -44,7 +43,8 @@ function StartMonsterList(){
             Search: true,
             ApiSelect: {ApiUrlSelect : ApiUrlSelect, ResponseName: "Monsters"},            
             Show: true, 
-            ShowOptions:{FormName: false} ,
+            ShowOptions:{FormName: false, Actions:{btnInput:{value:"Add Build", className:"BtnSuccess", onclick:"AddBuild()"}}
+            } ,
             Edit: false,
             EditOptions:{FormName: false, ApiUrlUpdate: ApiUrlUpdate},
             Select: false

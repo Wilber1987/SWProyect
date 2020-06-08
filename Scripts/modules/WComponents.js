@@ -191,15 +191,14 @@ function DrawTable(List, Config, TableId = null) {
         GetObj(TableContainer).append(Table);
     }   
 }
-
+//ASIGNACION DE EVENTOS
 function AsigEventsDel(InputForRT, DelData){ 
     InputForRT.addEventListener('click',
         function() {
             DeleteElement(DelData)           
         }
     )  
-}
-function AsigEventsEdit(InputForRT, EditData){ 
+}function AsigEventsEdit(InputForRT, EditData){ 
     InputForRT.addEventListener('click',
         function() {
             EditElement(EditData)
@@ -220,6 +219,9 @@ function AsigEventsEdit(InputForRT, EditData){
         }
     )  
 }
+//FIN ASIGNACION DE EVENTOS
+
+
 
 function FilterInList(ArrayList, Param, Config, TableId) {
    if (Param != "") {
@@ -296,41 +298,43 @@ function ShowElement(Data){
     }  
 }
 
-function InicializePaginateTable(Config) { 
-    var PaginateContainer = document.createElement('div');
-    PaginateContainer.className = 'ShowPaginate';
-    PaginateContainer.id = 'ShowPag_'+ Config.Name;   
-    if (GetObj('ShowPag_'+ Config.Name)) {
-        PaginateContainer = GetObj('ShowPag_'+ Config.Name);
-        PaginateContainer.innerHTML = "";
-    }    
-    var Cont  = Math.round(ArrayList.length / GetObj('Show_' + Config.Name).value);
-    for (let index = 0; index < Cont; index++) {
-        var Link = document.createElement('a');
-        Link.innerText = index + 1;
-        Link.href = '#Show_' + Config.Name;
-        Link.className = "ShowPaginate";
-        PaginateContainer.append(Link);                       
-    }
-    
-    return PaginateContainer;
-}
 
-function InicializeShowTable(Config) {
-    var sel = document.createElement('select');
-    sel.id = 'Show_' + Config.Name ;
-    sel.className = 'ShowTable'
-    var i = 10;
-    for (let index = 0; index < 10; index++) {
-        var opt = document.createElement('option');
-        opt.value = i;
-        opt.innerText = i;
-        i = i + 10;
-        sel.appendChild(opt);
+//#region PENDIENTE
+    function InicializePaginateTable(Config) { 
+        var PaginateContainer = document.createElement('div');
+        PaginateContainer.className = 'ShowPaginate';
+        PaginateContainer.id = 'ShowPag_'+ Config.Name;   
+        if (GetObj('ShowPag_'+ Config.Name)) {
+            PaginateContainer = GetObj('ShowPag_'+ Config.Name);
+            PaginateContainer.innerHTML = "";
+        }    
+        var Cont  = Math.round(ArrayList.length / GetObj('Show_' + Config.Name).value);
+        for (let index = 0; index < Cont; index++) {
+            var Link = document.createElement('a');
+            Link.innerText = index + 1;
+            Link.href = '#Show_' + Config.Name;
+            Link.className = "ShowPaginate";
+            PaginateContainer.append(Link);                       
+        }
+        
+        return PaginateContainer;
     }
-    return sel;
-}
 
+    function InicializeShowTable(Config) {
+        var sel = document.createElement('select');
+        sel.id = 'Show_' + Config.Name ;
+        sel.className = 'ShowTable'
+        var i = 10;
+        for (let index = 0; index < 10; index++) {
+            var opt = document.createElement('option');
+            opt.value = i;
+            opt.innerText = i;
+            i = i + 10;
+            sel.appendChild(opt);
+        }
+        return sel;
+    }
+//#endregion
 
 function EditElement(Data) {  
     var Form;  
