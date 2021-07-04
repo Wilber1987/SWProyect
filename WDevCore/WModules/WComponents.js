@@ -17,6 +17,68 @@ function CreateStringNode(string) {
     let node = document.createRange().createContextualFragment(string);
     return node;
 }
+function createElement(node) {   
+    
+    if (typeof node === 'string') {
+      return document.createTextNode(node)
+    }
+    if(node.tagName){
+        return node;
+    }    
+    //HTMLDivElement
+    const element = document.createElement(node.type)
+    if (node.props) {
+        for (const prop in node.props) {             
+            if (typeof  node.props[prop] === "function") {
+                element[prop] = node.props[prop];
+            }else if (typeof  node.props[prop] === 'object') {                
+                element[prop] = node.props[prop];
+            }else{
+                element.setAttribute(prop, node.props[prop]);
+            }  
+         }
+    }  
+    
+    if (node.children) {
+        node.children
+            .map(createElement)
+            .forEach(child => element.appendChild(child))
+    }  
+    return element;
+}
+function createElementNS(node) {
+    //console.log(node);
+    if (typeof node === 'string') {
+      return document.createTextNode(node)
+    }
+    const SVGN = "http:\/\/www.w3.org/2000/svg";
+    const element = document.createElementNS(SVGN,node.type)
+    if (node.props) {
+        for (const prop in node.props) {             
+            if (typeof  node.props[prop] === "function") {
+                element[prop] = node.props[prop];
+            }else if (typeof  node.props[prop] === 'object') {                
+                element[prop] = node.props[prop];
+            }else{
+                try {
+                    element.setAttributeNS(null, prop, node.props[prop])
+                } catch (error) {
+                    //console.log(prop, node.props[prop])
+                    console.log(error);
+                    element.setAttributeNS(SVGN, prop, node.props[prop]);
+                }  
+            }  
+         }
+    }  
+    if (node.children) {
+        node.children
+            .map(createElementNS)
+            .forEach(child => element.appendChild(child))
+    }  
+    return element;
+}
+//export{createElementNS, createElement}
+
 function CreateInput(Data) {
     var InputForRT = document.createElement("input");
     InputForRT.className = Data.className;
@@ -47,17 +109,20 @@ function CreateTable(Config) {
     return Table;
 }
   
-  
 function DrawTable(List, Config, TableId = null) {
    // console.log(List.length);
+   var urlPath = "";
+   if (typeof Url_Path != "undefined") {
+        urlPath = Url_Path;
+   }
     ArrayList = List;
     
     var Config = new ConfigTable(Config);
     if (TableId == null) {
-        tbody = Config.Table.querySelector("tbody");
-        TableId =  Config.Table.id;
+        var tbody = Config.Table.querySelector("tbody");
+        var TableId =  Config.Table.id;
     }else {
-        tbody = document.querySelector("#" + TableId + " tbody");
+        var tbody = document.querySelector("#" + TableId + " tbody");
     }
     if (tbody.parentNode.querySelector("tOptions")) {      
         let Search = true;
@@ -102,7 +167,7 @@ function DrawTable(List, Config, TableId = null) {
             var TdForRow = document.createElement("td");
             //TdForRow.style.display = 'none';
             TdForRow.setAttribute('name', Propiedad);
-            TdForRow.append(CreateStringNode(`<img src="${ArrayList[i][Propiedad]}"></img>`));
+            TdForRow.append(CreateStringNode(`<img src="${urlPath + ArrayList[i][Propiedad]}"></img>`));
             row.appendChild(TdForRow);
           }else if (Propiedad.includes("video")) {
             var TdForRow = document.createElement("td");
@@ -121,8 +186,15 @@ function DrawTable(List, Config, TableId = null) {
                 `<hidden  value="${ArrayList[i][Propiedad]}">`
             ));
             row.appendChild(TdForRow);
-          } 
-          else {
+          } else if (Propiedad.includes("url")) {
+            var TdForRow = document.createElement("td");
+            TdForRow.style.display = 'block';
+            TdForRow.setAttribute('name', Propiedad);
+            TdForRow.append(CreateStringNode(
+                `<a class="BtnSecundary" href="${ArrayList[i][Propiedad]}">${ArrayList[i][Propiedad]}</a>`
+            ));
+            row.appendChild(TdForRow);
+          }else {
             var TdForRow = document.createElement("td");
             TdForRow.setAttribute('name', Propiedad);
             if (Config.CardStyle == true) {
@@ -161,7 +233,7 @@ function DrawTable(List, Config, TableId = null) {
             }
             if (Config.Options.Select) {
                 var InputForRT = CreateInput({type:'button',value:'Select',className: "BtnSuccess"});
-                SelectData = {           
+                var SelectData = {           
                     'sector': i,
                     'holding': "", 
                     'empresa': ""
@@ -171,7 +243,7 @@ function DrawTable(List, Config, TableId = null) {
             }            
             if (Config.Options.Show) {                
                 const InputForRT = CreateInput({type:'button',value:'Show',className: "BtnSecundary"});  
-                ShowData = {
+                var ShowData = {
                     Index:i,
                     Config:Config,
                     TableId:TableId,
@@ -231,7 +303,7 @@ function FilterInList(ArrayList, Param, Config, TableId) {
         var ListArray = ArrayList.filter(function (element) {
                 //element => element.name.includes(Param)
                 for (var key in element) {
-                    if (element[key].includes(Param)) {
+                    if (element[key].toString().includes(Param)) {
                         return element;                                                
                     }
                 }
@@ -264,7 +336,10 @@ function ShowElement(Data){
                 TableId:Data.TableId
             }           
             var control = GetObj(Data.Config.Options.ShowOptions.FormName).querySelector(".BtnUpdate");
-            control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+            //control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+            control.onclick = ()=>{
+                UpdateElement(UpdateData);
+            }
         }   
         var index = 0;
         for (var Propiedad in Data.DataElement) {
@@ -297,7 +372,6 @@ function ShowElement(Data){
         CreateShowForm(Data);
     }  
 }
-
 
 //#region PENDIENTE
     function InicializePaginateTable(Config) { 
@@ -348,7 +422,10 @@ function EditElement(Data) {
                 TableId:Data.TableId
             }           
             var control = GetObj(Data.Config.Options.EditOptions.FormName).querySelector(".BtnUpdate");
-            control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+            //control.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+            control.onclick = ()=>{
+                UpdateElement(UpdateData);
+            }
         }   
         var index = 0;
         for (var Propiedad in Data.DataElement) {            
@@ -416,10 +493,16 @@ function CreateForm(Data) {
         DataElement:Data.DataElement,
         TableId:Data.TableId
     }
-    InputSave.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+   // InputSave.setAttribute("onclick","UpdateElement("+JSON.stringify(UpdateData) +");");
+    InputSave.onclick = ()=>{
+        UpdateElement(UpdateData);
+    }
     ActionsContainer.appendChild(InputSave);
     var InputClose = CreateInput({type:'button',value:'Cerrar'});   
-    InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");
+    //InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");
+    InputClose.onclick = ()=>{
+        modalFunction('TempForm'); RemoveTempForm()
+    }
     ActionsContainer.appendChild(InputClose);
     Form.append(Header,ControlContainer,ActionsContainer);
     FormContainer.append(Form);
@@ -429,6 +512,10 @@ function CreateForm(Data) {
 function CreateShowForm(Data) {
     if (GetObj('TempForm')) {
         return;
+    }
+    var urlPath = "";
+    if (typeof Url_Path != "undefined") {
+        urlPath = Url_Path;
     }
     var FormContainer = document.createElement('div');
     FormContainer.className = 'ModalContent';
@@ -452,7 +539,7 @@ function CreateShowForm(Data) {
             var ControlInput = document.createElement('img');
             ControlInput.className = "ImageDetail";
             ControlInput.id = Prop;
-            ControlInput.src = Data.DataElement[Prop];
+            ControlInput.src = urlPath + Data.DataElement[Prop];
             DivContainer.append(ControlLabel,ControlInput);
             ControlContainer.append(DivContainer);
         }else if (Prop.includes("video")) {
@@ -537,21 +624,22 @@ function CreateShowForm(Data) {
     var ActionsContainer = document.createElement('div');
     ActionsContainer.className = 'GroupForm HeaderForm';
     var InputClose = CreateInput({type:'button',value:'◄ Back', className: 'BtnPrimary'});   
-    InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()");    
+    //InputClose.setAttribute("onclick","modalFunction('TempForm'); RemoveTempForm()"); 
+    InputClose.onclick = ()=>{
+        modalFunction('TempForm'); RemoveTempForm();
+    }  
     ActionsContainer.appendChild(InputClose);
-
-
+    
     Form.append(ActionsContainer,ControlContainer);
     FormContainer.append(Form);
     document.body.append(FormContainer);
     setTimeout(function(){ modalFunction('TempForm');},100);    
 }
 
-
 function UpdateElement(Data) {   
-    ArrayObject = ArrayList.find(element => element.id_ = Data.DataElement.id_);
+    var ArrayObject = ArrayList.find(element => element = Data.DataElement);
     for (let index = 0; index < Object.keys(Data.DataElement).length; index++) {
-      prop = Object.keys(Data.DataElement)[index];
+      var prop = Object.keys(Data.DataElement)[index];
       ArrayObject[prop] = GetObj(prop).value;
     }    
     if (Data.Config.Options.EditOptions.ApiUrlUpdate) {
@@ -619,3 +707,5 @@ function  UpdateArrayForApi(UpdateObject, Config, TableId){
     xhr.send(JSON.stringify(UpdateObject));
 }
 
+
+export{createElementNS, createElement, CreateTable, DrawTable}

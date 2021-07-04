@@ -3,11 +3,9 @@
  .CardStyleComponent thead, 
  .CardStyleComponent tbody,
   .CardStyleComponent tfoot{
-    display: block;
-    position: relative;
+    display: block;   
     text-align: center;
 }
-
 .CardStyleComponent tr{
     display: inline-block;
     width: 40%;
@@ -16,8 +14,8 @@
     border-radius: 0.2cm;
     overflow: hidden;
     padding: 10px;
-    /* max-width: 300px;
-    height: 250px; */
+    max-width: 300px;
+    height: 300px; 
     position: relative;
 }
 .CardStyleComponent tr td{
@@ -39,7 +37,7 @@
 }
 .CardStyleComponent tr td img{    
     height: auto;
-    width: 100%;
+    width: 50%;
  }
 .toptions input[type=text]{
      width: calc(75% - 10px);
@@ -76,8 +74,9 @@
         width: calc(100% - 20px);  
         margin-left: 0px;
         margin-right: 0px; 
-        max-width: 90%;  
-        display: block; 
+        max-width: 90%; 
+        max-width: 300px; 
+        /* display: block;  */
     }
 }
 
@@ -95,36 +94,43 @@
 /* BOTONES */
 
 .BtnAlert, .BtnPrimary, 
-.BtnSuccess, .BtnSecundary
+.BtnSuccess, .BtnSecundary, .Btn
  {
-    margin: 5PX;
     font-weight: bold;
     border:none;
     padding: 10px;
     text-align: center;
     display: inline-block;
     min-width: 100px;   
-    border-radius: 0.15cm;
     cursor: pointer;
-
+    background-color: #09f;
+    color: #fff;
+    border-right: rgb(3, 106, 175) 5px solid;
 }
-
-
+.Btn[type=checkbox]{
+    height: 20px;   
+    min-width: 20px;
+    margin: 5px;   
+}
 .BtnPrimary {
     color: #fff;
     background-color:#007bff;
+    border-right: rgb(3, 106, 175) 5px solid;
 }
 .BtnAlert {
     color: #fff;
     background-color: #dc3545;
+    border-right: #7e1b25 5px solid;
 }
 .BtnSuccess {
     color: #fff;
     background-color: #28a745;
+    border-right: #165c26 5px solid;
 }
 .BtnSecundary {
     color: #fff;
     background-color: #17a2b8;
+    border-right: #0f5964 5px solid;
 }
 
 
@@ -133,7 +139,7 @@
 
 .ModalContent {
     opacity: 0;
-    pointer-events: none;
+    /* pointer-events: none; */
     background-color: rgba(0, 0, 0, 0.5) !important;
     width: 100%;
     position: fixed !important;
@@ -251,3 +257,27 @@
     background: #d4d4d4;
 }
 
+*::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
+}
+*::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+}
+*::-webkit-scrollbar {
+    width: 8px;  
+    height: 8px;   
+}
+
+*::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border-radius: 4px;
+}
+*::-webkit-scrollbar-track:hover,
+*::-webkit-scrollbar-track:active {
+    background: #d4d4d4;
+}

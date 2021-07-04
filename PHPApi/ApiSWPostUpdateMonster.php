@@ -1,10 +1,5 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Content-Type: application/json; charset=utf-8'); 
-
 $JSONData = file_get_contents("php://input");
 $dataObject = json_decode($JSONData);
 

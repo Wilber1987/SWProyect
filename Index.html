@@ -1,63 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="index.js"></script>
+    <script src="index.js" type="module"></script>
+    <!-- <script>
+        const storageObj = [{test:1}];
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj));
+        var dlAnchorElem = document.createElement('a');
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", "scene.json");
+        dlAnchorElem.click();
+    </script> -->    
 </head>
-<body id="Body">
-    <input type="file" name="" id="fileimage">
-<script>
-    function getBase64(file) {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            console.log(reader.result)
-            return reader.result;
-        };
-        
-        // reader.onerror = function (error) {
-        //     console.log('Error: ', error);
-        // };
-    }
-    function getBase64Image(img) {
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL();
-        return dataURL;
-    }
 
-      
-    function getBase64FromFile(img, callback){
-        let fileReader = new FileReader();
-        fileReader.addEventListener('load', function(evt){
-            callback(fileReader.result);
-        });
-        fileReader.readAsDataURL(img);
-    }
-    function save() {       
-        var base64 = getBase64FromFile(fileimage.files[0], function(base64){         
-           obj = {
-                id: 1,
-                Descripcion: "hola",
-                files : base64            
-            }
-            console.log(obj)           
-            var url =  "http://localhost/SWPROYECT/PHPApi/ApiSWSetBuildMonster.php";
-            var xhr = new XMLHttpRequest(); xhr.open("POST", url, true);    
-            xhr.setRequestHeader("Content-Type",  'application/json');//application/json
-            xhr.onreadystatechange = function(data) { 
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
-                {   
-                } 
-            } 
-            xhr.send(JSON.stringify(obj));      
-        });   
-    }
-</script>
+<body id="App">
+
 </body>
+
 </html>
