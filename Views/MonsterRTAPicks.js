@@ -15,10 +15,9 @@ export default class MonsterRTAPicks extends HTMLElement {
         }
         this.DrawComponent();
     }
-    DrawComponent = async () => {
-        // let responsePicks = await fetch("../DataBase/RTAPicks/MonPickData.json");
-        // responsePicks = await responsePicks.json();
-        let RTAPicksData =await fetch("../DataBase/RTAPicks/DataPickRate.json");      
+    DrawComponent = async (IndexSeason = 0) => {        
+        this.shadowRoot.innerHTML = "";
+        let RTAPicksData =await fetch("../DataBase/RTAPicks/DataPickRate"+SeasonList[IndexSeason]+".json");      
         RTAPicksData = await RTAPicksData.json();
         const UserActions = [{
             name: "Builds",
@@ -34,6 +33,12 @@ export default class MonsterRTAPicks extends HTMLElement {
               return -1;
             }
             return 0;
+        });
+        const SelectSeason = { type:'select', props: { id: '', class: 'className', onchange: (ev)=>{            
+            this.DrawComponent(ev.target.value);
+        }}, children:[]};
+        SeasonList.forEach((element, index) => {
+            SelectSeason.children.push( {type:'option', props: {innerText:element, value: index}});
         });
         var TableConfigG = {
             Datasets: RTAPicksData,
@@ -61,9 +66,8 @@ export default class MonsterRTAPicks extends HTMLElement {
             }
         }));        
         this.shadowRoot.append(WTableReport);
+        this.shadowRoot.appendChild(WRender.createElement(SelectSeason))
         this.append(WRender.createElement(this.Style));
-
-        console.log("cargando...");
     }   
     Style = {
         type: "w-style",

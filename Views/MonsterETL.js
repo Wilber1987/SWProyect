@@ -6,8 +6,7 @@ export default class MonsterETL extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this.className = "DocumentView";
-        this.temp = "EL July 2021 20*";
+        this.className = "DocumentView";        
     }
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
@@ -66,7 +65,7 @@ export default class MonsterETL extends HTMLElement {
                     pick.rank = RepList.rank;
                     pick.id_battle = BattleId;    
                     pick.date = RepList.date_add,  
-                    pick.temp = this.temp;              
+                    pick.temp = SeasonList[0];              
                     MonPickData.push(pick);
                 });
                 //OPONENTE
@@ -92,7 +91,7 @@ export default class MonsterETL extends HTMLElement {
                     pick.rank = RepList.opp_rank;
                     pick.id_battle = BattleId;
                     pick.date = RepList.date_add,
-                    pick.temp = this.temp; 
+                    pick.temp = SeasonList[0]; 
                     MonPickData.push(pick);
                 });
             });            
@@ -102,7 +101,7 @@ export default class MonsterETL extends HTMLElement {
             + encodeURIComponent(JSON.stringify(MonPickData));
         
         const DownLoadData = WRender.createElement({ type:'a', props: {
-            href: dataStr, download: "MonPickData.json", innerText: "Descargar..."
+            href: dataStr, download: "MonPickData"+SeasonList[0]+".json", innerText: "Descargar..."
         }});        
         this.shadowRoot.append(DownLoadData);
     }
@@ -131,6 +130,7 @@ export default class MonsterETL extends HTMLElement {
                  Mon.Win_Rate =  (Win_Rate/Pick_Rate*100).toFixed(2) + "%";
                  Mon.Banned_Rate = (Banned_Rate/Pick_Rate*100).toFixed(2) + "%";
                  Mon.Leader = (Leader/Pick_Rate*100).toFixed(2) + "%";
+                 Mon.Season = SeasonList[0];
                  RTAPicksData.push(Mon);
              }          
          });
@@ -138,7 +138,7 @@ export default class MonsterETL extends HTMLElement {
          + encodeURIComponent(JSON.stringify(RTAPicksData));
  
          const DownLoadDataTranform = WRender.createElement({ type:'a', props: {
-             href: dataStr2, download: "DataPickRate.json", innerText: "Descargar full Picks..."
+             href: dataStr2, download: "DataPickRate"+SeasonList[0]+".json", innerText: "Descargar full Picks..."
          }});        
          this.shadowRoot.append(DownLoadDataTranform);
     }
