@@ -1,13 +1,13 @@
-import { ComponentsManager, WAjaxTools, WArrayF, WRender } from "../WDevCore/WModules/WComponentsTools.js";
+import { ComponentsManager, WAjaxTools, WRender } from "../WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
 import "../WDevCore/WComponents/WTableComponents.js";
-import "../WDevCore/WComponents/WFilterControls.js";
 
-export default class MonsterRTAPicks extends HTMLElement {
-    constructor() {
+export default class MonsterDetail extends HTMLElement {
+    constructor(MonsterId) {
         super();
         this.attachShadow({ mode: "open" });
         this.className = "DocumentView";
+        this.MonsterId = MonsterId;
     }
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
@@ -15,50 +15,32 @@ export default class MonsterRTAPicks extends HTMLElement {
         }
         this.DrawComponent();
     }
-    DrawComponent = async (IndexSeason = 0) => {        
-        this.shadowRoot.innerHTML = "";
-        let RTAPicksData =await fetch("../DataBase/RTAPicks/DataPickRate"+SeasonList[IndexSeason]+".json");      
+    DrawComponent = async () => {
+        let RTAPicksData = await fetch("../DataBase/RTAPicks/MonPickData" + SeasonList[IndexSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-        
-        RTAPicksData.sort(function (a, b) {
-            if (a.Win_Rate < b.Win_Rate) {
-              return 1;
-            }
-            if (a.Win_Rate > b.Win_Rate) {
-              return -1;
-            }
-            return 0;
+        const RTABattles = RTAPicksData.filter((item) =>
+            item.com2us_id == this.MonsterId
+        );
+        RTABattles.forEach(bat => {
+            const RTAPic = RTAPicksData.filter((item) =>
+                item.id_battle == bat.id_battle
+            );
         });
-        const SelectSeason = { type:'select', props: { id: '', class: 'className', onchange: (ev)=>{            
-            this.DrawComponent(ev.target.value);
-        }}, children:[]};
-        SeasonList.forEach((element, index) => {
-            SelectSeason.children.push( {type:'option', props: {innerText:element, value: index}});
-        });
-        const UserActions = [{
-            name: "Builds",
-            Function: (Param) => {                
-                console.log(Param)
-            }
-        }]
         var TableConfigG = {
-            Datasets: RTAPicksData,
+            Datasets: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
             DisplayData: [
                 "image_filename",
                 "name",
                 "element",
-                "Pick_Rate",
-                "Win_Rate",
-                "Banned_Rate",
-                "Leader", 
-                "FirstPick",
-                "LastPick"             
+                "archetype",
+                "base_stars",
+                "natural_stars",
             ],
             Options: {
                 Search: true,
-                UserActions: UserActions
+                //UserActions: UserActions
             }
         };
         const WTableReport = WRender.createElement(WRender.createElement({
@@ -67,11 +49,11 @@ export default class MonsterRTAPicks extends HTMLElement {
                 id: "TableId",
                 TableConfig: TableConfigG
             }
-        }));        
+        }));
         this.shadowRoot.append(WTableReport);
-        this.shadowRoot.appendChild(WRender.createElement(SelectSeason))
         this.append(WRender.createElement(this.Style));
-    }   
+        console.log("cargando...");
+    }
     Style = {
         type: "w-style",
         props: {
@@ -97,5 +79,5 @@ export default class MonsterRTAPicks extends HTMLElement {
         }
     };
 }
-customElements.define("w-rta-picks", MonsterRTAPicks);
+customElements.define("w-monster-detail", MonsterDetail);
 
