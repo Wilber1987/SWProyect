@@ -9,6 +9,9 @@ export default class MonsterListView extends HTMLElement {
         this.className = "DocumentView";
     }
     connectedCallback() {
+        if (this.shadowRoot.innerHTML != "") {
+            return;
+        }
         this.DrawComponent();
     }
     DrawComponent = async () => {
@@ -84,7 +87,7 @@ export default class MonsterListView extends HTMLElement {
                 new WCssClass(".DocumentView", {
                     display: "grid",
                     height: "100%",
-                    padding: "20px",
+                    //padding: "20px",
                     //"grid-template-columns": "100%",
                     //"grid-template-rows": "50px calc(100% - 50px)"                           
                 }), new WCssClass(".DocumentView label", {

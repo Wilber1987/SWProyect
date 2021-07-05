@@ -10,6 +10,9 @@ export default class MonsterRTAPicks extends HTMLElement {
         this.className = "DocumentView";
     }
     connectedCallback() {
+        if (this.shadowRoot.innerHTML != "") {
+            return;
+        }
         this.DrawComponent();
     }
     DrawComponent = async () => {
@@ -23,6 +26,15 @@ export default class MonsterRTAPicks extends HTMLElement {
                 console.log(Param)
             }
         }]
+        RTAPicksData.sort(function (a, b) {
+            if (a.Win_Rate < b.Win_Rate) {
+              return 1;
+            }
+            if (a.Win_Rate > b.Win_Rate) {
+              return -1;
+            }
+            return 0;
+        });
         var TableConfigG = {
             Datasets: RTAPicksData,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
@@ -47,16 +59,7 @@ export default class MonsterRTAPicks extends HTMLElement {
                 id: "TableId",
                 TableConfig: TableConfigG
             }
-        }));
-        // this.shadowRoot.append(WRender.createElement({ type:'w-filter-option', 
-        //     props: { Config: {
-        //         Dataset: responsePicks,              
-        //         //DisplayOption:  ["user"]                
-        //     }, FilterFunction: async (DFilt)=>{                    
-        //         WTableReport.Dataset = await this.DefineData(DFilt); 
-        //         WTableReport.DefineTable();
-        //     }}
-        // }));
+        }));        
         this.shadowRoot.append(WTableReport);
         this.append(WRender.createElement(this.Style));
 
@@ -67,9 +70,9 @@ export default class MonsterRTAPicks extends HTMLElement {
         props: {
             ClassList: [
                 new WCssClass(".DocumentView", {
-                    display: "grid",
+                    //display: "grid",
                     height: "100%",
-                    padding: "20px",
+                    //padding: "20px",
                     //"grid-template-columns": "100%",
                     //"grid-template-rows": "50px calc(100% - 50px)"                           
                 }), new WCssClass(".DocumentView label", {

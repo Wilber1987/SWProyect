@@ -7,9 +7,12 @@ export default class MonsterETL extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.className = "DocumentView";
-        this.temp = "EL July 2021"
+        this.temp = "EL July 2021 20*";
     }
     connectedCallback() {
+        if (this.shadowRoot.innerHTML != "") {
+            return;
+        }
         this.DrawComponent();
     }
     DrawComponent = async () => {   
@@ -22,24 +25,7 @@ export default class MonsterETL extends HTMLElement {
             onclick: async ()=>{
                this.CreateRtaPicksData();
            }}}
-        ]));
-        // var TableConfigG = {
-        //     Datasets: MonPickData,
-        //     ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
-        //     Colors: ["#ff6699", "#ffbb99", "#adebad"],            
-        //     Options: {
-        //         Search: true,
-        //         //UserActions: UserActions
-        //     }
-        // };        
-        // const WTableReport = WRender.createElement(WRender.createElement({
-        //     type: "w-table",
-        //     props: {
-        //         id: "TableId",
-        //         TableConfig: TableConfigG
-        //     }
-        // }));       
-        // this.shadowRoot.append(WTableReport);
+        ]));       
         this.append(WRender.createElement(this.Style));
         console.log("cargando...");
     } 

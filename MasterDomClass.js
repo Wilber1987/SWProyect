@@ -33,7 +33,8 @@ class MasterDomClass extends ComponentsManager {
                 }), new WCssClass(".AppAside", {
                     "border-right": "solid #999999 1px"
                 }), new WCssClass(".AppMain", {
-                    overflow: "auto"
+                    overflow: "auto",
+                    padding: "20px"
                 }), new WCssClass(".AppFooter", {
                     "grid-column": "1/3",
                     "background-color": "#eee",
@@ -115,13 +116,31 @@ class AsideClass {
             Elements: [
                 {
                     name: "Inicio", url: "#",
-                    action: (ev) => { 
+                    action: (ev) => {
                         //CODE
+                    }
+                },
+                {
+                    name: "Monsters List", url: "#",
+                    action: (ev) => {
+                        DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
+                    }
+                },
+                {
+                    name: "RTA Picks", url: "#",
+                    action: (ev) => {
+                        DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
+                    }
+                },
+                {
+                    name: "RTA ETL", url: "#",
+                    action: (ev) => {
+                        DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
                     }
                 }
             ]
         }
-    }    
+    }
     convertToBase64(PDF) {
         var fileToLoad = PDF;
         // FileReader function for read the file.
@@ -135,16 +154,13 @@ class AsideClass {
         };
         // Convert data to base64
         fileReader.readAsDataURL(fileToLoad);
-    }    
+    }
 }
 class MainClass {
     constructor() {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
-        this.children = [ 
-            //new MonsterListView(),
-            //new MonsterETL(),                
-            new MonsterRTAPicks()
+        this.children = [            
         ];
     }
 }
