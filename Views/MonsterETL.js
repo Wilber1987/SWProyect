@@ -6,8 +6,7 @@ export default class MonsterETL extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this.className = "DocumentView";
-        this.temp = "EL July 2021 20*";
+        this.className = "DocumentView";        
     }
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
@@ -57,16 +56,16 @@ export default class MonsterETL extends HTMLElement {
                         pick.leader = false;
                     }
                     //win
-                    if (RepList.slot_id == RepList.win_lose) {
+                    if (RepList.slot_id == RepList.win_lose && pick.banned == false) {
                         pick.win = true;
                     } else {
                         pick.win = false;
-                    }
+                    }                    
                     pick.user = RepList.wizard_name;
                     pick.rank = RepList.rank;
                     pick.id_battle = BattleId;    
                     pick.date = RepList.date_add,  
-                    pick.temp = this.temp;              
+                    pick.temp = SeasonList[0];              
                     MonPickData.push(pick);
                 });
                 //OPONENTE
@@ -83,16 +82,17 @@ export default class MonsterETL extends HTMLElement {
                         pick.leader = false;
                     }
                     //win
-                    if (RepList.opp_slot_id == RepList.win_lose) {
+                    if (RepList.opp_slot_id == RepList.win_lose && pick.banned == false) {
                         pick.win = true;
                     } else {
                         pick.win = false;
                     }
+                    
                     pick.user = RepList.opp_wizard_name;
                     pick.rank = RepList.opp_rank;
                     pick.id_battle = BattleId;
                     pick.date = RepList.date_add,
-                    pick.temp = this.temp; 
+                    pick.temp = SeasonList[0]; 
                     MonPickData.push(pick);
                 });
             });            
@@ -102,7 +102,7 @@ export default class MonsterETL extends HTMLElement {
             + encodeURIComponent(JSON.stringify(MonPickData));
         
         const DownLoadData = WRender.createElement({ type:'a', props: {
-            href: dataStr, download: "MonPickData.json", innerText: "Descargar..."
+            href: dataStr, download: "MonPickData"+SeasonList[0]+".json", innerText: "Descargar..."
         }});        
         this.shadowRoot.append(DownLoadData);
     }
@@ -116,29 +116,30 @@ export default class MonsterETL extends HTMLElement {
              Data = Data.concat(response.results);
          } 
          const RTAPicksData = [];
-         //NPartidos.
-         const NPartidos = WArrayF.ArrayUnique(MonPickData, "id_battle").length;
-         console.log(NPartidos);
+         const NPartidos = WArrayF.ArrayUnique(MonPickData, "id_battle").length;         
          Data.forEach(Mon => {  
              const MonDataPicks = MonPickData.filter( D => D.unit_master_id == Mon.com2us_id);  
              if (MonDataPicks.length != 0) {
-                 //var elvisLives = Math.PI > 4 ? "Sip" : "Nop";
                  const Pick_Rate = MonDataPicks.length;
                  const Win_Rate = MonDataPicks.filter(D => D.win == true).length;  
                  const Banned_Rate = MonDataPicks.filter(D => D.banned == true).length;  
                  const Leader = MonDataPicks.filter(D => D.leader == true).length;
+                 const FirstPick = MonDataPicks.filter(D => D.pick_slot_id == 1).length;
+                 const LastPick = MonDataPicks.filter(D => D.pick_slot_id == 5).length;
                  Mon.Pick_Rate = (Pick_Rate / NPartidos * 100).toFixed(2) + "%";                
                  Mon.Win_Rate =  (Win_Rate/Pick_Rate*100).toFixed(2) + "%";
+                 Mon.FirstPick =  (FirstPick/Pick_Rate*100).toFixed(2) + "%";
+                 Mon.LastPick =  (LastPick/Pick_Rate*100).toFixed(2) + "%";
                  Mon.Banned_Rate = (Banned_Rate/Pick_Rate*100).toFixed(2) + "%";
                  Mon.Leader = (Leader/Pick_Rate*100).toFixed(2) + "%";
+                 Mon.Season = SeasonList[0];
                  RTAPicksData.push(Mon);
              }          
          });
          const dataStr2 = "data:text/json;charset=utf-8," 
-         + encodeURIComponent(JSON.stringify(RTAPicksData));
- 
+         + encodeURIComponent(JSON.stringify(RTAPicksData)); 
          const DownLoadDataTranform = WRender.createElement({ type:'a', props: {
-             href: dataStr2, download: "DataPickRate.json", innerText: "Descargar full Picks..."
+             href: dataStr2, download: "DataPickRate"+SeasonList[0]+".json", innerText: "Descargar full Picks..."
          }});        
          this.shadowRoot.append(DownLoadDataTranform);
     }
