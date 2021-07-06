@@ -395,9 +395,14 @@ class WArrayF {
             });
             return DataArraySR;
         } else if (typeof param !== 'undefined' && param != null && param != "") {
-            let DataArraySR = DataArray.filter((ActalValue, ActualIndex, Array) => {
+            let DataArraySR = [] /* DataArray.filter((ActalValue, ActualIndex, Array) => {
                 return Array.findIndex(ArryValue => JSON.stringify(ArryValue[param]) ===
                     JSON.stringify(ActalValue[param])) === ActualIndex
+            });*/
+            DataArray.forEach(element => {                
+                if (!DataArraySR.find(x => x[param] == element[param])) {
+                    DataArraySR.push(element)
+                }
             });
             return DataArraySR;
         }

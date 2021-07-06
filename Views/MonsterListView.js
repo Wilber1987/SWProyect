@@ -25,23 +25,8 @@ export default class MonsterListView extends HTMLElement {
         // });
         const UserActions = [{
             name: "Builds",
-            Function: (Param) => {                
-                console.log(Param)
-            }
-        },{
-            name: "RTA Info",
-            Function: (Param) => {                
-                console.log(Param)
-            }
-        },{
-            name: "ARENA Info",
-            Function: (Param) => {                
-                console.log(Param)
-            }
-        },{
-            name: "GUILD Info",
-            Function: (Param) => {                
-                console.log(Param)
+            Function: async (Param) => {                
+                //console.log(Param)
             }
         }]
         var TableConfigG = {
@@ -65,6 +50,7 @@ export default class MonsterListView extends HTMLElement {
             ],
             Options: {
                 Search: true,
+                Show: true,
                 UserActions: UserActions
             }
         };
@@ -106,4 +92,9 @@ export default class MonsterListView extends HTMLElement {
     };
 }
 customElements.define("w-monster-list", MonsterListView);
+class Build {
+    constructor(MobsData, BuildsData){
+
+    }
+}
 

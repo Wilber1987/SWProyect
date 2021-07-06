@@ -1,6 +1,7 @@
 import { ComponentsManager, WAjaxTools, WRender } from "./WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "./WDevCore/WModules/WStyledRender.js";
 import "./WDevCore/WComponents/WAppNavigator.js";
+import {HomeClass} from "./Views/Home.js";
 import MonsterListView from "./Views/MonsterListView.js";
 import MonsterETL from "./Views/MonsterETL.js";
 import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
@@ -49,7 +50,7 @@ class MasterDomClass extends ComponentsManager {
                 ClassList: [
                     new WCssClass(`.App`, {
                         display: "grid",
-                        "grid-template-columns": "0px calc(100% - 0px)",
+                        "grid-template-columns": "100px calc(100% - 100px)",
                         "grid-template-rows": "70px calc(100vh - 120px) 50px"
                     }), new WCssClass(".AppAside", {
                         overflow: "hidden"
@@ -82,7 +83,8 @@ class headerClass {
         this.props = { className: "AppHeader" }
         this.children = [
             this.Style,
-            { type: 'img', props: { src: "./Media/logo.png" } },
+            WRender.CreateStringNode("<h1>SummonersWars</h1>")
+            //{ type: 'img', props: { src: "./Media/logo.png" } },
         ];
     }
     Style = {
@@ -94,7 +96,9 @@ class headerClass {
                     "justify-content": "right",
                     "align-items": "center",
                     padding: "0px 40px"
-                }), new WCssClass(".AppHeader img", {
+                }), new WCssClass(".AppHeader h1", {                    
+                    color: "#444",
+                }),new WCssClass(".AppHeader img", {
                     display: "block",
                     height: "100%"
                 }),
@@ -112,12 +116,12 @@ class AsideClass {
         type: "w-app-navigator",
         props: {
             Direction: "column", id: "AppNav",
-            title: "Documentación",
+            title: "Menu",
             Elements: [
                 {
-                    name: "Inicio", url: "#",
+                    name: "Home", url: "#",
                     action: (ev) => {
-                        //CODE
+                        DOMManager.NavigateFunction("HomeClass", new HomeClass(), "AppMain");
                     }
                 },
                 {
@@ -131,8 +135,27 @@ class AsideClass {
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
                     }
-                },
-                {
+                },{
+                    name: "RTA TierList", url: "#",
+                    action: (ev) => {
+                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                    }
+                },{
+                    name: "RTA Comps", url: "#",
+                    action: (ev) => {
+                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                    }
+                },{
+                    name: "Guild/Siege Comps", url: "#",
+                    action: (ev) => {
+                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                    }
+                },{
+                    name: "Share Build", url: "#",
+                    action: (ev) => {
+                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                    }
+                }, {
                     name: "RTA ETL", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
@@ -160,19 +183,40 @@ class MainClass {
     constructor() {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
-        this.children = [            
+        this.children = [ 
+            new HomeClass(this.ImgData)          
         ];
     }
+    ImgData = [
+        { src: "./Media/Img/wall12.jpg", title: "Monster List", action: ()=>{
+            DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
+        }},
+        { src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: ()=>{
+            DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
+        }},
+        { src: "./Media/Img/wall5.jpg", title: "Export RTA Data", action: ()=>{
+            DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+        }},
+        { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
+
+        }},
+        { src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: ()=>{
+
+        }},,
+        { src: "./Media/Img/wall13.jpg", title: "Share Build", action: ()=>{
+
+        }},
+    ]
 }
 class FooterClass {
     constructor() {
         this.type = "footer";
         this.props = { className: "AppFooter" }
         this.children = [this.Style,
-        { type: 'label', props: { innerText: "Derechos reservados - " } },
+        { type: 'label', props: { innerText: "All rights reserved - " } },
         {
             type: 'a', props: {
-                innerText: "- https://github.com/Wilber1987/WExpDev.git",
+                innerText: "Wilber Jose Matus G (SeyferXx)",
                 href: "https://github.com/Wilber1987/WExpDev.git", target: "_blank"
             }
         }
