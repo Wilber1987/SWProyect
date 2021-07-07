@@ -5,8 +5,21 @@
     "set1": "violent",
     "set2": "will",
     "set3": "",
-    "artifactType": "atk",
-    "artifactElement": "atk",
-    "description": "Excelente para defensas de siege y RTA"
+    "Stats":"Atk%/Spd, Atk%, Atk%",
+    "Subs-stats":"Def%, Acc, Hp%",
+    "ArtType": "atk",
+    "ArtElement": "atk",
+    "Description": "Excelente para defensas de siege y RTA"
+  },{
+    "buildId": 1,
+    "monsterId": 12302,
+    "set1": "violent",
+    "set2": "will",
+    "set3": "",
+    "Stats":"Atk%/Spd, Atk%, Atk%",
+    "Subs-stats":"Def%, Acc, Hp%",
+    "ArtType": "atk",
+    "ArtElement": "atk",
+    "Description": "Excelente para defensas de siege y RTA"
   }
 ]

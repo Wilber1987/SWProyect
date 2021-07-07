@@ -430,8 +430,8 @@ class WTableComponent extends HTMLElement {
                                     props: {
                                         src: cadenaB64 + value,
                                         class: "imgPhoto",
-                                        height: 100,
-                                        width: 100
+                                        height: 50,
+                                        width: 50
                                     }
                                 }]
                             });
@@ -1773,9 +1773,9 @@ class WTableComponent extends HTMLElement {
                         "min-width": "20px",
                         "margin": "5px",
                     }), new WCssClass(`.imgPhoto`, {
-                        "width": "140px",
+                        "width": "80px",
                         "border-radius": "50%",
-                        "height": "140px",
+                        "height": "80px",
                         "size": "100%",
                         display: "block",
                         margin: "auto",

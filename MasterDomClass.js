@@ -5,6 +5,7 @@ import {HomeClass} from "./Views/Home.js";
 import MonsterListView from "./Views/MonsterListView.js";
 import MonsterETL from "./Views/MonsterETL.js";
 import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
+import RTATierList from "./Views/RTATierList.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -184,6 +185,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [ 
+            //new MonsterListView()
             new HomeClass(this.ImgData)          
         ];
     }
@@ -194,8 +196,8 @@ class MainClass {
         { src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: ()=>{
             DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
         }},
-        { src: "./Media/Img/wall5.jpg", title: "Export RTA Data", action: ()=>{
-            DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+        { src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: ()=>{
+            DOMManager.NavigateFunction("RtaETL", new RTATierList(), "AppMain");
         }},
         { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
 
