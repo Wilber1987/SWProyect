@@ -819,14 +819,27 @@ class WModalForm extends HTMLElement {
             props: {
                 ClassList: [
                     new WCssClass(" .ContainerFormWModal", {
-                        "width": "90% !important",
-                        "border-radius": "0.2cm !important",
-                        "max-width": "900px !important",
+                        "width": "90%",
+                        "border-radius": "0.2cm",
+                        "max-width": "900px",
                     }),
                     new WCssClass(" divForm", {
                         "grid-template-columns": "calc(30%) calc(30%) calc(30%)",
                     }),
-                ]
+                ],MediaQuery: [{
+                    condicion: "(max-width: 800px)",
+                    ClassList: [
+                       new WCssClass(" .ContainerFormWModal", {
+                            "margin-top": "0px",
+                            "width": "100%",
+                            "max-height": "calc(100vh - 0px)",
+                            "height": "calc(100vh - 0px)",
+                            "border-radius": "0cm",
+                        }), new WCssClass("", {
+                            "padding-bottom": "0px",
+                        }),
+                    ]
+                },]
             }
         }
         return Style;

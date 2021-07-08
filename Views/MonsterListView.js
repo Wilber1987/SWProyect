@@ -44,6 +44,9 @@ export default class MonsterListView extends HTMLElement {
                 this.shadowRoot.append(WRender.createElement(Modal))
             }
         }]
+        Data.sort(function (a, b) {
+            return b.natural_stars - a.natural_stars;
+        });
         var TableConfigG = {
             Datasets: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
@@ -101,7 +104,7 @@ export default class MonsterListView extends HTMLElement {
         props: {
             ClassList: [
                 new WCssClass(".DocumentView", {
-                    display: "grid",
+                   // display: "grid",
                     height: "100%",
                     //padding: "20px",
                     //"grid-template-columns": "100%",

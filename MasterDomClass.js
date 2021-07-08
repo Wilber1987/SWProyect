@@ -63,7 +63,7 @@ class MasterDomClass extends ComponentsManager {
                     new WCssClass(`.App`, {
                         display: "grid",
                         "grid-template-columns": "100%",
-                        "grid-template-rows": "70px 40px calc(100vh - 160px) 50px"
+                        "grid-template-rows": "70px auto calc(100vh - 160px) 50px"
                     }), new WCssClass(".AppHeader", {
                         "grid-column": "1/auto",
                         "background-color": "#eee",
@@ -141,7 +141,7 @@ class AsideClass {
                 },{
                     name: "RTA TierList", url: "#",
                     action: (ev) => {
-                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                        DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
                     }
                 },{
                     name: "RTA Comps", url: "#",
@@ -173,7 +173,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [ 
-            //new RTATierList(),
+            //new MonsterListView(),
             new HomeClass(this.ImgData)          
         ];
     }
@@ -185,7 +185,7 @@ class MainClass {
             DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
         }},
         { src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: ()=>{
-            DOMManager.NavigateFunction("RtaETL", new RTATierList(), "AppMain");
+            DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
         }},
         { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
 

@@ -134,7 +134,14 @@ export default class MonsterRTAPicks extends HTMLElement {
                 }), new WCssClass(".DataContainer select", {
                    padding: "10px"
                 }), 
-            ]
+            ], MediaQuery: [{
+                condicion: '(max-width: 600px)',
+                ClassList: [
+                    new WCssClass(".DataContainer", {
+                        "flex-direction": "column"
+                    })
+                ]
+            }]
         }
     };
 }

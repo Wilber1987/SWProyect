@@ -7,13 +7,18 @@ class WFilterOptions extends HTMLElement {
             this.id = undefined ?? Config.id;
             this.Config = Config;
         }
-        this.attachShadow({ mode: "open" });
+        this.attachShadow({ mode: "open" });        
     }
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
             return;
         }
-        this.className = this.className + " reportV";
+        this.className = this.className + " WFilterOptions";
+        this.append(WRender.createElement({ type:'w-style', props: {id: '', ClassList: [
+            new WCssClass(`.WFilterOptions`, {
+                display: "block"
+            }),
+        ]}}))
         this.DrawFilter();
     }
     DrawFilter() {
@@ -105,7 +110,8 @@ class WFilterOptions extends HTMLElement {
                 }), new WCssClass(`.OptionContainer`, {
                     display: "flex",
                     "flex-wrap": "wrap",
-                    "margin-bottom": "10px"
+                    "margin-bottom": "10px",
+                    width: "100%"
                 }), new WCssClass(`.OptionContainer div`, {
                     display: "grid",
                     "grid-template-rows": "20px 30px",
@@ -131,33 +137,20 @@ class WFilterOptions extends HTMLElement {
                 }),
             ], MediaQuery: [{
                 condicion: '(max-width: 600px)',
-                ClassList: []
+                ClassList: [ new WCssClass(`.OptionContainer`, {
+                    display: "flex",
+                    "flex-direction": "column",                    
+                }),new WCssClass(`.OptionContainer div`, {
+                    display: "grid",
+                    "grid-template-rows": "20px 30px",
+                    "grid-template-columns": "auto",
+                    margin: "5px",
+                    "font-size": "12px",
+                }),]
             },
             ]
         }
     };
 }
-const MasterStyle = {
-    type: "w-style",
-    props: {
-        ClassList: [
-            new WCssClass(".App", {
-                display: "grid",
-                "grid-template-columns": "250px calc(100% - 250px)",
-                "grid-template-rows": "70px calc(100vh - 120px) 50px"
-            })
-        ], MediaQuery: [{
-            condicion: "(max-width: 600px)",
-            ClassList: [
-                new WCssClass(`.App`, {
-                    display: "grid",
-                    "grid-template-columns": "100%",
-                    "grid-template-rows": "70px auto calc(100vh - 120px) 50px"
-                })
-            ]
-        }
-        ]
-    }
-};
 customElements.define("w-filter-option", WFilterOptions);
 export { WFilterOptions }
