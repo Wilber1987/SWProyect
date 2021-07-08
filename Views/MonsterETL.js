@@ -252,12 +252,15 @@ export default class MonsterETL extends HTMLElement {
                 let SeasonScore = 0;
                 if ((Pick_Rate / NPartidos * 100) > 1) {
                     SeasonScore = (
-                        (Pick_Rate / NPartidos * 100) * 0.3
-                        + (FirstPick / Pick_Rate * 100) * 0.15
-                        + (LastPick / Pick_Rate * 100) * 0.15
-                        + (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.2
-                        + (Banned_Rate / Pick_Rate * 100) * 0.2
+                        (Pick_Rate / NPartidos * 100) * 0.2
+                        + (FirstPick / Pick_Rate * 100) * 0.1
+                        + (LastPick / Pick_Rate * 100) * 0.05
+                        + (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.4
+                        + (Banned_Rate / Pick_Rate * 100) * 0.25
                     )
+                    if (SeasonScore>50) {
+                        SeasonScore = 50;
+                    }
                 }                  
                 Mon.SeasonScore = SeasonScore.toFixed(2);
                 RTAPicksData.push(Mon);

@@ -28,11 +28,11 @@ class WFilterOptions extends HTMLElement {
         for (const prop in this.Config.Dataset[0]) {
             const flag = this.checkDisplay(prop);
             if (flag) {
-                if ((typeof this.Config.Dataset[0][prop] != "number"
+               /* if ((typeof this.Config.Dataset[0][prop] != "number"
                     && !prop.toUpperCase().includes("FECHA")
                     && !prop.toUpperCase().includes("DATE"))
                     || prop.toUpperCase().includes("AÑO")
-                    || prop.toUpperCase().includes("YEAR")) {
+                    || prop.toUpperCase().includes("YEAR")) {*/
                     const select = {
                         type: 'select', props: { id: prop }, children: [
                             { type: 'option', props: { innerText: 'Seleccione', value: '' } }
@@ -80,10 +80,9 @@ class WFilterOptions extends HTMLElement {
                         }
                     }
                     ControlOptions.children.push([prop, select]);
-                }
+                //}
             }
-        }
-
+        }        
         this.shadowRoot.append(WRender.createElement(ControlOptions));
         this.shadowRoot.append(WRender.createElement(this.style));
     }

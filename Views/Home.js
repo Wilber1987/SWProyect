@@ -52,6 +52,7 @@ class HomeClass {
                 }),new WCssClass(".ImagesContainer img", {
                     display: "block",
                     height: "100%",
+                    width: "100%",
                     "object-fit": "cover"
                 }),new WCssClass(".ImagesContainer .imgBtn", {
                     position: "absolute",

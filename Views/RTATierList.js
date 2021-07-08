@@ -53,7 +53,7 @@ export default class RTATierList extends HTMLElement {
             TierContainer.children.push(new TierSection(RTAPicksData, {
                 topScore: topScore,
                 buttomScore: buttomScore
-            }))
+            }, this))
             topScore = topScore - 5;
             buttomScore = buttomScore - 5;
         }
@@ -85,7 +85,7 @@ export default class RTATierList extends HTMLElement {
     };
 }
 class TierSection {
-    constructor(TierData = [], TierScore = {}) {
+    constructor(TierData = [], TierScore = {}, Parent) {
         this.type = "div";
         this.props = {
             class: "TierSection"
@@ -103,7 +103,30 @@ class TierSection {
 
         TierData.forEach(Data => {
             if (Data.SeasonScore <= TierScore.topScore && Data.SeasonScore >= TierScore.buttomScore) {
-                MobContainer.children.push([{
+                MobContainer.children.push( { type:'div', props: { onclick: ()=>{
+                    const Modal = WRender.createElement({
+                        type: "w-modal-form",
+                        props: {
+                            ObjectDetail: Data,
+                            DisplayData: [
+                                "image_filename",
+                                "name",
+                                "element",
+                                "Pick_Rate",
+                                "Win_Rate",
+                                "Banned_Rate",
+                                "Leader",
+                                "FirstPick",
+                                "LastPick",
+                                "SeasonScore"
+                            ],
+                            //ShadowRoot: false,
+                            title: "Tier Data",
+                            StyleForm: "columnX3"
+                        }
+                    });
+                    Parent.shadowRoot.append(WRender.createElement(Modal));
+                }}, children:[{
                     type: "img", props: {
                         src: "https://swarfarm.com/static/herders/images/monsters/"
                             + Data.image_filename
@@ -111,7 +134,7 @@ class TierSection {
                 }, {
                     type: "label",
                     props: { innerText: `${Data.name}` }
-                }]);
+                }]} );
             }
         });
     }

@@ -2,6 +2,7 @@ import { ComponentsManager, type, WAjaxTools, WRender } from "../WDevCore/WModul
 import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
 import "../WDevCore/WComponents/WTableComponents.js";
 import "../WDevCore/WComponents/WModalForm.js";
+import "../WDevCore/WComponents/WFilterControls.js";
 
 export default class MonsterListView extends HTMLElement {
     constructor() {
@@ -75,6 +76,21 @@ export default class MonsterListView extends HTMLElement {
                 TableConfig: TableConfigG
             }
         });
+        const filtOptions = {
+            type: "w-filter-option", props: {Config: {
+                Dataset: Data,
+                DisplayOption: [ 
+                    "element",
+                    "archetype",
+                    //"base_stars",
+                    "natural_stars",                   
+                ],
+            }, FilterFunction : async (FilterData)=>{
+                //WTableReport.Dataset = FilterData;
+                WTableReport.DefineTable(FilterData);
+            }}
+        }
+        this.shadowRoot.append(WRender.createElement(filtOptions))
         this.shadowRoot.append(WTableReport);
         this.append(WRender.createElement(this.Style));
 
