@@ -5,6 +5,7 @@ import {HomeClass} from "./Views/Home.js";
 import MonsterListView from "./Views/MonsterListView.js";
 import MonsterETL from "./Views/MonsterETL.js";
 import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
+import RTATierList from "./Views/RTATierList.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -50,7 +51,7 @@ class MasterDomClass extends ComponentsManager {
                 ClassList: [
                     new WCssClass(`.App`, {
                         display: "grid",
-                        "grid-template-columns": "100px calc(100% - 100px)",
+                        "grid-template-columns": "0px calc(100% - 0px)",
                         "grid-template-rows": "70px calc(100vh - 120px) 50px"
                     }), new WCssClass(".AppAside", {
                         overflow: "hidden"
@@ -62,12 +63,14 @@ class MasterDomClass extends ComponentsManager {
                     new WCssClass(`.App`, {
                         display: "grid",
                         "grid-template-columns": "100%",
-                        "grid-template-rows": "70px auto calc(100vh - 120px) 50px"
+                        "grid-template-rows": "70px 40px calc(100vh - 160px) 50px"
                     }), new WCssClass(".AppHeader", {
                         "grid-column": "1/auto",
                         "background-color": "#eee",
                         "border-bottom": "solid #4da6ff 10px",
-                    }), new WCssClass(".AppFooter", {
+                    }), new WCssClass(".AppAside", {   
+                        "border-bottom": "solid #999 1px",
+                    }),new WCssClass(".AppFooter", {
                         "grid-column": "1/auto",
                         "background-color": "#eee",
                         "border-top": "solid #4da6ff 5px"
@@ -164,26 +167,13 @@ class AsideClass {
             ]
         }
     }
-    convertToBase64(PDF) {
-        var fileToLoad = PDF;
-        // FileReader function for read the file.
-        var fileReader = new FileReader();
-        var base64;
-        // Onload of file read the file content
-        fileReader.onload = function (fileLoadedEvent) {
-            base64 = fileLoadedEvent.target.result;
-            // Print data in console
-            console.log(base64);
-        };
-        // Convert data to base64
-        fileReader.readAsDataURL(fileToLoad);
-    }
 }
 class MainClass {
     constructor() {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [ 
+            //new RTATierList(),
             new HomeClass(this.ImgData)          
         ];
     }
@@ -194,8 +184,8 @@ class MainClass {
         { src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: ()=>{
             DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
         }},
-        { src: "./Media/Img/wall5.jpg", title: "Export RTA Data", action: ()=>{
-            DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+        { src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: ()=>{
+            DOMManager.NavigateFunction("RtaETL", new RTATierList(), "AppMain");
         }},
         { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
 
