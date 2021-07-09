@@ -8,6 +8,7 @@ import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
 import RTATierList from "./Views/RTATierList.js";
 import RTACompsView from "./Views/RTAComps.js";
 import ShareBuildsView from "./Views/ShareBuild.js";
+import SiegCompsView from "./Views/GuildSiegeComps.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -88,7 +89,7 @@ class headerClass {
         this.props = { className: "AppHeader" }
         this.children = [
             this.Style,
-            WRender.CreateStringNode("<h1>SummonersWars</h1>")
+            WRender.CreateStringNode("<h1>SeyferGames Proyect</h1>")
             //{ type: 'img', props: { src: "./Media/logo.png" } },
         ];
     }
@@ -153,7 +154,7 @@ class AsideClass {
                 },{
                     name: "Guild/Siege Comps", url: "#",
                     action: (ev) => {
-                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                        DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
                     }
                 },{
                     name: "Share Build", url: "#",
@@ -193,7 +194,7 @@ class MainClass {
             DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
         }},
         { src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: ()=>{
-
+            DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
         }},
         { src: "./Media/Img/wall13.jpg", title: "Share Build", action: ()=>{
             DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
@@ -205,11 +206,11 @@ class FooterClass {
         this.type = "footer";
         this.props = { className: "AppFooter" }
         this.children = [this.Style,
-        { type: 'label', props: { innerText: "All rights reserved - " } },
+        { type: 'label', props: { innerText: "All rights reserved -" } },
         {
-            type: 'a', props: {
+            type: 'label', props: {
                 innerText: "Wilber Jose Matus G (SeyferXx)",
-                href: "https://github.com/Wilber1987/WExpDev.git", target: "_blank"
+                //href: "https://github.com/Wilber1987/WExpDev.git", target: "_blank"
             }
         }
         ];
@@ -222,6 +223,9 @@ class FooterClass {
                     display: "flex",
                     "justify-content": "center",
                     "align-items": "center",
+                }),new WCssClass(".AppFooter label", {
+                    margin: "0px 5px",
+                    "font-size": "12px"
                 })
             ]
         }
