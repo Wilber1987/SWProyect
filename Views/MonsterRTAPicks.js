@@ -18,6 +18,9 @@ export default class MonsterRTAPicks extends HTMLElement {
     }
     DrawComponent = async () => {
         this.shadowRoot.innerHTML = "";
+        
+        this.shadowRoot.append(WRender.createElement(this.Style));
+        this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Picks Info</h2>"));
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
         GlobalData = await GlobalData.json();
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] }
@@ -78,7 +81,6 @@ export default class MonsterRTAPicks extends HTMLElement {
             }
         }));
         this.shadowRoot.append(WTableReport);
-        this.shadowRoot.append(WRender.createElement(this.Style));
     }
     CreateRtaPicksData = async (Season = SeasonList[this.SelectedSeason]) => {
         //TRANSFORMMMMM-----------------------------
@@ -133,7 +135,10 @@ export default class MonsterRTAPicks extends HTMLElement {
                     margin: "10px", "justify-content": "center", "align-items": "center", display: "flex"
                 }), new WCssClass(".DataContainer select", {
                    padding: "10px"
-                }), 
+                }), new WCssClass("h2", {
+                    margin: "0px",
+                    color: "#999"
+                }),
             ], MediaQuery: [{
                 condicion: '(max-width: 600px)',
                 ClassList: [

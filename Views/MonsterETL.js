@@ -13,6 +13,7 @@ export default class MonsterETL extends HTMLElement {
         if (this.shadowRoot.innerHTML != "") {
             return;
         }
+        this.shadowRoot.append(WRender.CreateStringNode("<h2>Data Export</h2>"));
         this.DrawComponent();
     }
     DrawComponent = async () => {
@@ -49,6 +50,13 @@ export default class MonsterETL extends HTMLElement {
                     id: '', type: 'button', class: 'className', value: 'CreateDataRtaPicks',
                     onclick: async () => {
                         this.CreateRtaPicksData();
+                    }
+                }
+            },{
+                type: 'input', props: {
+                    id: '', type: 'button', class: 'className', value: 'CreateDataRtaComps',
+                    onclick: async () => {
+                        this.CreateRtaPicksDataComps();
                     }
                 }
             }
@@ -225,7 +233,7 @@ export default class MonsterETL extends HTMLElement {
         //TRANSFORMMMMM-----------------------------
         const MonPickData = this.MonPickData;
         let Data = [];
-        for (let index = 0; index < 18; index++) {
+        for (let index = 0; index < 19; index++) {
             let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
             response = await response.json();
             Data = Data.concat(response.results);
@@ -275,6 +283,65 @@ export default class MonsterETL extends HTMLElement {
         });
         this.shadowRoot.append(DownLoadDataTranform);
     }
+    CreateRtaPicksDataComps = async (Season = SeasonList[this.SelectedSeason]) => {
+        //TRANSFORMMMMM-----------------------------
+        let MonPickData = await fetch("../DataBase/RTAPicks/MonPickData" + this.SelectedSeason + ".json");
+        MonPickData = await MonPickData.json();
+        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + this.SelectedSeason + ".json");
+        RTAPicksData = await RTAPicksData.json();
+        RTAPicksData.sort(function (a, b) {
+            return b.SeasonScore - a.SeasonScore;
+        });
+        console.log(MonPickData);
+        console.log(RTAPicksData);
+        const DataComps = [];
+        //RTAPicksData.forEach(mob => {
+            const Battles = WArrayF.ArrayUnique(MonPickData, "id_battle"); //MonPickData.filter(x=> x.unit_master_id == mob.com2us_id);
+            Battles.forEach(battle => {
+                const Comp = MonPickData.filter(x=> x.id_battle == battle.id_battle);
+                const users = WArrayF.ArrayUnique(Comp, "user")
+                const Composition1 = {
+                    id_battle: battle.id_battle,
+                    user: users[0].user
+                };
+                const Composition2 = {
+                    id_battle: battle.id_battle,
+                    user: users[1].user
+                };
+                Comp.forEach(comp => { 
+                    const mob = RTAPicksData.find(x=> x.com2us_id == comp.unit_master_id) 
+                    console.log(comp.unit_master_id);
+                    console.log(mob);               
+                    if (comp.user == Composition1.user) {
+                        Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id; 
+                        Composition1["Pick_Name" + comp.pick_slot_id] = mob.name;
+                        Composition1["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;                        
+                    }
+                    if (comp.user == Composition2.user) {
+                        Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id; 
+                        Composition2["Pick_Name" + comp.pick_slot_id] = mob.name;
+                        Composition2["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
+                    }
+                });
+                if (DataComps.find(x=> x.id_battle == battle.id_battle) == null) {
+                    DataComps.push(Composition1);
+                    DataComps.push(Composition2);
+                }
+            });
+        //});
+        console.log(MonPickData);
+        console.log(RTAPicksData);
+        console.log(DataComps);
+        //return DataComps;
+        const dataStr2 = "data:text/json;charset=utf-8,"
+            + encodeURIComponent(JSON.stringify(DataComps));
+        const DownLoadDataTranform = WRender.createElement({
+            type: 'a', props: {
+                href: dataStr2, download: "DataPickComps" + this.SelectedSeason + ".json", innerText: "Descargar full Comps Picks..."
+            }
+        });
+        this.shadowRoot.append(DownLoadDataTranform);
+   }
     Style = {
         type: "w-style",
         props: {
@@ -282,7 +349,10 @@ export default class MonsterETL extends HTMLElement {
                 new WCssClass(".DocumentView", {
                     display: "flex",
                     "flex-direction": "column"
-                })
+                }),new WCssClass("h2", {
+                    margin: "0px",
+                    color: "#999"
+                }),
             ]
         }
     };

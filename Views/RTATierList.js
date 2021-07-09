@@ -18,6 +18,9 @@ export default class RTATierList extends HTMLElement {
     }
     DrawComponent = async () => {
         this.shadowRoot.innerHTML = "";
+        
+        this.shadowRoot.append(WRender.createElement(this.Style));
+        this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
         GlobalData = await GlobalData.json();
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] }
@@ -58,7 +61,6 @@ export default class RTATierList extends HTMLElement {
             buttomScore = buttomScore - 5;
         }
         this.shadowRoot.append(WRender.createElement(TierContainer));
-        this.shadowRoot.append(WRender.createElement(this.Style));
     }
     Style = {
         type: 'w-style', props: {
@@ -72,6 +74,9 @@ export default class RTATierList extends HTMLElement {
                     margin: "10px", "justify-content": "center", "align-items": "center", display: "flex"
                 }), new WCssClass(".DataContainer select", {
                     padding: "10px"
+                }),new WCssClass("h2", {
+                    margin: "0px",
+                    color: "#999"
                 }),
             ], MediaQuery: [{
                 condicion: '(max-width: 600px)',

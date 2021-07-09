@@ -6,6 +6,8 @@ import MonsterListView from "./Views/MonsterListView.js";
 import MonsterETL from "./Views/MonsterETL.js";
 import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
 import RTATierList from "./Views/RTATierList.js";
+import RTACompsView from "./Views/RTAComps.js";
+import ShareBuildsView from "./Views/ShareBuild.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -146,7 +148,7 @@ class AsideClass {
                 },{
                     name: "RTA Comps", url: "#",
                     action: (ev) => {
-                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                        DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
                     }
                 },{
                     name: "Guild/Siege Comps", url: "#",
@@ -156,7 +158,7 @@ class AsideClass {
                 },{
                     name: "Share Build", url: "#",
                     action: (ev) => {
-                        //DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
+                        DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
                     }
                 }, {
                     name: "RTA ETL", url: "#",
@@ -173,7 +175,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [ 
-            //new MonsterListView(),
+            //new ShareBuildsView(),
             new HomeClass(this.ImgData)          
         ];
     }
@@ -188,13 +190,13 @@ class MainClass {
             DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
         }},
         { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
-
+            DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
         }},
         { src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: ()=>{
 
-        }},,
+        }},
         { src: "./Media/Img/wall13.jpg", title: "Share Build", action: ()=>{
-
+            DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
         }},
     ]
 }

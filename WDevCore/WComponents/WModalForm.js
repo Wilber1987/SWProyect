@@ -46,6 +46,7 @@ class WModalForm extends HTMLElement {
 
         //NO MODAL
         if (this.NoModal == true) {
+            this.HeadOptions == false;
             this.append(WRender.createElement(this.StyleNoModal()));
             if (this.ShadowRoot) {
                 this.shadowRoot.append(WRender.createElement({
@@ -222,7 +223,7 @@ class WModalForm extends HTMLElement {
         ComponentsManager.modalFunction(this)
     }
     DrawModalHead() {
-        if (this.HeadOptions == false) {
+        if (this.HeadOptions == false || this.NoModal == true) {
             return "";
         }
         let icon = "";

@@ -13,12 +13,15 @@ export default class MonsterListView extends HTMLElement {
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
             return;
-        }
+        }        
         this.DrawComponent();
     }
     DrawComponent = async () => {
+        this.shadowRoot.append(WRender.createElement(this.Style));
+        this.append(WRender.createElement(this.Style));
+        this.shadowRoot.append(WRender.CreateStringNode("<h2>Monster List</h2>"));
         let Data = [];
-        for (let index = 0; index < 18; index++) {
+        for (let index = 0; index < 19; index++) {
             let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
             response = await response.json();
             Data = Data.concat(response.results);
@@ -44,9 +47,11 @@ export default class MonsterListView extends HTMLElement {
                 this.shadowRoot.append(WRender.createElement(Modal))
             }
         }]
+        Data = Data.filter(x=> x.awakens_from != null);
         Data.sort(function (a, b) {
             return b.natural_stars - a.natural_stars;
         });
+        
         var TableConfigG = {
             Datasets: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
@@ -95,9 +100,6 @@ export default class MonsterListView extends HTMLElement {
         }
         this.shadowRoot.append(WRender.createElement(filtOptions))
         this.shadowRoot.append(WTableReport);
-        this.append(WRender.createElement(this.Style));
-
-        console.log("cargando...");
     }
     Style = {
         type: "w-style",
@@ -119,6 +121,9 @@ export default class MonsterListView extends HTMLElement {
                     display: "block",
                     width: "100%",
                     height: "100%"
+                }),new WCssClass("h2", {
+                    margin: "0px",
+                    color: "#999"
                 }),
             ]
         }
@@ -184,7 +189,7 @@ class BuildsView {
                         "box-shadow": "0 2px 5px 0 rgb(0 0 0 / 30%)"
                     }), new WCssClass(`.DetailMonster h4`, {
                         margin: "0px",
-                    })
+                    }),
                 ]
             }
         }
