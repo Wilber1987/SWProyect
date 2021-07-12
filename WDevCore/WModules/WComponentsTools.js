@@ -68,7 +68,7 @@ class WAjaxTools {
         }
     }
     static PostRequest = async (Url, Data = {}, PostConfig = {}) => {
-        //console.log(Data)
+        console.log(Data)
         try {
             let ContentType = "application/json; charset=utf-8";
             let Accept = "*/*";
@@ -407,6 +407,29 @@ class WArrayF {
             return DataArraySR;
         }
         return null;
+    }
+    static ArrayUniqueByObject(DataArray, param = {}) { 
+        let DataArraySR = [];       
+        DataArray.forEach(element => {   
+            const DFilt =  DataArraySR.find( obj => {
+                let flagObj = true;
+                for (const prop in param) {
+                    if (obj[prop] != element[prop]) {
+                        flagObj = false;
+                    }
+                }
+                return flagObj;
+            });  
+            if (!DFilt) { 
+                element.count = 1;
+                element.rate = ((1/DataArray.length)*100).toFixed(2) + "%";              
+                DataArraySR.push(element)
+            } else {
+                DFilt.count = DFilt.count +1;
+                DFilt.rate = ((DFilt.count/DataArray.length)*100).toFixed(2) + "%";
+            }
+        });
+        return DataArraySR;        
     }
     static DataTotals(Config) {
         let UniqueTotals = this.ArrayUnique(Config.Datasets, Config.AttNameG1, Config.AttNameG2, Config.AttNameG3);

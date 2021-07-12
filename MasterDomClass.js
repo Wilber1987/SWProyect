@@ -54,7 +54,7 @@ class MasterDomClass extends ComponentsManager {
                 ClassList: [
                     new WCssClass(`.App`, {
                         display: "grid",
-                        "grid-template-columns": "0px calc(100% - 0px)",
+                        "grid-template-columns": "100px calc(100% - 100px)",
                         "grid-template-rows": "70px calc(100vh - 120px) 50px"
                     }), new WCssClass(".AppAside", {
                         overflow: "hidden"
