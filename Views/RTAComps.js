@@ -17,8 +17,7 @@ export default class RTACompsView extends HTMLElement {
         this.DrawComponent();
     }
     DrawComponent = async () => {
-        this.shadowRoot.innerHTML = "";
-        
+        this.shadowRoot.innerHTML = "";        
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Teams Info</h2>"));
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
@@ -42,6 +41,9 @@ export default class RTACompsView extends HTMLElement {
         DivCont.children.push([SelectSeason])
         this.shadowRoot.appendChild(WRender.createElement(DivCont));       
         const RTAPicksData = await this.CreateRtaPicksData(SeasonList[this.SelectedSeason]);
+        RTAPicksData.sort(function (a, b) {
+            return b.Win_Rate - a.Win_Rate;
+        });
         const UserActions = [{
             name: "Builds",
             Function: (Param) => {
@@ -53,12 +55,12 @@ export default class RTACompsView extends HTMLElement {
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
              DisplayData: [
-                 "user",
                  "Pick_Image_1",
                  "Pick_Image_2",
                  "Pick_Image_3",
                  "Pick_Image_4",
-                 "Pick_Image_5"            
+                 "Pick_Image_5",
+                 "Win_Rate"           
              ],
             Options: {
                 Search: true, 

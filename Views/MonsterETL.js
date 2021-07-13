@@ -238,11 +238,13 @@ export default class MonsterETL extends HTMLElement {
             const users = WArrayF.ArrayUnique(Comp, "user")
             const Composition1 = {
                 id_battle: battle.id_battle,
-                user: users[0].user
+                user: users[0].user,
+                Win: users[0].win
             };
             const Composition2 = {
                 id_battle: battle.id_battle,
-                user: users[1].user
+                user: users[1].user,
+                Win: users[1].win
             };
             Comp.forEach(comp => {
                 const mob = RTAPicksData.find(x => x.com2us_id == comp.unit_master_id)
@@ -252,6 +254,7 @@ export default class MonsterETL extends HTMLElement {
                     Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id;
                     Composition1["Pick_Name" + comp.pick_slot_id] = mob.name;
                     Composition1["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
+                    
                 }
                 if (comp.user == Composition2.user) {
                     Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id;
@@ -268,13 +271,14 @@ export default class MonsterETL extends HTMLElement {
         //console.log(MonPickData);
         //console.log(RTAPicksData);
         console.log(DataComps);
-        const DataCompsUnique = this.ArrayUniqueByObject(DataComps, {
+        let DataCompsUnique = this.ArrayUniqueByObject(DataComps, {
             Pick1: 1, Pick2: 1, Pick3: 1,Pick4: 1,Pick5: 1
         });
+        DataCompsUnique = DataCompsUnique.filter(x => x.count > 10);
         console.log(DataCompsUnique);
         //return DataComps;
         const dataStr2 = "data:text/json;charset=utf-8,"
-            + encodeURIComponent(JSON.stringify(DataComps));
+            + encodeURIComponent(JSON.stringify(DataCompsUnique));
         const DownLoadDataTranform = WRender.createElement({
             type: 'a', props: {
                 href: dataStr2, download: "DataPickComps" + this.SelectedSeason + ".json", innerText: "Descargar full Comps Picks..."
@@ -288,15 +292,9 @@ export default class MonsterETL extends HTMLElement {
             const comps = [];
             for (const prop in param) {
                 comps.push(element[prop])
-            } 
-            //console.log(comps);
+            }
             const DFilt =  DataArraySR.find( obj => {
-                let flagObj = false;  
-                //let flagObj2 = false;              
-                /* for (let index = 0; index < comps.length; index++) {                    
-                    const comp = comps[index];
-                                 
-                } */
+                let flagObj = false;                 
                 let sumFlag = 0;
                 comps.forEach(comp => {                    
                     for (const prop in obj) {
@@ -311,14 +309,24 @@ export default class MonsterETL extends HTMLElement {
                 }
                 return flagObj;
             });  
-            if (!DFilt) { 
-                element.count = 1;
-                element.rate = ((1/DataArray.length)*100).toFixed(2) + "%";              
-                DataArraySR.push(element)
-            } else {
-                
+            if (!DFilt) {
+                element.count = 1;  
+                element.rate = ((1/DataArray.length)*100).toFixed(2);  
+                if (element.Win == true) {
+                    element.Win_Battle = 1;
+                    element.Win_Rate = ((1/element.count)*100).toFixed(2);
+                } else {
+                    element.Win_Battle = 0;
+                    element.Win_Rate = ((0/element.count)*100).toFixed(2);
+                }           
+                DataArraySR.push(element);
+            } else {                
                 DFilt.count = DFilt.count +1;
-                DFilt.rate = ((DFilt.count/DataArray.length)*100).toFixed(2) + "%";
+                DFilt.rate = ((DFilt.count/DataArray.length)*100).toFixed(2);
+                if (element.Win == true) {
+                    DFilt.Win_Battle = DFilt.Win_Battle + 1;
+                    DFilt.Win_Rate = ((DFilt.Win_Battle/DFilt.count)*100).toFixed(2);
+                }
             }
         });
         return DataArraySR;        
