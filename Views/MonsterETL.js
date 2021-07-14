@@ -16,7 +16,7 @@ export default class MonsterETL extends HTMLElement {
         this.shadowRoot.append(WRender.CreateStringNode("<h2>Data Export</h2>"));
         this.DrawComponent();
     }
-    DrawComponent = async () => {    
+    DrawComponent = async () => {
         const SelectSeason = {
             type: 'select', props: {
                 id: '', class: 'className', onchange: (ev) => {
@@ -59,19 +59,55 @@ export default class MonsterETL extends HTMLElement {
     CreateRTAData = async () => {
         let RTAData = await fetch("./DataBase/full_log" + this.SelectedSeason + ".json");
         RTAData = await RTAData.json();
+        console.log(RTAData);
         const MonPickData = [];
+        let i = 0;
         RTAData.forEach(dat => {
             if (!dat.ranker_replay_list) {
                 return;
             }
             dat.ranker_replay_list.forEach((RepList) => {
                 //PRIMER
-                const BattleId = RepList.opp_wizard_name + "_" + RepList.wizard_name + "_" + RepList.date_add;
+                const BattleId = RepList.opp_wizard_name + "_" + RepList.wizard_name + "_" + RepList.date_add + dat.tvaluelocal;
                 if (MonPickData.find(d => d.id_battle == BattleId)) {
+                    console.log(BattleId);
+                    i++;
+                    console.log(i);
                     return;
                 }
                 RepList.pick_info.unit_list.forEach(pick => {
                     //banned
+                    if (pick.unit_master_id == 24511) {
+                        pick.unit_master_id = 24011;
+                    }
+                    if (pick.unit_master_id == 24512) {
+                        pick.unit_master_id = 24012;
+                    }
+                    if (pick.unit_master_id == 24513) {
+                        pick.unit_master_id = 24013;
+                    }
+                    if (pick.unit_master_id == 24514) {
+                        pick.unit_master_id = 24014;
+                    }
+                    if (pick.unit_master_id == 24515) {
+                        pick.unit_master_id = 24015;
+                    }
+                    //slayers
+                    if (pick.unit_master_id == 24711) {
+                        pick.unit_master_id = 24211;
+                    }
+                    if (pick.unit_master_id == 24712) {
+                        pick.unit_master_id = 24212;
+                    }
+                    if (pick.unit_master_id == 24713) {
+                        pick.unit_master_id = 24213;
+                    }
+                    if (pick.unit_master_id == 24714) {
+                        pick.unit_master_id = 24214;
+                    }
+                    if (pick.unit_master_id == 24715) {
+                        pick.unit_master_id = 24215;
+                    }
                     if (RepList.pick_info.banned_slot_ids[0] == pick.pick_slot_id) {
                         pick.banned = true;
                     } else {
@@ -98,7 +134,37 @@ export default class MonsterETL extends HTMLElement {
                 });
                 //OPONENTE
                 RepList.opp_pick_info.unit_list.forEach(pick => {
-
+                    if (pick.unit_master_id == 24511) {
+                        pick.unit_master_id = 24011;
+                    }
+                    if (pick.unit_master_id == 24512) {
+                        pick.unit_master_id = 24012;
+                    }
+                    if (pick.unit_master_id == 24513) {
+                        pick.unit_master_id = 24013;
+                    }
+                    if (pick.unit_master_id == 24514) {
+                        pick.unit_master_id = 24014;
+                    }
+                    if (pick.unit_master_id == 24515) {
+                        pick.unit_master_id = 24015;
+                    }
+                    //slayers
+                    if (pick.unit_master_id == 24711) {
+                        pick.unit_master_id = 24211;
+                    }
+                    if (pick.unit_master_id == 24712) {
+                        pick.unit_master_id = 24212;
+                    }
+                    if (pick.unit_master_id == 24713) {
+                        pick.unit_master_id = 24213;
+                    }
+                    if (pick.unit_master_id == 24714) {
+                        pick.unit_master_id = 24214;
+                    }
+                    if (pick.unit_master_id == 24715) {
+                        pick.unit_master_id = 24215;
+                    }
                     if (RepList.opp_pick_info.banned_slot_ids[0] == pick.pick_slot_id) {
                         pick.banned = true;
                     } else {
@@ -125,12 +191,15 @@ export default class MonsterETL extends HTMLElement {
                 });
             });
         });
+
         const GlobalData = {
             Season: this.SelectedSeason,
             Fight_Number: WArrayF.ArrayUnique(MonPickData, "id_battle").length
-        } 
+        }
         this.GlobalData = GlobalData;
         this.MonPickData = MonPickData;
+        console.log(MonPickData.filter((item) => item.unit_master_id == 24011));
+        console.log(MonPickData.filter((item) => item.unit_master_id == 24511));
         /*
         //REQUEST   
         //SETGLOBAL DATA...   
@@ -142,7 +211,7 @@ export default class MonsterETL extends HTMLElement {
         const url = "./API/CreateRTAData.php/?function=MonPickData"
         await WAjaxTools.PostRequest(url,{ });
         //FIN REQUEST 
-        */   
+        */
 
         const dataStr = "data:text/json;charset=utf-8,"
             + encodeURIComponent(JSON.stringify(MonPickData));
@@ -159,12 +228,12 @@ export default class MonsterETL extends HTMLElement {
 
         const DownLoadData2 = WRender.createElement({
             type: 'a', props: {
-                href: dataStr, download: "GlobalData" + this.SelectedSeason + ".json", innerText: "Descargar Global Data..."
+                href: dataStr2, download: "GlobalData" + this.SelectedSeason + ".json", innerText: "Descargar Global Data..."
             }
         });
         this.shadowRoot.append(DownLoadData2);
     }
-    
+
     CreateRtaPicksData = async () => {
         //TRANSFORMMMMM-----------------------------
         const MonPickData = this.MonPickData;
@@ -178,6 +247,38 @@ export default class MonsterETL extends HTMLElement {
         const NPartidos = this.GlobalData.Fight_Number;
         Data.forEach(Mon => {
             const MonDataPicks = MonPickData.filter(D => D.unit_master_id == Mon.com2us_id);
+            //strikers          
+            if (Mon.com2us_id == 24511 || Mon.com2us_id == 24011) {
+                Mon.name = "Moore/Water RYU";
+            }
+            if (Mon.com2us_id == 24512 || Mon.com2us_id == 24012) {
+                Mon.name = "Douglas/Fire RYU";
+            }
+            if (Mon.com2us_id == 24513 || Mon.com2us_id == 24013) {
+                Mon.name = "Kashmir/Wind RYU";
+            }
+            if (Mon.com2us_id == 24514 || Mon.com2us_id == 24014) {
+                Mon.name = "Talisman/Light RYU";
+            }
+            if (Mon.com2us_id == 24515 || Mon.com2us_id == 24015) {
+                Mon.name = "Vancliffe/Dark RYU";
+            }
+            //slayers
+            if (Mon.com2us_id == 24711 || Mon.com2us_id == 24211) {
+                Mon.name = "Borynine/Water M. BISON";
+            }
+            if (Mon.com2us_id == 24712 || Mon.com2us_id == 24212) {
+                Mon.name = "Karnal/Fire M. BISON";
+            }
+            if (Mon.com2us_id == 24713 || Mon.com2us_id == 24213) {
+                Mon.name = "Sagar/Wind M. BISON";
+            }
+            if (Mon.com2us_id == 24714 || Mon.com2us_id == 24214) {
+                Mon.name = "Craig/Light M. BISON";
+            }
+            if (Mon.com2us_id == 24715 || Mon.com2us_id == 24215) {
+                Mon.name = "Gurkha/Dark M. BISON";
+            }
             if (MonDataPicks.length != 0) {
                 const Pick_Rate = MonDataPicks.length;
                 const Win_Rate = MonDataPicks.filter(D => D.win == true).length;
@@ -192,16 +293,51 @@ export default class MonsterETL extends HTMLElement {
                 Mon.Banned_Rate = (Banned_Rate / Pick_Rate * 100).toFixed(2) + "%";
                 Mon.Leader = (Leader / Pick_Rate * 100).toFixed(2) + "%";
                 Mon.Season = this.SelectedSeason;
-
                 let SeasonScore = 0;
                 if ((Pick_Rate / NPartidos * 100) > 1) {
-                    SeasonScore = (
-                        (Pick_Rate / NPartidos * 100) * 0.2
-                        + (FirstPick / Pick_Rate * 100) * 0.1
-                        + (LastPick / Pick_Rate * 100) * 0.05
-                        + (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.4
-                        + (Banned_Rate / Pick_Rate * 100) * 0.25
-                    )
+                    let Pick_RateScore = 0;/*(Pick_Rate / NPartidos * 100) > 15 ?
+                        (Pick_Rate / NPartidos * 100) * 0.2 :
+                        (Pick_Rate / NPartidos * 100) * 0;*/
+                    let FirstPickScore = (FirstPick / Pick_Rate * 100) * 0.1;
+                    let LastPickScore = 0;//(LastPick / Pick_Rate * 100) * 0.05;
+                    let Win_RateScore = 0;
+                    let Banned_RateScore = 0;
+
+                    if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
+                        && ((Pick_Rate / NPartidos * 100) > 30) // && ((Banned_Rate / Pick_Rate * 100) > 25)
+                        ) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
+                        && ((Pick_Rate / NPartidos * 100) > 25)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
+                        && ((Pick_Rate / NPartidos * 100) > 5)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
+                        && ((Pick_Rate / NPartidos * 100) > 5)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.50
+                    }  else {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.30
+                    }
+                    if (((Banned_Rate / Pick_Rate * 100) > 25)
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.35
+                    } else if (((Banned_Rate / Pick_Rate * 100) > 20)
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.25
+                    } else if (((Banned_Rate / Pick_Rate * 100) > 10)
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.20
+                    } else { 
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.10
+                    }
+
+
+                    SeasonScore = Pick_RateScore +
+                        FirstPickScore +
+                        LastPickScore +
+                        Win_RateScore +
+                        Banned_RateScore;
                     if (SeasonScore > 50) {
                         SeasonScore = 50;
                     }
@@ -249,12 +385,12 @@ export default class MonsterETL extends HTMLElement {
             Comp.forEach(comp => {
                 const mob = RTAPicksData.find(x => x.com2us_id == comp.unit_master_id)
                 //console.log(comp.unit_master_id);
-                //console.log(mob);
+                console.log(mob);
                 if (comp.user == Composition1.user) {
                     Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id;
                     Composition1["Pick_Name" + comp.pick_slot_id] = mob.name;
                     Composition1["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
-                    
+
                 }
                 if (comp.user == Composition2.user) {
                     Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id;
@@ -272,7 +408,7 @@ export default class MonsterETL extends HTMLElement {
         //console.log(RTAPicksData);
         console.log(DataComps);
         let DataCompsUnique = this.ArrayUniqueByObject(DataComps, {
-            Pick1: 1, Pick2: 1, Pick3: 1,Pick4: 1,Pick5: 1
+            Pick1: 1, Pick2: 1, Pick3: 1, Pick4: 1, Pick5: 1
         });
         DataCompsUnique = DataCompsUnique.filter(x => x.count > 10);
         console.log(DataCompsUnique);
@@ -286,50 +422,50 @@ export default class MonsterETL extends HTMLElement {
         });
         this.shadowRoot.append(DownLoadDataTranform);
     }
-    ArrayUniqueByObject(DataArray, param = {}) { 
-        let DataArraySR = [];         
-        DataArray.forEach(element => {  
+    ArrayUniqueByObject(DataArray, param = {}) {
+        let DataArraySR = [];
+        DataArray.forEach(element => {
             const comps = [];
             for (const prop in param) {
                 comps.push(element[prop])
             }
-            const DFilt =  DataArraySR.find( obj => {
-                let flagObj = false;                 
+            const DFilt = DataArraySR.find(obj => {
+                let flagObj = false;
                 let sumFlag = 0;
-                comps.forEach(comp => {                    
+                comps.forEach(comp => {
                     for (const prop in obj) {
                         if (comp == obj[prop]) {
                             sumFlag++;
                             break;
                         }
-                    }       
+                    }
                 });
                 if (sumFlag == 5) {
                     flagObj = true;
                 }
                 return flagObj;
-            });  
+            });
             if (!DFilt) {
-                element.count = 1;  
-                element.rate = ((1/DataArray.length)*100).toFixed(2);  
+                element.count = 1;
+                element.rate = ((1 / DataArray.length) * 100).toFixed(2);
                 if (element.Win == true) {
                     element.Win_Battle = 1;
-                    element.Win_Rate = ((1/element.count)*100).toFixed(2);
+                    element.Win_Rate = ((1 / element.count) * 100).toFixed(2);
                 } else {
                     element.Win_Battle = 0;
-                    element.Win_Rate = ((0/element.count)*100).toFixed(2);
-                }           
+                    element.Win_Rate = ((0 / element.count) * 100).toFixed(2);
+                }
                 DataArraySR.push(element);
-            } else {                
-                DFilt.count = DFilt.count +1;
-                DFilt.rate = ((DFilt.count/DataArray.length)*100).toFixed(2);
+            } else {
+                DFilt.count = DFilt.count + 1;
+                DFilt.rate = ((DFilt.count / DataArray.length) * 100).toFixed(2);
                 if (element.Win == true) {
                     DFilt.Win_Battle = DFilt.Win_Battle + 1;
-                    DFilt.Win_Rate = ((DFilt.Win_Battle/DFilt.count)*100).toFixed(2);
+                    DFilt.Win_Rate = ((DFilt.Win_Battle / DFilt.count) * 100).toFixed(2);
                 }
             }
         });
-        return DataArraySR;        
+        return DataArraySR;
     }
     Style = {
         type: "w-style",
