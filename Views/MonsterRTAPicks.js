@@ -70,7 +70,7 @@ export default class MonsterRTAPicks extends HTMLElement {
             ],
             Options: {
                 Search: true,
-                UserActions: UserActions
+                //UserActions: UserActions
             }
         };
         const WTableReport = WRender.createElement(WRender.createElement({

@@ -113,6 +113,7 @@ class TierSection {
                         type: "w-modal-form",
                         props: {
                             ObjectDetail: Data,
+                            ImageUrlPath:"https://swarfarm.com/static/herders/images/monsters/",
                             DisplayData: [
                                 "image_filename",
                                 "name",

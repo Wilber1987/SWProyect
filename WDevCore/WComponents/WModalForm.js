@@ -100,7 +100,14 @@ class WModalForm extends HTMLElement {
                             "overflow-y": "auto",
                             "padding-bottom": "50px",
                         })
-                    ]
+                    ], MediaQuery: [{
+                        condicion: "(max-width: 800px)",
+                        ClassList: [
+                            new WCssClass(".ModalContentWModal", {
+                                "padding-bottom": "0px",
+                            }),
+                        ]
+                    }]
                 }
             }))
         }
@@ -685,6 +692,8 @@ class WModalForm extends HTMLElement {
                         "justify-content": "space-between",
                         "align-items": "center",
                         padding: "10px 30px",
+                        color: "#7b7b7b",
+                        "margin-top": "10px"
                     }),
                     new WCssClass(` .BtnClose`, {
                         "font-size": "18pt",
@@ -696,7 +705,7 @@ class WModalForm extends HTMLElement {
                         "display": "flex",
                         "justify-content": "center",
                         "align-items": "center",
-                        "transform": "translateY(-5px)",
+                        //"transform": "translateY(-5px)",
                         border: "none",
                         //float: "right",
                         "background-color": "#fff"
@@ -750,6 +759,7 @@ class WModalForm extends HTMLElement {
                             "grid-gap": "1rem",
                             "grid-template-columns": "calc(100% - 20px) !important",
                             "grid-template-rows": "auto",
+                            "justify-content": "center"
                         }), new WCssClass(" .ContainerFormWModal", {
                             "margin-top": "0px",
                             "width": "100%",
