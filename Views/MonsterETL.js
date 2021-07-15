@@ -387,15 +387,14 @@ export default class MonsterETL extends HTMLElement {
                 //console.log(comp.unit_master_id);
                 console.log(mob);
                 if (comp.user == Composition1.user) {
-                    Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id;
-                    Composition1["Pick_Name" + comp.pick_slot_id] = mob.name;
                     Composition1["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
-
+                    Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id;
+                    Composition1["Pick_Name" + comp.pick_slot_id] = mob.name; 
                 }
                 if (comp.user == Composition2.user) {
-                    Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id;
-                    Composition2["Pick_Name" + comp.pick_slot_id] = mob.name;
                     Composition2["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
+                    Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id;
+                    Composition2["Pick_Name" + comp.pick_slot_id] = mob.name;                    
                 }
             });
             if (DataComps.find(x => x.id_battle == battle.id_battle) == null) {

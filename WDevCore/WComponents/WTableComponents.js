@@ -24,6 +24,9 @@ class WTableComponent extends HTMLElement {
             case "Cards2":
                 this.shadowRoot.append(WRender.createElement(this.TableCardStyle2()));
                 break;
+            case "Cards3":
+                this.shadowRoot.append(WRender.createElement(this.TableCardStyle3()));
+                break;
             case "Cards2-ColumnX2":
                 this.shadowRoot.append(WRender.createElement(this.TableCardStyle2()));
                 this.shadowRoot.append(WRender.createElement(this.TableCardStyle2ColumnX2()));
@@ -382,9 +385,9 @@ class WTableComponent extends HTMLElement {
                 let tBodyStyle = "display:none";
                 if (index == 0) {
                     //tBodyStyle = "display:table-row-group";
-                    if (this.TableConfig.StyleType == "Cards") {
+                    if (this.TableConfig.StyleType != undefined && this.TableConfig.StyleType.includes("Cards")) {
                         tBodyStyle = "display:flex";
-                    } else if (this.TableConfig.StyleType == "Grid") {
+                    } else if (this.TableConfig.StyleType != undefined && this.TableConfig.StyleType == "Grid") {
                         tBodyStyle = "display:grid";
                     } else {
                         //tBodyStyle = "display:table-row-group";
@@ -1061,9 +1064,10 @@ class WTableComponent extends HTMLElement {
                     }))
                 }
                 index++;
-            }        
+            }
         }
-        if (this.TableConfig.StyleType == "Cards") {
+        if (this.TableConfig.StyleType != undefined
+            && this.TableConfig.StyleType.includes("Cards")) {
             return {
                 type: "w-style",
                 props: { ClassList: ClassList }
@@ -1154,7 +1158,7 @@ class WTableComponent extends HTMLElement {
                             "align-items": "center",
                             width: "auto",
                             padding: "10px"
-                        }),,new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
+                        }) , new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
                             "background-color": "#fff"
                         }),
 
@@ -1359,7 +1363,7 @@ class WTableComponent extends HTMLElement {
                             width: "calc(98% - 0.25rem)",
                             "justify-content": "center",
                             "align-items": "center"
-                        }),new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
+                        }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
                             "background-color": "#f9f9f9"
                         }),
 
@@ -1512,6 +1516,60 @@ class WTableComponent extends HTMLElement {
                     //TOPCION
 
                 ],
+            }
+        }
+        return WTableStyle;
+    }
+    TableCardStyle3() {
+        const style = this.shadowRoot.querySelector("#TableCardStyle3" + this.id);
+        if (style) {
+            style.parentNode.removeChild(style);
+        }
+        const WTableStyle = {
+            type: "w-style",
+            props: {
+                id: "TableCardStyle3" + this.id,
+                ClassList:  [
+                    new WCssClass(`divForm div`, {
+                        width: "calc(100% - 10px)",
+                        margin: "5px"
+                    }), new WCssClass(`.WTable`, {
+                        display: "block ", //width: "100%"
+                    }), new WCssClass(`.WTable tbody`, {
+                        "font-size": "12px",
+                        display: "flex",
+                        "overflow-x": "scroll"
+                    }), new WCssClass(`.WTable thead`, {
+                        display: "none ", //width: "100%"
+                    }), new WCssClass(`.WTable tr`, {
+                        display: "grid",
+                        "grid-template-columns": "auto auto",
+                        width: "23%",
+                        "min-width": "340px",
+                        margin: "10px",
+                        "border-radius": "0.3cm",
+                        overflow: "hidden",
+                        "box-shadow": "0 2px 5px 2px rgba(0,0,0,0.2)"
+                    }),  new WCssClass(`.WTable td`, {
+                        //"grid-column": "2/3"
+                    }),new WCssClass(`.WTable .tdImage`, {
+                        "grid-column": "1/2"
+                    }),new WCssClass(`.WTable td`, {
+                        display: "flex ",
+                        "border-bottom": "1px solid #c5c5c5",
+                        padding: "10px"
+                        //width: "100%"
+                    }), new WCssClass(`.WTable .tdAction`, {
+                        display: "block ",
+                        "justify-content": "center",
+                        "align-items": "center",
+                        width: "auto",
+                        padding: "10px"
+                    }), , new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
+                        "background-color": "#fff"
+                    }),
+
+                ]
             }
         }
         return WTableStyle;

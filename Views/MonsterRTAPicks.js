@@ -143,7 +143,7 @@ export default class MonsterRTAPicks extends HTMLElement {
                 condicion: '(max-width: 600px)',
                 ClassList: [
                     new WCssClass(".DataContainer", {
-                        "flex-direction": "column"
+                        //"flex-direction": "column"
                     })
                 ]
             }]

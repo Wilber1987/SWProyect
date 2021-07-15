@@ -1,7 +1,7 @@
 import { ComponentsManager, WAjaxTools, WRender } from "./WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "./WDevCore/WModules/WStyledRender.js";
 import "./WDevCore/WComponents/WAppNavigator.js";
-import {HomeClass} from "./Views/Home.js";
+import { HomeClass } from "./Views/Home.js";
 import MonsterListView from "./Views/MonsterListView.js";
 import MonsterETL from "./Views/MonsterETL.js";
 import MonsterRTAPicks from "./Views/MonsterRTAPicks.js";
@@ -30,7 +30,7 @@ class MasterDomClass extends ComponentsManager {
                 new WCssClass(".App", {
                     display: "grid",
                     "grid-template-columns": "250px calc(100% - 250px)",
-                    "grid-template-rows": "70px calc(100vh - 120px) 50px"
+                    "grid-template-rows": "100px calc(100vh - 150px) 50px"
                 }), new WCssClass(".AppHeader", {
                     "grid-column": "1/3",
                     "background-color": "#eee",
@@ -50,12 +50,12 @@ class MasterDomClass extends ComponentsManager {
                     "font-family": "Arial, Helvetica, sans-serif"
                 }),
             ], MediaQuery: [{
-                condicion: "(max-width: 1400px)",
+                condicion: "(max-width: 1200px)",
                 ClassList: [
                     new WCssClass(`.App`, {
                         display: "grid",
                         "grid-template-columns": "100px calc(100% - 100px)",
-                        "grid-template-rows": "70px calc(100vh - 120px) 50px"
+                        "grid-template-rows": "100px calc(100vh - 130px) 50px"
                     }), new WCssClass(".AppAside", {
                         overflow: "hidden"
                     }),
@@ -66,18 +66,26 @@ class MasterDomClass extends ComponentsManager {
                     new WCssClass(`.App`, {
                         display: "grid",
                         "grid-template-columns": "100%",
-                        "grid-template-rows": "70px auto calc(100vh - 160px) 50px"
+                        "grid-template-rows": "100px auto calc(100vh - 190px) 50px",
                     }), new WCssClass(".AppHeader", {
                         "grid-column": "1/auto",
                         "background-color": "#eee",
                         "border-bottom": "solid #4da6ff 10px",
-                    }), new WCssClass(".AppAside", {   
+                    }), new WCssClass(".AppAside", {
                         "border-bottom": "solid #999 1px",
-                    }),new WCssClass(".AppFooter", {
+                    }), new WCssClass(".AppFooter", {
                         "grid-column": "1/auto",
                         "background-color": "#eee",
                         "border-top": "solid #4da6ff 5px"
-                    }),
+                    }), new WCssClass(`.App .AppMain`, {
+                        "font-size": "11px"
+                    }), new WCssClass(`.App .AppHeader`, {
+                        //"flex-direction": "column",
+                        overflow: "hidden",
+                        "font-size": "8px"
+                    }), new WCssClass(`.App .AppHeader h1`, {
+                        display: "none"
+                    })
                 ]
             }]
         }
@@ -89,8 +97,9 @@ class headerClass {
         this.props = { className: "AppHeader" }
         this.children = [
             this.Style,
-            WRender.CreateStringNode("<h1>SeyferGames Proyect</h1>")
-            //{ type: 'img', props: { src: "./Media/logo.png" } },
+            { type: 'img', props: { src: "./Media/logoSG.png" } },
+            WRender.CreateStringNode("<h1>SummonersWar Proyect</h1>"),
+            { type: 'img', props: { src: "./Media/logoSW.png" } }
         ];
     }
     Style = {
@@ -102,9 +111,11 @@ class headerClass {
                     "justify-content": "right",
                     "align-items": "center",
                     padding: "0px 40px"
-                }), new WCssClass(".AppHeader h1", {                    
+                }), new WCssClass(".AppHeader h1", {
                     color: "#444",
-                }),new WCssClass(".AppHeader img", {
+                    width: "100%",
+                    "text-align": "center",
+                }), new WCssClass(".AppHeader img", {
                     display: "block",
                     height: "100%"
                 }),
@@ -141,22 +152,22 @@ class AsideClass {
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
                     }
-                },{
+                }, {
                     name: "RTA TierList", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
                     }
-                },{
+                }, {
                     name: "RTA Comps", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
                     }
-                },{
+                }, {
                     name: "Guild/Siege Comps", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
                     }
-                },{
+                }, {
                     name: "Share Build", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
@@ -175,30 +186,42 @@ class MainClass {
     constructor() {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
-        this.children = [ 
+        this.children = [
             //new ShareBuildsView(),
-            new HomeClass(this.ImgData)          
+            new HomeClass(this.ImgData)
         ];
     }
     ImgData = [
-        { src: "./Media/Img/wall12.jpg", title: "Monster List", action: ()=>{
-            DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
-        }},
-        { src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: ()=>{
-            DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
-        }},
-        { src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: ()=>{
-            DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
-        }},
-        { src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: ()=>{
-            DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
-        }},
-        { src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: ()=>{
-            DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
-        }},
-        { src: "./Media/Img/wall13.jpg", title: "Share Build", action: ()=>{
-            DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
-        }},
+        {
+            src: "./Media/Img/wall12.jpg", title: "Monster List", action: () => {
+                DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
+            }
+        },
+        {
+            src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: () => {
+                DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
+            }
+        },
+        {
+            src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: () => {
+                DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
+            }
+        },
+        {
+            src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: () => {
+                DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
+            }
+        },
+        {
+            src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: () => {
+                DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
+            }
+        },
+        {
+            src: "./Media/Img/wall13.jpg", title: "Share Build", action: () => {
+                DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
+            }
+        },
     ]
 }
 class FooterClass {
@@ -223,7 +246,7 @@ class FooterClass {
                     display: "flex",
                     "justify-content": "center",
                     "align-items": "center",
-                }),new WCssClass(".AppFooter label", {
+                }), new WCssClass(".AppFooter label", {
                     margin: "0px 5px",
                     "font-size": "12px"
                 })

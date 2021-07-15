@@ -73,7 +73,7 @@ export default class MonsterListView extends HTMLElement {
             ],
             Options: {
                 Search: true,
-                Show: true,
+                //Show: true,
                 UserActions: UserActions
             }
         };

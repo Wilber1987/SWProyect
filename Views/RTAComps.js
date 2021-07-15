@@ -42,7 +42,7 @@ export default class RTACompsView extends HTMLElement {
         this.shadowRoot.appendChild(WRender.createElement(DivCont));       
         const RTAPicksData = await this.CreateRtaPicksData(SeasonList[this.SelectedSeason]);
         RTAPicksData.sort(function (a, b) {
-            return b.Win_Rate - a.Win_Rate;
+            return b.rate - a.rate;
         });
         const UserActions = [{
             name: "Builds",
@@ -52,6 +52,7 @@ export default class RTACompsView extends HTMLElement {
         }]
         var TableConfigG = {
             Datasets: RTAPicksData,
+            StyleType:"Cards3",
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
              DisplayData: [
@@ -60,12 +61,19 @@ export default class RTACompsView extends HTMLElement {
                  "Pick_Image_3",
                  "Pick_Image_4",
                  "Pick_Image_5",
-                 "Win_Rate"           
+                 "Win_Rate" ,
+                 "Pick_Name1",
+                 "Pick_Name2",
+                 "Pick_Name3",
+                 "Pick_Name4",
+                 "Pick_Name5",
+                 "count"
              ],
+             
             Options: {
                 Search: true, 
                 //Show: true
-                UserActions: UserActions
+                //UserActions: UserActions
             }
         };
         const WTableReport = WRender.createElement(WRender.createElement({

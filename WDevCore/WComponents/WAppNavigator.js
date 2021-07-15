@@ -23,7 +23,8 @@ class WAppNavigator extends HTMLElement {
         this.shadowRoot.querySelectorAll(".elementNavActive").forEach(elementNavActive => {
             elementNavActive.className = "elementNav";
         });
-        ev.target.className = "elementNavActive";
+        ev.target.className =  "elementNavActive";
+        this.shadowRoot.querySelector("#MainNav").className = "navInactive";
     }
     DrawAppNavigator() {
         const header = {
@@ -31,7 +32,7 @@ class WAppNavigator extends HTMLElement {
                 onclick: () => {
                     const nav = this.shadowRoot.querySelector("#MainNav");
                     if (nav.className == "navActive") {
-                        nav.className = "";
+                        nav.className = "navInactive";
                     } else {
                         nav.className = "navActive";
                     }
@@ -58,7 +59,14 @@ class WAppNavigator extends HTMLElement {
             }
             const elementNav = {
                 type: "a",
-                props: { class: "elementNav", innerText: element.name, href: element.url }
+                props: { class: "",  href: element.url },
+                children: [  {
+                    type: "label",
+                    props: { class: "elementNav", innerText: element.name },
+                },  {
+                    type: "label",
+                    props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
+                } ]
             }
             elementNav.props.onclick = async (ev) => {
                 this.ActiveMenu(ev);
@@ -102,11 +110,11 @@ class WAppNavigator extends HTMLElement {
                     }
                     Nav.children.push(SubNav);
                 }
-            }
+            }            
         });
         this.shadowRoot.append(WRender.createElement(this.Style()));
         this.shadowRoot.appendChild(WRender.createElement(header));
-        this.shadowRoot.append(WRender.createElement(Nav));
+        this.shadowRoot.append(WRender.createElement(Nav));        
     }
     Style() {
         const style = this.querySelector("#NavStyle" + this.id);
@@ -127,6 +135,9 @@ class WAppNavigator extends HTMLElement {
                         "flex-direction": navDirection,
                         padding: "0px 10px",
                         transition: "all 1s",
+                    }), new WCssClass(`a`, {
+                        "text-decoration": "none",                        
+                        cursor: "pointer"
                     }), new WCssClass(`.elementNav`, {
                         "text-decoration": "none",
                         color: "#444444",
@@ -134,6 +145,7 @@ class WAppNavigator extends HTMLElement {
                         "border-bottom": "solid 2px #eee",
                         transition: "all 0.6s",
                         display: "flex", "align-items": "center",
+                        cursor: "pointer"
                     }), new WCssClass(`.elementNavActive`, {
                         "text-decoration": "none",
                         color: "#444444",
@@ -180,9 +192,37 @@ class WAppNavigator extends HTMLElement {
                     }), new WCssClass(`.navActive`, {
                         overflow: "hidden",
                         "max-height": "5000px"
-                    }),
+                    }),new WCssClass(`.elementNavMedia`, {
+                        display: "none",
+                        
+                    })
                 ],
                 MediaQuery: [{
+                    condicion: "(max-width: 1200px)",
+                    ClassList: [
+                        new WCssClass(`.elementNav`, {
+                            display: "none",
+                        }),new WCssClass(`.elementNavMedia` , {
+                            display: "block",
+                            "font-size": "26px",                        
+                            "text-align": "center",
+                            padding: "10px",
+                            "text-decoration": "none",
+                            "font-weight": "bold",
+                            cursor: "pointer",
+                            "border-bottom": "solid 2px #eee",
+                        }),  new WCssClass(`.elementNavActive` , {
+                            display: "block",
+                            "font-size": "26px",                        
+                            "text-align": "center",
+                            padding: "10px",
+                            "text-decoration": "none",
+                            "font-weight": "bold",
+                            cursor: "pointer",
+                            "border-bottom": "solid 2px #eee",
+                        })
+                    ]
+                },{
                     condicion: "(max-width: 800px)",
                     ClassList: [
                         new WCssClass(`.DisplayBtn`, {
@@ -195,6 +235,10 @@ class WAppNavigator extends HTMLElement {
                         }), new WCssClass(`.navActive`, {
                             overflow: "hidden",
                             "max-height": "5000px"
+                        }),new WCssClass(`.navInactive`, {
+                            overflow: "hidden",
+                            "max-height": "0px",
+                            transition: "all 0.6s",
                         }),
                     ]
                 },]
