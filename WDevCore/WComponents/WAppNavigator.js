@@ -20,8 +20,11 @@ class WAppNavigator extends HTMLElement {
         this.DrawAppNavigator();
     }
     ActiveMenu = (ev) => {
-        this.shadowRoot.querySelectorAll(".elementNavActive").forEach(elementNavActive => {
+        this.shadowRoot.querySelectorAll("label.elementNavActive").forEach(elementNavActive => {
             elementNavActive.className = "elementNav";
+        });
+        this.shadowRoot.querySelectorAll("h4.elementNavActive").forEach(elementNavActive => {
+            elementNavActive.className = "elementNavMedia";
         });
         ev.target.className =  "elementNavActive";
         this.shadowRoot.querySelector("#MainNav").className = "navInactive";
@@ -64,7 +67,7 @@ class WAppNavigator extends HTMLElement {
                     type: "label",
                     props: { class: "elementNav", innerText: element.name },
                 },  {
-                    type: "label",
+                    type: "h4",
                     props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
                 } ]
             }
@@ -153,6 +156,8 @@ class WAppNavigator extends HTMLElement {
                         "border-bottom": "solid 2px #4da6ff",
                         transition: "all 0.6s",
                         display: "flex", "align-items": "center",
+                    }),new WCssClass(`h4.elementNavActive`, {
+                        display: "none", 
                     }), new WCssClass(`.elementNav:hover`, {
                         "border-bottom": "solid 2px #444444"
                     }), new WCssClass(`header`, {
@@ -177,11 +182,10 @@ class WAppNavigator extends HTMLElement {
                         "max-height": "1000px",
                         display: "flex",
                         "flex-direction": "column"
-                    }), new WCssClass(`.DisplayMenu a`, {
-                        "text-decoration": "none",
-                        color: "#444444",
-                        padding: "10px",
-                        "border-bottom": "solid 1px #999",
+                    }), new WCssClass(`a`, {
+                        "text-decoration": "none",                        
+                        color: "#8e8e8e",
+                        //padding: "10px",
                     }),
                     //ocultacion. 
                     new WCssClass(`.DisplayBtn`, {                       
@@ -200,27 +204,31 @@ class WAppNavigator extends HTMLElement {
                 MediaQuery: [{
                     condicion: "(max-width: 1200px)",
                     ClassList: [
-                        new WCssClass(`.elementNav`, {
-                            display: "none",
-                        }),new WCssClass(`.elementNavMedia` , {
-                            display: "block",
-                            "font-size": "26px",                        
-                            "text-align": "center",
-                            padding: "10px",
-                            "text-decoration": "none",
-                            "font-weight": "bold",
-                            cursor: "pointer",
-                            "border-bottom": "solid 2px #eee",
-                        }),  new WCssClass(`.elementNavActive` , {
-                            display: "block",
-                            "font-size": "26px",                        
-                            "text-align": "center",
-                            padding: "10px",
-                            "text-decoration": "none",
-                            "font-weight": "bold",
-                            cursor: "pointer",
-                            "border-bottom": "solid 2px #eee",
-                        })
+                        // new WCssClass(`.elementNav`, {
+                        //     display: "none",
+                        // }),new WCssClass(`.elementNavMedia` , {
+                        //     display: "block",
+                        //     "font-size": "26px",                        
+                        //     "text-align": "center",
+                        //     padding: "10px",
+                        //     "text-decoration": "none",
+                        //     "font-weight": "bold",
+                        //     cursor: "pointer",
+                        //     "border-bottom": "solid 2px #eee",
+                        //     margin: "0px"
+                        // }),  new WCssClass(`.elementNavActive` , {
+                        //     display: "block",
+                        //     "font-size": "26px",                        
+                        //     "text-align": "center",
+                        //     padding: "10px",
+                        //     "text-decoration": "none",
+                        //     "font-weight": "bold",
+                        //     cursor: "pointer",
+                        //     "border-bottom": "solid 2px #eee",
+                        //     margin: "0px"
+                        // }),  new WCssClass(`label.elementNavActive` , {
+                        //     display: "none",
+                        // })
                     ]
                 },{
                     condicion: "(max-width: 800px)",
@@ -241,7 +249,7 @@ class WAppNavigator extends HTMLElement {
                             transition: "all 0.6s",
                         }),
                     ]
-                },]
+                }]
             }
         }
         return Style;

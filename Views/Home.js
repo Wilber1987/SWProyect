@@ -11,7 +11,9 @@ class HomeClass {
             children: []
         }
         ImaData.forEach(img => {
-            const DivImg = [{ type: 'img', props: { src: img.src } }]
+            const DivImg = [{ type: 'img', props: { src: img.src, onclick: async () => {
+                img.action();
+            } } }]
             if (img.action) {
                 DivImg.push({
                     type: 'input',
