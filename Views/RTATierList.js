@@ -38,7 +38,7 @@ export default class RTATierList extends HTMLElement {
         SeasonList.forEach((element, index) => {
             const option = { type: 'option', props: { innerText: element, value: index } };
             if (SeasonList[this.SelectedSeason] == element) {
-                option.props.checked = true;
+                option.props.selected = true;
             }
             SelectSeason.children.push(option);
         });

@@ -9,6 +9,7 @@ import RTATierList from "./Views/RTATierList.js";
 import RTACompsView from "./Views/RTAComps.js";
 import ShareBuildsView from "./Views/ShareBuild.js";
 import SiegCompsView from "./Views/GuildSiegeComps.js";
+import Guides from "./Views/Guides.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -142,6 +143,11 @@ class AsideClass {
                     }
                 },
                 {
+                    name: "Guides", url: "#",
+                    action: (ev) => {
+                        DOMManager.NavigateFunction("Guides", new Guides(), "AppMain");
+                    }
+                },{
                     name: "Monsters List", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
@@ -187,11 +193,16 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
-            //new MonsterRTAPicks(),
+            //new Guides(),
             new HomeClass(this.ImgData)
         ];
     }
     ImgData = [
+        {
+            src: "./Media/Img/wall2.jpg", title: "Guides", action: () => {
+                DOMManager.NavigateFunction("GuidesView", new Guides(), "AppMain");
+            }
+        },
         {
             src: "./Media/Img/wall12.jpg", title: "Monster List", action: () => {
                 DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
@@ -203,7 +214,7 @@ class MainClass {
             }
         },
         {
-            src: "./Media/Img/wall5.jpg", title: "RTA TierList", action: () => {
+            src: "./Media/Img/wall3.jpg", title: "RTA TierList", action: () => {
                 DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
             }
         },
@@ -213,7 +224,7 @@ class MainClass {
             }
         },
         {
-            src: "./Media/Img/wall3.jpg", title: "Guild/Siege Comps", action: () => {
+            src: "./Media/Img/wall5.jpg", title: "Guild/Siege Comps", action: () => {
                 DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
             }
         },

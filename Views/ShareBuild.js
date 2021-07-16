@@ -27,8 +27,10 @@ export default class ShareBuildsView extends HTMLElement {
             set1: [],
             set2: [],
             set3: [],
-            Stats: "Atk%/Spd, Atk%, Atk%",
-            "Subs-stats": "Def%, Acc, Hp%",
+            slot_2: ["SPD", "HP%", "DEF%", "ATK%"],
+            slot_4: ["CRT DMG","CRT RATE", "HP%", "DEF%", "ATK%"],
+            slot_6: ["ACC", "RES", "HP%", "DEF%", "ATK%"],            
+            "Subs-stats": "Example: focus in Def%, Acc, Hp%",
             ArtType: [],
             ArtElement: [],
             Description: "Excelente para RTA"
@@ -95,11 +97,22 @@ export default class ShareBuildsView extends HTMLElement {
             "entry.949748321": Build.set1,
             "entry.90022714": Build.set2,
             "entry.1814828266": Build.set3,
-            "entry.538323684": Build["Stats"],
+            "entry.538323684": `${Build.slot_2}, ${Build.slot_4}, ${Build.slot_5}` ,
             "entry.715275418": Build["Sub-stats"],
             "entry.123631978": Build.ArtType,
             "entry.630505179": Build.ArtElement,
             "entry.739031166": Build.Description,
+        }
+        const dataPost = {
+            monsterId: Build.monsterId,
+            set1: Build.set1,
+            set2: Build.set2,
+            set3: Build.set3,
+            stats: `Slot 2: ${Build.slot_2}, Slot 4: ${Build.slot_4}, Slot 6: ${Build.slot_5}` ,
+            "Sub-stats": Build["Sub-stats"],
+            ArtType: Build.ArtType,
+            ArtElement: Build.ArtElement,
+            Description: Build.Description,
         }
         $.ajax({
             url: url,
@@ -117,7 +130,6 @@ export default class ShareBuildsView extends HTMLElement {
                 }
             }
         });
-
     }
     RuneList = [
         "none",

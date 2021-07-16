@@ -39,13 +39,12 @@ class HomeClass {
             ClassList: [
                 new WCssClass(".HomeClass", {
                     //display: "flex",
-
                 }), new WCssClass(".ImagesContainer", {
-                    display: "flex",
-                    "flex-wrap": "wrap"
+                    display: "grid",
+                    "grid-template-columns": "auto auto auto auto"
                 }),new WCssClass(".ImagesContainer div", {                    
-                    height: "250px",
-                    width: "360px",
+                    //height: "250px",
+                   // width: "360px",
                     "border-radius": "10px",
                     overflow: "hidden",
                     margin: "10px",
@@ -68,7 +67,23 @@ class HomeClass {
                     padding: "10px 0px",
                     cursor: "pointer",
                 }),
-            ]
+            ], MediaQuery: [{
+                condicion: "(max-width: 1200px)",
+                ClassList: [
+                    new WCssClass(".ImagesContainer", {
+                        display: "grid",
+                        "grid-template-columns": "auto auto auto"
+                    })
+                ]
+            }, {
+                condicion: "(max-width: 600px)",
+                ClassList: [
+                    new WCssClass(".ImagesContainer", {
+                        display: "grid",
+                        "grid-template-columns": "auto auto"
+                    })
+                ]
+            }]
         }
     };
 }

@@ -27,35 +27,47 @@ class WAppNavigator extends HTMLElement {
             elementNavActive.className = "elementNavMedia";
         });
         ev.target.className =  "elementNavActive";
-        this.shadowRoot.querySelector("#MainNav").className = "navInactive";
+        if ( this.NavStyle != "tab") {
+            this.shadowRoot.querySelector("#MainNav").className = "navInactive";
+        }        
     }
     DrawAppNavigator() {
-        const header = {
-            type: "header", props: {
-                onclick: () => {
-                    const nav = this.shadowRoot.querySelector("#MainNav");
-                    if (nav.className == "navActive") {
-                        nav.className = "navInactive";
-                    } else {
-                        nav.className = "navActive";
+        this.shadowRoot.append(WRender.createElement(this.Style()));
+        if (this.NavStyle == undefined) {
+            this.NavStyle = "nav";
+        }
+        if (this.NavStyle == "nav") {
+            const header = {
+                type: "header", props: {
+                    onclick: () => {
+                        const nav = this.shadowRoot.querySelector("#MainNav");
+                        if (nav.className == "navActive") {
+                            nav.className = "navInactive";
+                        } else {
+                            nav.className = "navActive";
+                        }
                     }
-                }
-            }, children: [{
-                type: "img", props: {
-                    src: WIcons.Menu ,
-                    class: "DisplayBtn",
-                }, children: []
-            }]
+                }, children: [{
+                    type: "img", props: {
+                        src: WIcons.Menu ,
+                        class: "DisplayBtn",
+                    }, children: []
+                }]
+            }
+            if (typeof this.title === "string") {
+                header.children.push({
+                    type: "label", props: { class: "title", innerText: this.title }
+                });
+            }
+            this.shadowRoot.appendChild(WRender.createElement(header));
         }
-        if (typeof this.title === "string") {
-            header.children.push({
-                type: "label", props: { class: "title", innerText: this.title }
-            });
-        }
+        
+        
         if (this.Elements == undefined) {
             this.Elements = [];
         }
-        const Nav = { type: "nav", props: { id: "MainNav" }, children: [] };
+       
+        const Nav = { type: "nav", props: { id: "MainNav", className: this.NavStyle }, children: [] };
         this.Elements.forEach((element, Index) => {
             if (element.url == undefined) {
                 element.url = "#" + this.id;
@@ -115,8 +127,7 @@ class WAppNavigator extends HTMLElement {
                 }
             }            
         });
-        this.shadowRoot.append(WRender.createElement(this.Style()));
-        this.shadowRoot.appendChild(WRender.createElement(header));
+        
         this.shadowRoot.append(WRender.createElement(Nav));        
     }
     Style() {
@@ -133,11 +144,22 @@ class WAppNavigator extends HTMLElement {
             props: {
                 id: "NavStyle" + this.id,
                 ClassList: [
-                    new WCssClass(`nav`, {
+                    new WCssClass(`.nav, .navInactive`, {
                         display: "flex",
                         "flex-direction": navDirection,
                         padding: "0px 10px",
                         transition: "all 1s",
+                    }), new WCssClass(`.tab`, {
+                        display: "flex",
+                        "flex-direction": navDirection,
+                        //padding: "0px 10px",
+                        transition: "all 1s",
+                        "justify-content": "center"
+                    }), new WCssClass(`.tab .elementNavActive`, {
+                        "border-top": "solid 1px #dedddd",
+                        "border-left": "solid 1px #dedddd",
+                        "border-right": "solid 1px #dedddd",
+                        "border-radius": "0.1cm",
                     }), new WCssClass(`a`, {
                         "text-decoration": "none",                        
                         cursor: "pointer"
@@ -235,11 +257,12 @@ class WAppNavigator extends HTMLElement {
                     ClassList: [
                         new WCssClass(`.DisplayBtn`, {
                             display: "initial",
-                        }),new WCssClass(`nav`, {
-                            "flex-direction": "column"
-                        }), new WCssClass(`nav`, {
+                        }),new WCssClass(`.nav`, {
+                            "flex-direction": "column",
                             overflow: "hidden",
                             "max-height": "0px"
+                        }), new WCssClass(`nav`, {
+                           
                         }), new WCssClass(`.navActive`, {
                             overflow: "hidden",
                             "max-height": "5000px"
