@@ -52,7 +52,7 @@ export default class RTACompsView extends HTMLElement {
         }]
         var TableConfigG = {
             Datasets: RTAPicksData,
-            StyleType:"Cards3",
+            //StyleType:"Cards3",
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
              DisplayData: [
@@ -62,11 +62,11 @@ export default class RTACompsView extends HTMLElement {
                  "Pick_Image_4",
                  "Pick_Image_5",
                  "Win_Rate" ,
-                 "Pick_Name1",
-                 "Pick_Name2",
-                 "Pick_Name3",
-                 "Pick_Name4",
-                 "Pick_Name5",
+                 //"Pick_Name1",
+                 //"Pick_Name2",
+                 //"Pick_Name3",
+                 //"Pick_Name4",
+                 //"Pick_Name5",
                  "count"
              ],
              

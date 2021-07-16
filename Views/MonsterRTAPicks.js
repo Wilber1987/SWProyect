@@ -36,7 +36,11 @@ export default class MonsterRTAPicks extends HTMLElement {
             }, children: []
         };
         SeasonList.forEach((element, index) => {
-            SelectSeason.children.push({ type: 'option', props: { innerText: element, value: index } });
+            const option = { type: 'option', props: { innerText: element, value: index } };
+            if (SeasonList[this.SelectedSeason] == element) {
+                option.props.checked = true;
+            }
+            SelectSeason.children.push(option);
         });
         DivCont.children.push([SelectSeason])
         this.shadowRoot.appendChild(WRender.createElement(DivCont));

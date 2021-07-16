@@ -187,7 +187,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
-            //new ShareBuildsView(),
+            //new MonsterRTAPicks(),
             new HomeClass(this.ImgData)
         ];
     }

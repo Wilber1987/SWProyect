@@ -292,6 +292,14 @@ export default class MonsterETL extends HTMLElement {
                 Mon.LastPick = (LastPick / Pick_Rate * 100).toFixed(2) + "%";
                 Mon.Banned_Rate = (Banned_Rate / Pick_Rate * 100).toFixed(2) + "%";
                 Mon.Leader = (Leader / Pick_Rate * 100).toFixed(2) + "%";
+
+                Mon.PickValue = Pick_Rate;
+                Mon.WinValue = Win_Rate;
+                Mon.FirstPickValue = FirstPick;
+                Mon.LastPickValue = LastPick;
+                Mon.BannedValue = Banned_Rate;
+                Mon.LeaderValue = Leader;
+
                 Mon.Season = this.SelectedSeason;
                 let SeasonScore = 0;
                 if ((Pick_Rate / NPartidos * 100) > 1) {
@@ -302,10 +310,9 @@ export default class MonsterETL extends HTMLElement {
                     let LastPickScore = 0;//(LastPick / Pick_Rate * 100) * 0.05;
                     let Win_RateScore = 0;
                     let Banned_RateScore = 0;
-
+                    //WIN RATE SCORE
                     if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
-                        && ((Pick_Rate / NPartidos * 100) > 30) // && ((Banned_Rate / Pick_Rate * 100) > 25)
-                        ) {
+                        && ((Pick_Rate / NPartidos * 100) > 30)) {
                         Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
                         && ((Pick_Rate / NPartidos * 100) > 25)) {
@@ -313,22 +320,26 @@ export default class MonsterETL extends HTMLElement {
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
                         && ((Pick_Rate / NPartidos * 100) > 5)) {
                         Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 40)
+                        && ((Pick_Rate / NPartidos * 100) > 25)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
                         && ((Pick_Rate / NPartidos * 100) > 5)) {
                         Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.50
-                    }  else {
+                    } else {
                         Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.30
                     }
+                    //BANNED RATE SCORE
                     if (((Banned_Rate / Pick_Rate * 100) > 25)
                         && ((Pick_Rate / NPartidos * 100) > 10)) {
-                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.35
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.30
                     } else if (((Banned_Rate / Pick_Rate * 100) > 20)
                         && ((Pick_Rate / NPartidos * 100) > 10)) {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.25
                     } else if (((Banned_Rate / Pick_Rate * 100) > 10)
                         && ((Pick_Rate / NPartidos * 100) > 10)) {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.20
-                    } else { 
+                    } else {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.10
                     }
 
@@ -346,6 +357,7 @@ export default class MonsterETL extends HTMLElement {
                 RTAPicksData.push(Mon);
             }
         });
+        this.RTAPicksData = RTAPicksData;
         const dataStr2 = "data:text/json;charset=utf-8,"
             + encodeURIComponent(JSON.stringify(RTAPicksData));
         const DownLoadDataTranform = WRender.createElement({
@@ -357,10 +369,15 @@ export default class MonsterETL extends HTMLElement {
     }
     CreateRtaPicksDataComps = async (Season = SeasonList[this.SelectedSeason]) => {
         //TRANSFORMMMMM-----------------------------
-        let MonPickData = await fetch("../DataBase/RTAPicks/MonPickData" + this.SelectedSeason + ".json");
-        MonPickData = await MonPickData.json();
-        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + this.SelectedSeason + ".json");
-        RTAPicksData = await RTAPicksData.json();
+        // let MonPickData = await fetch("../DataBase/RTAPicks/MonPickData" + this.SelectedSeason + ".json");
+        // MonPickData = await MonPickData.json();
+        // let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + this.SelectedSeason + ".json");
+        // RTAPicksData = await RTAPicksData.json();
+
+
+        const MonPickData = this.MonPickData;
+        const RTAPicksData = this.RTAPicksData;
+
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });
@@ -389,12 +406,12 @@ export default class MonsterETL extends HTMLElement {
                 if (comp.user == Composition1.user) {
                     Composition1["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
                     Composition1["Pick" + comp.pick_slot_id] = comp.unit_master_id;
-                    Composition1["Pick_Name" + comp.pick_slot_id] = mob.name; 
+                    Composition1["Pick_Name" + comp.pick_slot_id] = mob.name;
                 }
                 if (comp.user == Composition2.user) {
                     Composition2["Pick_Image_" + comp.pick_slot_id] = mob.image_filename;
                     Composition2["Pick" + comp.pick_slot_id] = comp.unit_master_id;
-                    Composition2["Pick_Name" + comp.pick_slot_id] = mob.name;                    
+                    Composition2["Pick_Name" + comp.pick_slot_id] = mob.name;
                 }
             });
             if (DataComps.find(x => x.id_battle == battle.id_battle) == null) {
