@@ -130,15 +130,17 @@ class WReportView extends HTMLElement{
         if (this.shadowRoot.innerHTML != "") {
             return;
         } 
-        this.className =  this.className + " reportV";       
+        this.className =  this.className + " reportV"; 
         this.DrawReport();
     }
     DrawReport(){
-        this.shadowRoot.innerHTML = "";
+        this.shadowRoot.innerHTML = "";        
         if (this.Config.Dataset.length == 0) {
             this.shadowRoot.innerHTML = "No hay datos que mostrar";
         }
-        
+        if (this.ReportList == undefined) {
+            this.ReportList = true;
+        }  
         const ControlOptions = {
             type: 'div',
             props: { id: 'optionsContainter', class: "OptionContainer" }, children: []
@@ -307,13 +309,16 @@ class WReportView extends HTMLElement{
         }));
         console.log(WTableReport.TableConfig);
         this.shadowRoot.append(WTableReport);
+        if (this.Config.ReportList == true) {
+            this.shadowRoot.append(WRender.createElement({
+                type: 'w-report-list', props: { id: '', 
+                Dataset: this.Config.Dataset, 
+                groupParam: this.Config.GroupParam,
+                header:this.Config.headerGroup, body: this.Config.bodyGroup 
+            }}));
+        }
 
-        this.shadowRoot.append(WRender.createElement({
-            type: 'w-report-list', props: { id: '', 
-            Dataset: this.Config.Dataset, 
-            groupParam: this.Config.GroupParam,
-            header:this.Config.headerGroup, body: this.Config.bodyGroup 
-        }}));
+        
         this.shadowRoot.append(WRender.createElement(this.style));
     }
     style = { type: 'w-style', props: {id: '', ClassList: [

@@ -20,13 +20,13 @@ class WAppNavigator extends HTMLElement {
         this.DrawAppNavigator();
     }
     ActiveMenu = (ev) => {
-        this.shadowRoot.querySelectorAll("label.elementNavActive").forEach(elementNavActive => {
+        this.shadowRoot.querySelectorAll(".elementNavActive").forEach(elementNavActive => {
             elementNavActive.className = "elementNav";
         });
-        this.shadowRoot.querySelectorAll("h4.elementNavActive").forEach(elementNavActive => {
-            elementNavActive.className = "elementNavMedia";
-        });
-        ev.target.className =  "elementNavActive";
+        // this.shadowRoot.querySelectorAll("h4.elementNavActive").forEach(elementNavActive => {
+        //     elementNavActive.className = "elementNavMedia";
+        // });
+        ev.className =  "elementNavActive";
         if ( this.NavStyle != "tab") {
             this.shadowRoot.querySelector("#MainNav").className = "navInactive";
         }        
@@ -72,21 +72,21 @@ class WAppNavigator extends HTMLElement {
             if (element.url == undefined) {
                 element.url = "#" + this.id;
             }
-            const elementNav = {
+            const elementNav = WRender.createElement({
                 type: "a",
-                props: { class: "",  href: element.url },
-                children: [  {
-                    type: "label",
-                    props: { class: "elementNav", innerText: element.name },
-                },  {
-                    type: "h4",
-                    props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
-                } ]
-            }
-            elementNav.props.onclick = async (ev) => {
-                this.ActiveMenu(ev);
+                props: { class: "elementNav",  href: element.url, innerText: element.name },
+                // children: [  {
+                //     type: "label",
+                //     props: { class: "", innerText: element.name },
+                // },  {
+                //     type: "h4",
+                //     props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
+                // } ]
+            });
+            elementNav.onclick = async (ev) => {
+                this.ActiveMenu(elementNav);
                 if (element.action != undefined) {
-                    element.action(ev);
+                    element.action();
                 }
             }
             Nav.children.push(elementNav);
@@ -114,7 +114,7 @@ class WAppNavigator extends HTMLElement {
                             }
                         });
                     });
-                    elementNav.props.onclick = (ev) => {
+                    elementNav.onclick = (ev) => {
                         this.ActiveMenu(ev);
                         const MenuSelected = this.shadowRoot.querySelector("#" + SubMenuId);
                         if (MenuSelected.className == "UnDisplayMenu") {
@@ -125,9 +125,13 @@ class WAppNavigator extends HTMLElement {
                     }
                     Nav.children.push(SubNav);
                 }
-            }            
-        });
-        
+            }       
+            if (Index == 0 && element.SubNav == undefined) {
+                this.InitialNav = ()=>{
+                    elementNav.onclick();
+                } 
+            }     
+        });        
         this.shadowRoot.append(WRender.createElement(Nav));        
     }
     Style() {

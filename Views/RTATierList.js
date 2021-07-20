@@ -111,7 +111,7 @@ class TierSection {
         this.children = [this.Style, LabelContainer, MobContainer];
 
         TierData.forEach(Data => {
-            if (Data.SeasonScore <= TierScore.topScore && Data.SeasonScore >= TierScore.buttomScore) {
+            if (Data.SeasonScore <= TierScore.topScore && Data.SeasonScore > TierScore.buttomScore) {
                 MobContainer.children.push( { type:'div', props: { onclick: ()=>{
                     const Modal = WRender.createElement({
                         type: "w-modal-form",

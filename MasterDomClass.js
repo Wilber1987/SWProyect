@@ -10,6 +10,7 @@ import RTACompsView from "./Views/RTAComps.js";
 import ShareBuildsView from "./Views/ShareBuild.js";
 import SiegCompsView from "./Views/GuildSiegeComps.js";
 import Guides from "./Views/Guides.js";
+import RTADashboard from "./Views/RTADashboard.js";
 
 const DOMManager = new ComponentsManager();
 class MasterDomClass extends ComponentsManager {
@@ -193,7 +194,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
-            //new Guides(),
+           // new Guides(),
             new HomeClass(this.ImgData)
         ];
     }

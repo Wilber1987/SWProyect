@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "title": "Tricaru",
+        "categ": "Advanced",
+        "place": "Cairos",
+        "dungeon": "DB12",
+        "img": "Tricaru.jpg",
+        "doc": "tricaru.pdf",
+        "description": "desc.............."
+    },{
+        "id": 2,
+        "title": "DotTeam",
+        "categ": "Advanced",
+        "place": "Cairos",
+        "dungeon": "GB12",
+        "img": "DotTeam.jpg",
+        "doc": "dotteam.pdf",
+        "description": "desc.............."
+    },
+    {
+        "id": 3,
+        "title": "RJ5",
+        "categ": "Advanced",
+        "place": "RW",
+        "dungeon": "Raids",
+        "img": "RJ5.jpg",
+        "doc": "rj5.pdf",
+        "description": "desc.............."
+    }, {
+        "id": 4,
+        "title": "Farmeable TEAM",
+        "categ": "Initial",
+        "place": "DH",
+        "dungeon": "LumenBoss",
+        "img": "LumenBoss.jpg",
+        "doc": "farmeableteam_lumen.pdf",
+        "description": "desc.............."
+    },{
+        "id": 5,
+        "title": "WindTeam",
+        "categ": "Advanced",
+        "place": "DH",
+        "dungeon": "ElluniaBoss",
+        "img": "ElluniaBoss.jpg",
+        "doc": "doc.pdf",
+        "description": "desc.............."
+    },{
+        "id": 6,
+        "title": "TWIN Team",
+        "categ": "Advanced",
+        "place": "TOA",
+        "dungeon": "NORMAL/HARD",
+        "img": "twinT.jpg",
+        "doc": "doc.pdf",
+        "description": "desc.............."
+    }
+]

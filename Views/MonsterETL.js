@@ -236,7 +236,16 @@ export default class MonsterETL extends HTMLElement {
 
     CreateRtaPicksData = async () => {
         //TRANSFORMMMMM-----------------------------
+
+        if (!this.MonPickData) {
+            this.MonPickData = await fetch("../DataBase/RTAPicks/MonPickData" + this.SelectedSeason + ".json");
+            this.MonPickData = await this.MonPickData.json();
+            this.GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + this.SelectedSeason + ".json");
+            this.GlobalData = await this.GlobalData.json();
+        }
         const MonPickData = this.MonPickData;
+        console.log(MonPickData);
+        console.log(this.GlobalData);
         let Data = [];
         for (let index = 0; index < 19; index++) {
             let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
@@ -311,39 +320,43 @@ export default class MonsterETL extends HTMLElement {
                     let Win_RateScore = 0;
                     let Banned_RateScore = 0;
                     //WIN RATE SCORE
-                    if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
+                    if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 55)
+                        && ((Pick_Rate / NPartidos * 100) > 5)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70//----------------> 55/5
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 47)
                         && ((Pick_Rate / NPartidos * 100) > 30)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70//----------------> 50/30
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65//----------------> 47/10
+                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 43)
                         && ((Pick_Rate / NPartidos * 100) > 25)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65
-                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 50)
-                        && ((Pick_Rate / NPartidos * 100) > 5)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65//----------------> 40/25
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 40)
-                        && ((Pick_Rate / NPartidos * 100) > 25)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
+                        && ((Pick_Rate / NPartidos * 100) > 15)) {
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60//----------------> 40/15
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
                         && ((Pick_Rate / NPartidos * 100) > 5)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.50
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.50//----------------> 45/05
                     } else {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.30
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.30//----------------> any
                     }
                     //BANNED RATE SCORE
-                    if (((Banned_Rate / Pick_Rate * 100) > 25)
+                    if (((Banned_Rate / Pick_Rate * 100) > 30)
                         && ((Pick_Rate / NPartidos * 100) > 10)) {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.30
+                    } else if (((Banned_Rate / Pick_Rate * 100) > 25)
+                        && ((Pick_Rate / NPartidos * 100) > 20)) {
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.30
                     } else if (((Banned_Rate / Pick_Rate * 100) > 20)
-                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        && ((Pick_Rate / NPartidos * 100) > 20)) {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.25
                     } else if (((Banned_Rate / Pick_Rate * 100) > 10)
                         && ((Pick_Rate / NPartidos * 100) > 10)) {
-                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.20
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.15
                     } else {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.10
                     }
-
-
                     SeasonScore = Pick_RateScore +
                         FirstPickScore +
                         LastPickScore +
@@ -354,7 +367,9 @@ export default class MonsterETL extends HTMLElement {
                     }
                 }
                 Mon.SeasonScore = SeasonScore.toFixed(2);
-                RTAPicksData.push(Mon);
+                if ((Pick_Rate / NPartidos * 100) > 0.005) {
+                    RTAPicksData.push(Mon);
+                }
             }
         });
         this.RTAPicksData = RTAPicksData;
