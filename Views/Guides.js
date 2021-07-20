@@ -29,7 +29,7 @@ export default class Guides extends HTMLElement {
         }));
         this.DataGuides = await WAjaxTools.GetRequest("../DataBase/Guides/GuideList.json");
         this.GuideNav.InitialNav()
-    }   
+    }
     GuideNav = WRender.createElement({
         type: "w-app-navigator",
         props: {
@@ -128,7 +128,7 @@ class GuidesContainer {
         if (AdvanceGuides.length == 0 && InitialGuides.length == 0) {
             this.children.push("No guides registered!");
         }
-        this.ModalContainer = WRender.createElement({ type:'div', props: { id: '', class: 'className'}})
+        this.ModalContainer = WRender.createElement({ type: 'div', props: { id: '', class: 'className' } })
         this.children.push(this.ModalContainer)
 
     }
@@ -141,8 +141,8 @@ class GuidesContainer {
                 {
                     type: 'input',
                     props: {
-                        id: '', type: 'button',  value: "View",
-                        onclick: async () => {                            
+                        id: '', type: 'button', value: "View",
+                        onclick: async () => {
                             this.ModalContainer.append(WRender.createElement({
                                 type: "w-modal-form",
                                 props: {
@@ -159,7 +159,7 @@ class GuidesContainer {
         };
         return GDiv;
     }
-    Navigate =  (pdf) => {
+    Navigate = (pdf) => {
         const DocURL = "./Media/DOCS/" + pdf;
         //const DocURL = pdf;
         const PDF2 = WRender.createElement({
@@ -169,11 +169,21 @@ class GuidesContainer {
             }
         });
         const iframe = WRender.createElement({
-            type: "iframe", props: {
+            type: "embed", props: {
                 src: DocURL
             }
-        });  
-        return iframe;                              
+        });
+        return [iframe, {
+            type: 'w-style', props: {
+                id: '', ClassList: [
+                    new WCssClass(`embed`, {
+                        width: "100%",
+                        "min-height": "600px",
+                        //"height": "calc(100% - 50px)"
+                    }),
+                ]
+            }
+        }];
     }
     Style = {
         type: "w-style",
@@ -195,13 +205,13 @@ class GuidesContainer {
                     color: "#fff",
                     "background-color": "rgba(0,0,0,0.5)",
                     padding: "10px"
-                }),new WCssClass(".GuidesContainer input", {
+                }), new WCssClass(".GuidesContainer input", {
                     color: "#fff",
                     "background-color": "#4da6ff",
                     padding: "10px",
                     border: "none",
                     cursor: "pointer"
-                }),new WCssClass(".GuidesContainer p", {                    
+                }), new WCssClass(".GuidesContainer p", {
                     padding: "10px",
                     margin: "0px"
                 }),
