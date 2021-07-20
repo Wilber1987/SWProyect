@@ -320,30 +320,40 @@ export default class MonsterETL extends HTMLElement {
                     let Win_RateScore = 0;
                     let Banned_RateScore = 0;
                     //WIN RATE SCORE
+                    //70 SCORE############################################################################                    
                     if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 55)
-                        && ((Pick_Rate / NPartidos * 100) > 5)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70//----------------> 55/5
-                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 47)
-                        && ((Pick_Rate / NPartidos * 100) > 30)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70//----------------> 50/30
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {//------------------------------> 55/10
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
-                        && ((Pick_Rate / NPartidos * 100) > 10)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65//----------------> 47/10
-                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 43)
-                        && ((Pick_Rate / NPartidos * 100) > 25)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65//----------------> 40/25
+                        && ((Pick_Rate / NPartidos * 100) > 25)) {//------------------------------> 45/25
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.70
+                    }
+                    //65 SCORE############################################################################                    
+                    else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 55)
+                        && ((Pick_Rate / NPartidos * 100) > 5)) {//------------------------------> 55/5
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65
                     } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 40)
-                        && ((Pick_Rate / NPartidos * 100) > 15)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60//----------------> 40/15
-                    } else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
-                        && ((Pick_Rate / NPartidos * 100) > 5)) {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.50//----------------> 45/05
-                    } else {
-                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.30//----------------> any
+                        && ((Pick_Rate / NPartidos * 100) > 30)) {//------------------------------> 40/30
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.65
+                    }
+                    //60 SCORE############################################################################  
+                    else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 40)
+                        && ((Pick_Rate / NPartidos * 100) > 10)) {//------------------------------> 40/15
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.60
+                    }
+                    //50 SCORE############################################################################
+                    else if (((Win_Rate / (Pick_Rate - Banned_Rate) * 100) > 45)
+                        && ((Pick_Rate / NPartidos * 100) > 5)) {//------------------------------> 45/05
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.55
+                    } else {//------------------------------> any
+                        Win_RateScore = (Win_Rate / (Pick_Rate - Banned_Rate) * 100) * 0.45
                     }
                     //BANNED RATE SCORE
                     if (((Banned_Rate / Pick_Rate * 100) > 30)
-                        && ((Pick_Rate / NPartidos * 100) > 10)) {
+                        && ((Pick_Rate / NPartidos * 100) > 20)) {
+                        Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.35
+                    } else if (((Banned_Rate / Pick_Rate * 100) > 35)
+                        && ((Pick_Rate / NPartidos * 100) > 15)) {
                         Banned_RateScore = (Banned_Rate / Pick_Rate * 100) * 0.30
                     } else if (((Banned_Rate / Pick_Rate * 100) > 25)
                         && ((Pick_Rate / NPartidos * 100) > 20)) {
@@ -367,7 +377,7 @@ export default class MonsterETL extends HTMLElement {
                     }
                 }
                 Mon.SeasonScore = SeasonScore.toFixed(2);
-                if ((Pick_Rate / NPartidos * 100) > 0.005) {
+                if ((Pick_Rate / NPartidos * 100) > 0.002) {
                     RTAPicksData.push(Mon);
                 }
             }
