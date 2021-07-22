@@ -8,6 +8,15 @@
 		"prefix": ["winp", "winput"],
 		"body": ["{ type:'input', props: { id: '', type:'text', class: 'className'}}"],
 		"description": "Objeto para WREnder."
+	},"WImg": {
+		"prefix": ["wimg", "Wimg"],
+		"body": ["{ type:'img', props: { src: 'img', class: 'className'}}"],
+		"description": "Objeto para WREnder."
+	},"WImgBtn": {
+		"prefix": ["wimgbtn", "WimgBtn"],
+		"body": ["{ type:'img', props: { src: 'img', class: 'className',onclick: async ()=>{",
+			"\t//code.....","}}}"],
+		"description": "Objeto para WREnder."
 	},
 	"WBTN": {
 		"prefix": ["wbtn", "wbtn"],

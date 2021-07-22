@@ -242,7 +242,11 @@ class WStyledRender extends HTMLElement {
             let bodyClass = "";
             if (Class.__proto__ == WCssClass.prototype) {
                 for (const prop in Class.CSSProps) {
-                    bodyClass = bodyClass + `${prop}: ${Class.CSSProps[prop]};`;
+                    let PropValue = Class.CSSProps[prop];
+                    if (typeof PropValue === "number") {
+                        PropValue = PropValue + "px"
+                    }
+                    bodyClass = bodyClass + `${prop}: ${PropValue};`;
                 }
                 bodyClass = `${Class.Name} {${bodyClass}}`;
                 bodyStyle = bodyStyle + bodyClass;
