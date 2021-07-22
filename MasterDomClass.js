@@ -73,7 +73,10 @@ class MasterDomClass extends ComponentsManager {
                     new WCssClass(`.App`, {
                         display: "grid",
                         "grid-template-columns": "10% 90%",
-                        "grid-template-rows": "70px  calc(100vh - 140px) 70px",
+                        "grid-template-rows": "70px  calc(100% - 140px) 70px",
+                        position: "fixed",
+                        top: 0,
+                        bottom: 0
                     }), new WCssClass(".AppHeader", {
                         "grid-column": "2/3",
                         "grid-row": "1/2",
