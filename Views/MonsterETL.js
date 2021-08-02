@@ -311,7 +311,7 @@ export default class MonsterETL extends HTMLElement {
 
                 Mon.Season = this.SelectedSeason;
                 let SeasonScore = 0;
-                if ((Pick_Rate / NPartidos * 100) > 1) {
+                if ((Pick_Rate / NPartidos * 100) > 0.5) {
                     let Pick_RateScore = 0;/*(Pick_Rate / NPartidos * 100) > 15 ?
                         (Pick_Rate / NPartidos * 100) * 0.2 :
                         (Pick_Rate / NPartidos * 100) * 0;*/

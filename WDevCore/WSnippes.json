@@ -8,6 +8,10 @@
 		"prefix": ["winp", "winput"],
 		"body": ["{ type:'input', props: { id: '', type:'text', class: 'className'}}"],
 		"description": "Objeto para WREnder."
+	},"WHeader": {
+		"prefix": ["wh", "WHeader"],
+		"body": ["{ type:'h1', props: { innerText: 'header'}}"],
+		"description": "Objeto para WREnder."
 	},"WImg": {
 		"prefix": ["wimg", "Wimg"],
 		"body": ["{ type:'img', props: { src: 'img', class: 'className'}}"],
@@ -47,6 +51,14 @@
 			"\t\tClassList: []},",
 			"\t]}",
 			"};"],
+		"description": "Objeto para WREnder."
+	},"WStyleClass": {
+		"prefix": ["wstyclass", "wstyleClass"],
+		"body": [
+			"new WCssClass( `selector`, {",
+			"\tprop: 'value',",
+			"}),"
+			],
 		"description": "Objeto para WREnder."
 	}
 }

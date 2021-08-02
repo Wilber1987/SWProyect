@@ -1,3 +1,4 @@
+import { WSecurity } from "../WModules/WSecurity.js";
 import { WRender, ComponentsManager } from "../WModules/WComponentsTools.js";
 import { WCssClass } from "../WModules/WStyledRender.js";
 import { WIcons } from "../WModules/WIcons.js";
@@ -10,7 +11,7 @@ class WAppNavigator extends HTMLElement {
         this.DrawAppNavigator();
     }
     connectedCallback() {
-        if (this.shadowRoot.innerHTML != "") {
+        if (this.shadowRoot.innerHTML != "") {            
             return;
         }
         if (this.id == undefined) {
@@ -289,6 +290,13 @@ class WAppNavigator extends HTMLElement {
                             transform: "translateX(-100%)",
                             "position": "fixed",
                             "z-index": "999",
+                            "background-color": "#fff",
+                            "color": "#fff",
+                            "width": "80%",
+                            "height": "100vh",
+                            top: 0,
+                            transition: "all 0.6s",
+                            "box-shadow": "0 0 0 0 rgba(0,0,0,0.3)"
                         }),
                         new WCssClass(`header`, {
                             display: "flex",

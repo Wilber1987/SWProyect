@@ -11,7 +11,6 @@ class WModalForm extends HTMLElement {
     constructor() {
         super();
         this.ShadowRoot = true;
-
         this.DataRequire = true;
     }
     attributeChangedCallBack() {
@@ -808,7 +807,7 @@ class WModalForm extends HTMLElement {
                     new WCssClass(" divForm", {
                         "grid-template-columns": "calc(100% - 20px) !important",
                     }),
-                ]
+                ], MediaQuery: this.MediaQuery
             }
         }
         return Style;
@@ -837,10 +836,10 @@ class WModalForm extends HTMLElement {
                     new WCssClass(" divForm", {
                         "grid-template-columns": "calc(30%) calc(30%) calc(30%)",
                     }),
-                ],MediaQuery: [{
+                ], MediaQuery: [{
                     condicion: "(max-width: 800px)",
                     ClassList: [
-                       new WCssClass(" .ContainerFormWModal", {
+                        new WCssClass(" .ContainerFormWModal", {
                             "margin-top": "0px",
                             "width": "100%",
                             "max-height": "calc(100vh - 0px)",
@@ -862,5 +861,26 @@ class WModalForm extends HTMLElement {
         }
         reader.readAsDataURL(value);
     }
+    MediaQuery= [{
+        condicion: "(max-width: 800px)",
+        ClassList: [
+            new WCssClass(" divForm", {
+                padding: "20px",
+                "display": "grid",
+                "grid-gap": "1rem",
+                "grid-template-columns": "calc(100% - 20px) !important",
+                "grid-template-rows": "auto",
+                "justify-content": "center"
+            }), new WCssClass(" .ContainerFormWModal", {
+                "margin-top": "0px",
+                "width": "100%",
+                "max-height": "calc(100vh - 0px)",
+                "height": "calc(100vh - 0px)",
+                "border-radius": "0cm",
+            }), new WCssClass("", {
+                "padding-bottom": "0px",
+            }),
+        ]
+    }]
 }
 customElements.define("w-modal-form", WModalForm);

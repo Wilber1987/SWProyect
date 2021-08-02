@@ -11,18 +11,18 @@ class WLoginTemplate extends HTMLElement {
         username: null,
         token: null
     }
-    connectedCallback() {
+    connectedCallback() {        
+        this.DrawComponent();
+    }
+    async DrawComponent() {
+        console.log("drawing login...");
         this.#LoginData.username = sessionStorage.getItem(this.id + "username");
         this.#LoginData.token = sessionStorage.getItem(this.id + "token");
-
         this.innerHTML = "";
         this.childsContainer = WRender.createElement({ type: "div" });
         this.append(WRender.createElement(this.StyleLoginTemplate()));
         this.append(this.childsContainer);
-        this.DrawComponent();
-    }
-    async DrawComponent() {
-        this.childsContainer.innerHTML = "";
+        this.childsContainer.innerHTML = "";        
         if (this.#LoginData.token == null ||
             this.#LoginData.token == undefined ||
             this.#LoginData.token == "") {
@@ -59,7 +59,6 @@ class WLoginTemplate extends HTMLElement {
                                             sessionStorage.setItem(this.id + "username", this.#LoginData.username);
                                             sessionStorage.setItem(this.id + "token", this.#LoginData.token);
                                             this.DrawComponent();
-
                                         }
                                     }
                                 }
@@ -142,9 +141,14 @@ class WLoginTemplate extends HTMLElement {
             props: {
                 id: "StyleLoginTemplate",
                 ClassList: [
+                    new WCssClass(`#${this.id}`, {
+                        display: "block",
+                        margin: "auto",
+                        "text-align": "center"
+                    }), 
                     new WCssClass(`#${this.id} label`, {
                         //"font-weight": "bold",
-                        color: "#808080",
+                        //color: "#808080",
                         padding: "10px",
                     }), new WCssClass(`#${this.id} .BtnRadio`, {
                         //"font-weight": "bold",
