@@ -75,7 +75,7 @@ class WAppNavigator extends HTMLElement {
             }
             const elementNav = WRender.createElement({
                 type: "a",
-                props: { class: "elementNav", href: element.url, innerText: element.name },
+                props: { class: "elementNav", innerText: element.name },
                 // children: [  {
                 //     type: "label",
                 //     props: { class: "", innerText: element.name },
@@ -84,6 +84,9 @@ class WAppNavigator extends HTMLElement {
                 //     props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
                 // } ]
             });
+            if (element.url != undefined && element.url != "#") {
+                elementNav.href = element.url
+            }
             elementNav.onclick = async (ev) => {
                 this.ActiveMenu(elementNav);
                 if (element.action != undefined) {

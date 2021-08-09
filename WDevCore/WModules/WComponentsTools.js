@@ -48,12 +48,12 @@ class WAjaxTools {
                 ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 Accept = "*/*";
             }
-            let dataRequest =  {
+            let dataRequest = {
                 method: typeRequest,
                 headers: {
                     'Content-Type': ContentType,
                     'Accept': Accept
-                }               
+                }
             }
             if (Data != {}) {
                 dataRequest.body = JSON.stringify(Data);
@@ -137,7 +137,7 @@ class WAjaxTools {
 }
 class WRender {
     static CreateStringNode = (string) => {
-        let node = document.createRange().createContextualFragment(string);        
+        let node = document.createRange().createContextualFragment(string);
         return node.childNodes[0];
     }
     static createElement = (Node) => {
@@ -149,10 +149,10 @@ class WRender {
                     return this.CreateStringNode(`<p>${Node}</p>`);
                 }
                 return this.CreateStringNode(`<label>${Node}</label>`);
-            } else if (Node.__proto__ === HTMLElement.prototype 
+            } else if (Node.__proto__ === HTMLElement.prototype
                 || Node.__proto__.__proto__ === HTMLElement.prototype) {
                 return Node;
-            } else {   
+            } else {
                 if (Node.__proto__ == Array.prototype) {
                     Node = { type: "div", children: Node }
                 }
@@ -223,39 +223,72 @@ class WRender {
     }
 }
 class ComponentsManager {
-    constructor() {
+    constructor(Config = {}) {
         this.DomComponents = [];
         this.type = "div";
         this.props = {
             class: "MyForm"
         };
+        this.SelectedComponent = "";
+        this.MainContainer = Config.MainContainer;
+        window.onhashchange = () => {
+            if (sessionStorage.getItem("navigateFlag") != "true") {
+                let navigateComponets = JSON.parse(sessionStorage.getItem("navigateComponets"));
+                if (navigateComponets == null) {
+
+                }
+                console.log(sessionStorage.getItem("navigateFlag"));
+            }
+
+            //navigateComponets.push(node);
+            //sessionStorage.setItem("navigateComponets", JSON.stringify(navigateComponets));
+            // const hashD = window.location.hash.replace("#", "");
+            // console.log(window.location.hash);
+            // console.log(hashD);
+            // console.log(this);
+            // console.log(this.DomComponents);
+            // console.log(this.DomComponents[hashD]);
+            // if (this.DomComponents[hashD]) {
+            //     console.log("navegar");
+            //    this.NavigateFunction(hashD, this.DomComponents[hashD] , this.MainContainer);
+            // }           
+        }
     }
     NavigateFunction = async (IdComponent, ComponentsInstance, ContainerName) => {
+        if (this.MainContainer == undefined) {
+            this.MainContainer = ContainerName;
+        }
         const ContainerNavigate = document.querySelector("#" + ContainerName);
-        let Nodes = ContainerNavigate.querySelectorAll(".DivContainer");        
+        let Nodes = ContainerNavigate.querySelectorAll(".DivContainer");
         Nodes.forEach((node) => {
-            if (node.id != IdComponent) {               
-                this.DomComponents[node.id] = node;
-                if (ContainerNavigate.querySelector("#" + node.id)) {
+            if (node.id != IdComponent) {
+                let nodeF = this.DomComponents.find(n => n.id == node.id);
+                if (nodeF != undefined && nodeF != null) {
+                    nodeF = node;
+                } else {
+                    this.DomComponents.push(node);
+                }
+                if (ContainerNavigate.querySelector("#" + node.id)) {                    
                     ContainerNavigate.removeChild(node);
                 }
             }
         });
         if (!ContainerNavigate.querySelector("#" + IdComponent)) {
-            if (typeof this.DomComponents[IdComponent] != "undefined") {
-                ContainerNavigate.append(this.DomComponents[IdComponent]);
-                return;
-            } else {               
+            const node = this.DomComponents.find(node => node.id == IdComponent);
+            if (node != undefined && node != null) {
+                ContainerNavigate.append(node);
+            } else {
                 const NewChild = WRender.createElement(ComponentsInstance);
                 NewChild.id = IdComponent;
                 NewChild.className = NewChild.className + " DivContainer";
-                this.DomComponents[IdComponent] = NewChild;
+                this.DomComponents.push(NewChild);
                 ContainerNavigate.append(NewChild);
-                return;
-            }            
+
+            }
+            window.location = "#" + IdComponent;            
         }
     }
-    AddComponent = async(IdComponent, ComponentsInstance, ContainerName, order = "last") => {
+    AddComponent = async (IdComponent, ComponentsInstance, ContainerName, order = "last") => {
         const ContainerNavigate = document.querySelector("#" + ContainerName);
         if (ContainerNavigate.querySelector("#" + IdComponent)) {
             window.location = "#" + IdComponent;
@@ -323,7 +356,7 @@ class ComponentsManager {
     }
 }
 class WArrayF {
-    static JSONParse(param){
+    static JSONParse(param) {
         return JSON.parse((param).replace(/&quot;/gi, '"'));
     }
     static orderByDate(Arry, type) {
@@ -399,7 +432,7 @@ class WArrayF {
                 return Array.findIndex(ArryValue => JSON.stringify(ArryValue[param]) ===
                     JSON.stringify(ActalValue[param])) === ActualIndex
             });*/
-            DataArray.forEach(element => {                
+            DataArray.forEach(element => {
                 if (!DataArraySR.find(x => x[param] == element[param])) {
                     DataArraySR.push(element)
                 }
@@ -408,10 +441,10 @@ class WArrayF {
         }
         return null;
     }
-    static ArrayUniqueByObject(DataArray, param = {}) { 
-        let DataArraySR = [];       
-        DataArray.forEach(element => {   
-            const DFilt =  DataArraySR.find( obj => {
+    static ArrayUniqueByObject(DataArray, param = {}) {
+        let DataArraySR = [];
+        DataArray.forEach(element => {
+            const DFilt = DataArraySR.find(obj => {
                 let flagObj = true;
                 for (const prop in param) {
                     if (obj[prop] != element[prop]) {
@@ -419,17 +452,17 @@ class WArrayF {
                     }
                 }
                 return flagObj;
-            });  
-            if (!DFilt) { 
+            });
+            if (!DFilt) {
                 element.count = 1;
-                element.rate = ((1/DataArray.length)*100).toFixed(2) + "%";              
+                element.rate = ((1 / DataArray.length) * 100).toFixed(2) + "%";
                 DataArraySR.push(element)
             } else {
-                DFilt.count = DFilt.count +1;
-                DFilt.rate = ((DFilt.count/DataArray.length)*100).toFixed(2) + "%";
+                DFilt.count = DFilt.count + 1;
+                DFilt.rate = ((DFilt.count / DataArray.length) * 100).toFixed(2) + "%";
             }
         });
-        return DataArraySR;        
+        return DataArraySR;
     }
     static DataTotals(Config) {
         let UniqueTotals = this.ArrayUnique(Config.Datasets, Config.AttNameG1, Config.AttNameG2, Config.AttNameG3);
@@ -489,13 +522,13 @@ class WArrayF {
         var Maxvalue = 0;
         //Config.TypeChart = "row";
         //Config.TypeChart = "column"; 
-        let Data = [];   
+        let Data = [];
         if (Config.TypeChart == "column") {
             Data = DataArry;
         } else {
             console.log(Config.Datasets);
             Data = Config.Datasets;
-        }    
+        }
         console.log(Data);
         for (let index = 0; index < Data.length; index++) {
             if (parseInt(Data[index][Config.EvalValue]) > Maxvalue) {
@@ -557,8 +590,8 @@ class WArrayF {
                 } else {
                     Maxvalue = "Error!";
                     break;
-                }                
-            }            
+                }
+            }
         }
         return Maxvalue;
     }
@@ -640,5 +673,5 @@ const ModalNavigateFunction = async (IdComponent, ComponentsInstance, ContainerN
             }, 1000
         );
     }
-}  
+}
 export { WAjaxTools, WRender, ComponentsManager, WArrayF, type }

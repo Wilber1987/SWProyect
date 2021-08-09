@@ -10,8 +10,8 @@ import RTACompsView from "./Views/RTAComps.js";
 import ShareBuildsView from "./Views/ShareBuild.js";
 import SiegCompsView from "./Views/GuildSiegeComps.js";
 import Guides from "./Views/Guides.js";
-import {InfoView} from "./Views/InfoView.js";
-import {PerfilView} from "./Views/PerfilView.js";
+import { InfoView } from "./Views/InfoView.js";
+import { PerfilView } from "./Views/PerfilView.js";
 import ForosView from "./Views/ForosView.js";
 import { WSecurity } from "./WDevCore/WModules/WSecurity.js";
 import "./WDevCore/WComponents/WLoginTemplate.js";
@@ -28,7 +28,7 @@ class MasterDomClass extends ComponentsManager {
             new FooterClass(),
             new FooterNavigator(),
             this.MasterStyle,
-        ];
+        ];        
     }
     MasterStyle = {
         type: "w-style",
@@ -112,7 +112,7 @@ class MasterDomClass extends ComponentsManager {
                         display: "none"
                     }), new WCssClass(".FooterNav", {
                         "grid-column": "1/3",
-                        display: "flex",                        
+                        display: "flex",
                     }),
                 ]
             }]
@@ -205,17 +205,17 @@ class AsideClass {
                     action: (ev) => {
                         DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
                     }
-                },  {
+                }, {
                     name: "Info", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("InfoView", new InfoView(), "AppMain");
                     }
-                },{
+                }, {
                     name: "Foro", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("ForosView", new ForosView(), "AppMain");
                     }
-                },{
+                }, {
                     name: "RTA ETL", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
@@ -321,9 +321,9 @@ class FooterNavigator extends ComponentsManager {
                     padding: "10px 30px"
                 }),
                 new WCssClass(`.FooterNav img`, {
-                   height: 30,
-                   width: 30,
-                   opacity: "0.6"
+                    height: 30,
+                    width: 30,
+                    opacity: "0.6"
                 })
             ]
         }

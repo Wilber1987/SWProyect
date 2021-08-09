@@ -100,8 +100,8 @@ export default class Guides extends HTMLElement {
 }
 class GuidesContainer {
     constructor(InitialGuides = [], AdvanceGuides = []) {
-        console.log(InitialGuides);
-        console.log(AdvanceGuides);
+        //console.log(InitialGuides);
+        //console.log(AdvanceGuides);
         this.type = "div"
         this.props = {
             className: "",
