@@ -16,7 +16,7 @@ import ForosView from "./Views/ForosView.js";
 import { WSecurity } from "./WDevCore/WModules/WSecurity.js";
 import "./WDevCore/WComponents/WLoginTemplate.js";
 //const Auth = new WSecurity();
-const DOMManager = new ComponentsManager();
+const DOMManager = new ComponentsManager({SPAManage : true});
 class MasterDomClass extends ComponentsManager {
     constructor() {
         super();
@@ -162,11 +162,12 @@ class AsideClass {
         props: {
             Direction: "column", id: "AppNav",
             title: "Menu",
+            Inicialize: true,
             Elements: [
                 {
                     name: "Home", url: "#",
                     action: (ev) => {
-                        DOMManager.NavigateFunction("HomeClass", new HomeClass(), "AppMain");
+                        DOMManager.NavigateFunction("HomeClass", new HomeClass(ImgData), "AppMain");
                     }
                 },
                 {
@@ -231,46 +232,9 @@ class MainClass {
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
             //new ForosView(),
-            new HomeClass(this.ImgData)
+            //new HomeClass(this.ImgData)
         ];
-    }
-    ImgData = [
-        {
-            src: "./Media/Img/wall2.jpg", title: "Guides", action: () => {
-                DOMManager.NavigateFunction("GuidesView", new Guides(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall12.jpg", title: "Monster List", action: () => {
-                DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: () => {
-                DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall3.jpg", title: "RTA TierList", action: () => {
-                DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: () => {
-                DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall5.jpg", title: "Guild/Siege Comps", action: () => {
-                DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
-            }
-        },
-        {
-            src: "./Media/Img/wall13.jpg", title: "Share Build", action: () => {
-                DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
-            }
-        },
-    ]
+    }    
 }
 class FooterClass {
     constructor() {
@@ -365,4 +329,41 @@ class FooterNavigator extends ComponentsManager {
         }
     }];
 }
+const ImgData = [
+    {
+        src: "./Media/Img/wall2.jpg", title: "Guides", action: () => {
+            DOMManager.NavigateFunction("GuidesView", new Guides(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall12.jpg", title: "Monster List", action: () => {
+            DOMManager.NavigateFunction("MonsterList", new MonsterListView(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall1.jpg", title: "RTA Picks", action: () => {
+            DOMManager.NavigateFunction("RtaPicks", new MonsterRTAPicks(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall3.jpg", title: "RTA TierList", action: () => {
+            DOMManager.NavigateFunction("RtaTIERList", new RTATierList(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall14.jpg", title: "RTA Comps", action: () => {
+            DOMManager.NavigateFunction("RTACompsView", new RTACompsView(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall5.jpg", title: "Guild/Siege Comps", action: () => {
+            DOMManager.NavigateFunction("SiegCompsView", new SiegCompsView(), "AppMain");
+        }
+    },
+    {
+        src: "./Media/Img/wall13.jpg", title: "Share Build", action: () => {
+            DOMManager.NavigateFunction("ShareBuildsView", new ShareBuildsView(), "AppMain");
+        }
+    },
+]
 export { MasterDomClass };

@@ -18,7 +18,10 @@ class WAppNavigator extends HTMLElement {
             const Rand = Math.random();
             this.id = "Menu" + Rand;
         }
-        this.DrawAppNavigator();
+        this.DrawAppNavigator();       
+        if (this.Inicialize == true) {
+            this.InitialNav();
+        }
     }
     ActiveMenu = (ev) => {
         this.shadowRoot.querySelectorAll(".elementNavActive").forEach(elementNavActive => {
@@ -30,7 +33,7 @@ class WAppNavigator extends HTMLElement {
         ev.className = "elementNavActive";
         if (this.NavStyle != "tab") {
             this.shadowRoot.querySelector("#MainNav").className = "navInactive";
-        }
+        }       
     }
     DrawAppNavigator() {
         this.shadowRoot.append(WRender.createElement(this.Style()));
@@ -62,12 +65,9 @@ class WAppNavigator extends HTMLElement {
             }
             this.shadowRoot.appendChild(WRender.createElement(header));
         }
-
-
         if (this.Elements == undefined) {
             this.Elements = [];
         }
-
         const Nav = { type: "nav", props: { id: "MainNav", className: this.NavStyle }, children: [] };
         this.Elements.forEach((element, Index) => {
             if (element.url == undefined) {
@@ -76,13 +76,7 @@ class WAppNavigator extends HTMLElement {
             const elementNav = WRender.createElement({
                 type: "a",
                 props: { class: "elementNav", innerText: element.name },
-                // children: [  {
-                //     type: "label",
-                //     props: { class: "", innerText: element.name },
-                // },  {
-                //     type: "h4",
-                //     props: { class: "elementNavMedia", innerText: element.name.charAt(0) },
-                // } ]
+               
             });
             if (element.url != undefined && element.url != "#") {
                 elementNav.href = element.url
@@ -133,7 +127,7 @@ class WAppNavigator extends HTMLElement {
             if (Index == 0 && element.SubNav == undefined) {
                 this.InitialNav = () => {
                     elementNav.onclick();
-                }
+                }                
             }
         });
         this.shadowRoot.append(WRender.createElement(Nav));
