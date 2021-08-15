@@ -231,28 +231,32 @@ class ComponentsManager {
         };
         this.SelectedComponent = "";
         this.MainContainer = Config.MainContainer;
-        window.onhashchange = () => {
-            if (sessionStorage.getItem("navigateFlag") != "true") {
-                let navigateComponets = JSON.parse(sessionStorage.getItem("navigateComponets"));
-                if (navigateComponets == null) {
+        this.Config = Config;
+        if (this.Config.SPAManage == true) {
+            window.onhashchange = () => {
+                if (sessionStorage.getItem("navigateFlag") != "true") {
+                    let navigateComponets = JSON.parse(sessionStorage.getItem("navigateComponets"));
+                    if (navigateComponets == null) {
 
+                    }
+                    console.log(sessionStorage.getItem("navigateFlag"));
                 }
-                console.log(sessionStorage.getItem("navigateFlag"));
-            }
 
-            //navigateComponets.push(node);
-            //sessionStorage.setItem("navigateComponets", JSON.stringify(navigateComponets));
-            // const hashD = window.location.hash.replace("#", "");
-            // console.log(window.location.hash);
-            // console.log(hashD);
-            // console.log(this);
-            // console.log(this.DomComponents);
-            // console.log(this.DomComponents[hashD]);
-            // if (this.DomComponents[hashD]) {
-            //     console.log("navegar");
-            //    this.NavigateFunction(hashD, this.DomComponents[hashD] , this.MainContainer);
-            // }           
+                //navigateComponets.push(node);
+                //sessionStorage.setItem("navigateComponets", JSON.stringify(navigateComponets));
+                // const hashD = window.location.hash.replace("#", "");
+                // console.log(window.location.hash);
+                // console.log(hashD);
+                // console.log(this);
+                // console.log(this.DomComponents);
+                // console.log(this.DomComponents[hashD]);
+                // if (this.DomComponents[hashD]) {
+                //     console.log("navegar");
+                //    this.NavigateFunction(hashD, this.DomComponents[hashD] , this.MainContainer);
+                // }           
+            }
         }
+
     }
     NavigateFunction = async (IdComponent, ComponentsInstance, ContainerName) => {
         if (this.MainContainer == undefined) {
@@ -268,7 +272,7 @@ class ComponentsManager {
                 } else {
                     this.DomComponents.push(node);
                 }
-                if (ContainerNavigate.querySelector("#" + node.id)) {                    
+                if (ContainerNavigate.querySelector("#" + node.id)) {
                     ContainerNavigate.removeChild(node);
                 }
             }
@@ -285,7 +289,7 @@ class ComponentsManager {
                 ContainerNavigate.append(NewChild);
 
             }
-            window.location = "#" + IdComponent;            
+            window.location = "#" + IdComponent;
         }
     }
     AddComponent = async (IdComponent, ComponentsInstance, ContainerName, order = "last") => {

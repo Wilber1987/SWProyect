@@ -76,19 +76,18 @@ export default class RTATierList extends HTMLElement {
             topScore: 40,
             buttomScore: 30
         }, this));
-        // TierContainer.children.push(new TierSection(RTAPicksData, {
-        //     topScore: 30,
-        //     buttomScore: 25
-        // }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 30,
+            buttomScore: 25
+        }, this));
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 25,
             buttomScore: 20
         }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 20,
             buttomScore: 10
-        }, this));
-        
+        }, this));       
         this.shadowRoot.append(WRender.createElement(TierContainer));
     }
     Style = {
