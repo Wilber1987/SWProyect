@@ -6,6 +6,7 @@ import "../WDevCore/WComponents/WModalForm.js";
 import { WSecurity } from "../WDevCore/WModules/WSecurity.js";
 const DOMForoManager = new ComponentsManager();
 export default class ForosView extends HTMLElement {
+    
     constructor() {
         super();
         //this.attachShadow({ mode: "open" });
