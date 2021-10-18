@@ -45,8 +45,9 @@ export default class RTATierList extends HTMLElement {
         DivCont.children.push([SelectSeason])
         this.shadowRoot.appendChild(WRender.createElement(DivCont));
         //this.shadowRoot.appendChild(WRender.createElement(SelectSeason));
-        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
-        RTAPicksData = await RTAPicksData.json();
+        //let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
+        let RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData");
+        //RTAPicksData = await RTAPicksData.json();
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });
@@ -64,6 +65,10 @@ export default class RTATierList extends HTMLElement {
             topScore = topScore - 5;
             buttomScore = buttomScore - 5;
         } */
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 1000,
+            buttomScore: 50
+        }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 50,
             buttomScore: 45
@@ -87,7 +92,11 @@ export default class RTATierList extends HTMLElement {
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 20,
             buttomScore: 10
-        }, this));       
+        }, this));     
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 10,
+            buttomScore: 0
+        }, this));   
         this.shadowRoot.append(WRender.createElement(TierContainer));
     }
     Style = {
@@ -137,6 +146,7 @@ class TierSection {
         TierData.forEach(Data => {
             if (Data.SeasonScore <= TierScore.topScore && Data.SeasonScore > TierScore.buttomScore) {
                 MobContainer.children.push( { type:'div', props: { onclick: ()=>{
+                    console.log(Data);
                     const Modal = WRender.createElement({
                         type: "w-modal-form",
                         props: {

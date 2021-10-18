@@ -31,14 +31,6 @@ export default class MonsterETL extends HTMLElement {
             SelectSeason,
             {
                 type: 'input', props: {
-                    id: '', type: 'button', class: 'className', value: 'CreateData',
-                    onclick: async () => {
-                        this.CreateRTAData();
-                    }
-                }
-            },
-            {
-                type: 'input', props: {
                     id: '', type: 'button', class: 'className', value: 'CreateDataRtaPicks',
                     onclick: async () => {
                         this.CreateRtaPicksData();
@@ -51,10 +43,29 @@ export default class MonsterETL extends HTMLElement {
                         this.CreateRtaPicksDataComps();
                     }
                 }
+            }, {
+                type: 'input', props: {
+                    id: '', type: 'button', class: 'className', value: 'Database',
+                    onclick: async () => {
+                        this.CreateDatabaseMonster();
+                    }
+                }
+            }, {
+                type: 'input', props: {
+                    id: '', type: 'button', class: 'className', value: 'PostRta',
+                    onclick: async () => {
+                        this.PostRTAPicksData();
+                    }
+                }
             }
         ]));
         this.append(WRender.createElement(this.Style));
         console.log("cargando...");
+    }
+    PostRTAPicksData = async()=>{
+        if (!this.MonPickData) {
+            this.MonPickData = await WAjaxTools.PostRequest("./API/RTAPicksData.php?function=RTAData");
+        }
     }
     CreateRTAData = async () => {
         let RTAData = await fetch("./DataBase/full_log" + this.SelectedSeason + ".json");
@@ -233,15 +244,34 @@ export default class MonsterETL extends HTMLElement {
         });
         this.shadowRoot.append(DownLoadData2);
     }
+    CreateDatabaseMonster = async()=>{      
+        
+        let Data = [];
+        for (let index = 0; index < 19; index++) {
+            let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
+            response = await response.json();
+            Data = Data.concat(response.results);
+        }
+        const dataStr2 = "data:text/json;charset=utf-8,"
+        + encodeURIComponent(JSON.stringify(Data));
+        const DownLoadDataTranform = WRender.createElement({
+            type: 'a', props: {
+                href: dataStr2, download: "monsterlist.json", innerText: "Descargar monsterlist..."
+            }
+        });
+        this.shadowRoot.append(DownLoadDataTranform);
 
+    } 
     CreateRtaPicksData = async () => {
         //TRANSFORMMMMM-----------------------------
 
         if (!this.MonPickData) {
             this.MonPickData = await fetch("../DataBase/RTAPicks/MonPickData" + this.SelectedSeason + ".json");
-            this.MonPickData = await this.MonPickData.json();
-            this.GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + this.SelectedSeason + ".json");
-            this.GlobalData = await this.GlobalData.json();
+            this.MonPickData = await this.MonPickData.json();           
+        }
+        const GlobalData = {
+            Season: this.SelectedSeason,
+            Fight_Number: WArrayF.ArrayUnique(this.MonPickData, "id_battle").length
         }
         const MonPickData = this.MonPickData;
         console.log(MonPickData);
@@ -252,6 +282,7 @@ export default class MonsterETL extends HTMLElement {
             response = await response.json();
             Data = Data.concat(response.results);
         }
+
         const RTAPicksData = [];
         const NPartidos = this.GlobalData.Fight_Number;
         Data.forEach(Mon => {
