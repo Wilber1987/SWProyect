@@ -21,9 +21,20 @@ export default class RTATierList extends HTMLElement {
         
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
+      
+            
+        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
+        RTAPicksData = await RTAPicksData.json();
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData");       
+        //console.log(RTAPicksData);
+        RTAPicksData.sort(function (a, b) {
+            return b.SeasonScore - a.SeasonScore;
+        });
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
         GlobalData = await GlobalData.json();
-        const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] }
+        const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] };
+     
+        GlobalData.Fight_Number = RTAPicksData[0].countFilter;
         for (const prop in GlobalData) {
             DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);
         }
@@ -43,14 +54,7 @@ export default class RTATierList extends HTMLElement {
             SelectSeason.children.push(option);
         });
         DivCont.children.push([SelectSeason])
-        this.shadowRoot.appendChild(WRender.createElement(DivCont));
-        //this.shadowRoot.appendChild(WRender.createElement(SelectSeason));
-        //let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
-        let RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData");
-        //RTAPicksData = await RTAPicksData.json();
-        RTAPicksData.sort(function (a, b) {
-            return b.SeasonScore - a.SeasonScore;
-        });
+        this.shadowRoot.appendChild(WRender.createElement(DivCont));   
         const TierContainer = {
             type: 'div', props: { id: '', class: 'TierContainer' },
             children: []
@@ -66,35 +70,35 @@ export default class RTATierList extends HTMLElement {
             buttomScore = buttomScore - 5;
         } */
         TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 1000,
+            topScore: 100,
+            buttomScore: 90
+        }, this));
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 90,
+            buttomScore: 80
+        }, this));
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 80,
+            buttomScore: 70
+        }, this));
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 70,
+            buttomScore: 60
+        }, this));
+        TierContainer.children.push(new TierSection(RTAPicksData, {
+            topScore: 60,
             buttomScore: 50
         }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 50,
-            buttomScore: 45
-        }, this));
-        TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 45,
             buttomScore: 40
         }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 40,
             buttomScore: 30
-        }, this));
-        TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 30,
-            buttomScore: 25
-        }, this));
-        TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 25,
-            buttomScore: 20
-        }, this));
-        TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 20,
-            buttomScore: 10
         }, this));     
         TierContainer.children.push(new TierSection(RTAPicksData, {
-            topScore: 10,
+            topScore: 30,
             buttomScore: 0
         }, this));   
         this.shadowRoot.append(WRender.createElement(TierContainer));
