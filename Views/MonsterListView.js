@@ -53,7 +53,7 @@ export default class MonsterListView extends HTMLElement {
         });
         
         var TableConfigG = {
-            Datasets: Data,
+            Dataset: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
             DisplayData: [
