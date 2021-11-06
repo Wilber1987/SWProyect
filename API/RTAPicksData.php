@@ -88,7 +88,7 @@ function RTAData($request, $pMysqli)
             $SeasonScore = 0;
             $Win_RateScore = 0;
             $Banned_RateScore = 0;
-            $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.2;
+            $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.05;
             //EVALUACION
             #region WINRATE--------------------
             // if (($Mon["Win_Rate"] >= 55) && 
@@ -118,11 +118,7 @@ function RTAData($request, $pMysqli)
                 $Win_RateScore = $Mon["Win_Rate"] * 0.60;
             }//ENTRE  ---------------> 55 - 50------------------------------------------------------------------->
             else */
-            if ($Mon["Win_Rate"] >= 55 &&
-                ($Mon["Pick_Rate"] >= 10 )) {
-                    //RATE 50-45 CON 220
-                    $Win_RateScore = $Mon["Win_Rate"] * 0.75;
-            }else if ($Mon["Win_Rate"] >= 45 &&
+            if ($Mon["Win_Rate"] >= 45 &&
                 ($Mon["Pick_Rate"] >= 40 )) {
                     //RATE 50-45 CON 220
                     $Win_RateScore = $Mon["Win_Rate"] * 0.75;

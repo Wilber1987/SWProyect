@@ -278,7 +278,11 @@ class WModalForm extends HTMLElement {
                             id: "imgControl" + prop + this.id,
                         }
                     })
-                } else {                    
+                } else {
+                    let value = ObjectF[prop];
+                    if(typeof value === "number"){
+                      value = value.toFixed(2)
+                    } 
                     Form.children.push({
                         type: "div",
                         props: {
@@ -291,7 +295,7 @@ class WModalForm extends HTMLElement {
                         }, {
                             type: "label",
                             props: {
-                                innerHTML: ObjectF[prop]
+                                innerHTML: value
                             }
                         }]
                     });
@@ -693,9 +697,9 @@ class WModalForm extends HTMLElement {
                             "max-height": "calc(100vh - 0px)",
                             "height": "calc(100vh - 0px)",
                             "border-radius": "0cm",
-                        }), new WCssClass(".ModalElement", {
-                            "font-size": 16,
-                        }),  
+                        }), new WCssClass("", {
+                            "padding-bottom": "0px",
+                        }),
                     ]
                 },]
             }

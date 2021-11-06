@@ -1,6 +1,6 @@
 import { ComponentsManager, WAjaxTools, WRender, WArrayF } from "../WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
-import "../WDevCore/WComponents/WTableComponents.js";
+import "../WDevCore/WComponents/WTableComponent.js";
 
 export default class MonsterETL extends HTMLElement {
     constructor() {

@@ -1,6 +1,6 @@
 import { ComponentsManager, type, WAjaxTools, WRender } from "../WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
-import "../WDevCore/WComponents/WTableComponents.js";
+import "../WDevCore/WComponents/WTableComponent.js";
 import "../WDevCore/WComponents/WModalForm.js";
 import "../WDevCore/WComponents/WFilterControls.js";
 

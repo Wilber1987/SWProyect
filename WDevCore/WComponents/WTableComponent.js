@@ -466,7 +466,9 @@ class WTableComponent extends HTMLElement {
                                     innerHTML: `${Money[this.TypeMoney]} ${value}`
                                 }
                             });
-                        } else {
+                        } else if(typeof value === "number"){
+                            tr.children.push({ type: "td", props: { innerHTML: value.toFixed(2) } });
+                        }  else {
                             tr.children.push({ type: "td", props: { innerHTML: value } });
                         }
                     }
