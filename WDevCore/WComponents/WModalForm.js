@@ -278,7 +278,7 @@ class WModalForm extends HTMLElement {
                             id: "imgControl" + prop + this.id,
                         }
                     })
-                } else {
+                } else {                    
                     Form.children.push({
                         type: "div",
                         props: {
@@ -693,9 +693,9 @@ class WModalForm extends HTMLElement {
                             "max-height": "calc(100vh - 0px)",
                             "height": "calc(100vh - 0px)",
                             "border-radius": "0cm",
-                        }), new WCssClass("", {
-                            "padding-bottom": "0px",
-                        }),
+                        }), new WCssClass(".ModalElement", {
+                            "font-size": 16,
+                        }),  
                     ]
                 },]
             }
