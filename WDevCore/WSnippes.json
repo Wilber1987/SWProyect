@@ -12,6 +12,10 @@
 		"prefix": ["wh", "WHeader"],
 		"body": ["{ type:'h1', props: { innerText: 'header'}}"],
 		"description": "Objeto para WREnder."
+	},"WLink": {
+		"prefix": ["wlink", "WLink"],
+		"body": ["{ type:'a', props: { innerText: 'header', href: '#'}}"],
+		"description": "Objeto para WREnder."
 	},"WImg": {
 		"prefix": ["wimg", "Wimg"],
 		"body": ["{ type:'img', props: { src: 'img', class: 'className'}}"],
@@ -58,6 +62,72 @@
 			"new WCssClass( `selector`, {",
 			"\tprop: 'value',",
 			"}),"
+			],
+		"description": "Objeto para WREnder."
+	}, "WWebComponent": {
+		"prefix": ["wcomp", "wcomponent"],
+		"body": [
+			"class WComponent  extends HTMLElement {",
+			"\tconstructor() { super(); }",
+			"\tconnectedCallback() { DrawComponent(); }",
+			"\tDrawComponent = async () => {  }",
+			"}",
+			"customElements.define('w-component', WComponent);",
+			"export { WComponent }"
+			],
+		"description": "Objeto para WREnder."
+	}, "WWebComponentShadow": {
+		"prefix": ["wcompShadow", "wcomponentShadow"],
+		"body": [
+			"class WComponent  extends HTMLElement {",
+			"\tconstructor() { super(); this.attachShadow({ mode: 'open' }); }",
+			"\tconnectedCallback() { DrawComponent(); }",
+			"\tDrawComponent = async () => {  }",
+			"}",
+			"customElements.define('w-component', WComponent);",
+			"export { WComponent }"
+			],
+		"description": "Objeto para WREnder."
+	}, "WImports": {
+		"prefix": ["wimports", "WImports"],
+		"body": [
+			"import { WRender, WArrayF, ComponentsManager, WAjaxTools } from '../WModules/WComponentsTools.js';",
+			"import { WCssClass } from '../WModules/WStyledRender.js';"			
+			],
+		"description": "Objeto para WREnder."
+	}, "WTableBasic": {
+		"prefix": ["WTableBasic", "WTableBasic"],
+		"body": [
+			"new WBTableComponent({",
+                "\tDataset: dataTestFact,",
+                "\tDisplayData: ['prop', 'prop', 'prop', 'prop', 'prop'],",
+                "\tOptions: {",
+                    "\t\tSearch: true,  UrlSearch: 'api_route',",
+                    "\t\tAdd: true, UrlAdd: 'api_route',", 
+                    "\t\tUserActions: [{ name: 'Log...', Function: (TableElement) => { console.log(TableElement); } }]",
+                "\t}",
+            "})"			
+			],
+		"description": "Objeto para WREnder."
+	}, "WTableBasicFull": {
+		"prefix": ["WTableBasicFull", "WTableBasicFull"],
+		"body": [
+			"new WBTableComponent({",
+                "\tDataset: dataTestFact,",
+                "\tDisplayData: ['prop', 'prop', 'prop', 'prop', 'prop'],",
+                "\tmaxElementByPage: 5,",
+                "\tpaginate: true,",
+                "\tModelObject: {'prop':'', 'prop':'', 'prop':'', 'prop':'', 'prop':''},",
+                "\tOptions: {",
+                    "\t\tSearch: true,  UrlSearch: 'api_route',",
+                    "\t\tAdd: true, UrlAdd: 'api_route',",
+                    "\t\tEdit: true, UrlUpdate: 'api_route',",
+                    "\t\tDelete: true, UrlDelete: 'api_route',",
+                    "\t\tShow: true, ",
+                    "\t\tSelect: true,",
+                    "\t\tUserActions: [{ name: 'Log...', Function: (TableElement) => { console.log(TableElement); } }]",
+                "\t}",
+            "})"			
 			],
 		"description": "Objeto para WREnder."
 	}

@@ -48,7 +48,6 @@ function RTAData($request, $pMysqli)
             $Win_Rate = count(array_filter($MonDataPicks, function ($mon) {
                 return $mon["win"] == true;
             }));
-
             $Banned_Rate = count(array_filter($MonDataPicks, function ($mon) {
                 return $mon["banned"] == true;
             }));
@@ -56,6 +55,9 @@ function RTAData($request, $pMysqli)
                 return $mon["leader"] == true;
             }));
             $FirstPick = count(array_filter($MonDataPicks, function ($mon) {
+                return $mon["firstPick"] == true;
+            }));
+            $FirstPickInTeam = count(array_filter($MonDataPicks, function ($mon) {
                 return $mon["pick_slot_id"] == 1;
             }));
             $LastPick = count(array_filter($MonDataPicks, function ($mon) {
@@ -66,6 +68,7 @@ function RTAData($request, $pMysqli)
             }
             $Mon["Pick_Rate"] = ($Pick_Rate / $NPartidos * 100);
             $Mon["Win_Rate"] = ($Win_Rate / ($Pick_Rate - $Banned_Rate) * 100);
+            $Mon["FirstPickInTeam"] = ($FirstPickInTeam / $Pick_Rate * 100);
             $Mon["FirstPick"] = ($FirstPick / $Pick_Rate * 100);
             $Mon["LastPick"] = ($LastPick / $Pick_Rate * 100);
             $Mon["Banned_Rate"] = ($Banned_Rate / $Pick_Rate * 100);
@@ -83,7 +86,7 @@ function RTAData($request, $pMysqli)
             $SeasonScore = 0;
             $Win_RateScore = 0;
             $Banned_RateScore = 0;
-            $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.15;
+            $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.2;
             //EVALUACION
             #region WINRATE--------------------
             if (($Mon["Win_Rate"] >= 55) && 

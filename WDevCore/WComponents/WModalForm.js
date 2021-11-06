@@ -1,11 +1,6 @@
-import {
-    WRender,
-    WAjaxTools,
-    ComponentsManager
-} from "../WModules/WComponentsTools.js";
-import {
-    WCssClass
-} from "../WModules/WStyledRender.js";
+import { WRender, WAjaxTools, ComponentsManager } from "../WModules/WComponentsTools.js";
+import { WCssClass } from "../WModules/WStyledRender.js";
+import { StyleScrolls, StylesControlsV1 } from "../StyleModules/WStyleComponents.JS";
 let photoB64;
 class WModalForm extends HTMLElement {
     constructor() {
@@ -19,67 +14,53 @@ class WModalForm extends HTMLElement {
     connectedCallback() {
         if (this.innerHTML != "") {
             return;
-        } //NO MODAL
+        } //NO MODAL        
+        if (this.StyleForm == "columnX1") {
+            this.WidthContainer = "40%";
+            this.DivColumns = "calc(100% - 20px)";
+        } else if (this.StyleForm == "columnX3") {
+            this.WidthContainer = "100%";
+            this.DivColumns = "calc(30%) calc(30%) calc(30%)";
+        } else {
+            this.WidthContainer = "70%";
+            this.DivColumns = "calc(50% - 10px) calc(50% - 10px)";
+        }
         if (this.ShadowRoot) {
-            this.attachShadow({
-                mode: "open"
-            });
+            this.attachShadow({ mode: "open" });
             this.shadowRoot.append(WRender.createElement(this.FormStyle()));
-            if (this.StyleForm == "columnX1") {
-                this.shadowRoot.append(WRender.createElement(this.StyleColumX1()));
-            } else if (this.StyleForm == "columnX2") {
-                this.shadowRoot.append(WRender.createElement(this.StyleColumX2()));
-            } else if (this.StyleForm == "columnX3") {
-                this.shadowRoot.append(WRender.createElement(this.StyleColumX3()));
-            }
         } else {
             this.append(WRender.createElement(this.FormStyle()));
-            if (this.StyleForm == "columnX1") {
-                this.append(WRender.createElement(this.StyleColumX1()));
-            } else if (this.StyleForm == "columnX2") {
-                this.append(WRender.createElement(this.StyleColumX2()));
-            } else if (this.StyleForm == "columnX3") {
-                this.append(WRender.createElement(this.StyleColumX3()));
-            }
         }
-
         //NO MODAL
         if (this.NoModal == true) {
+            const StyleNoM = {
+                type: "w-style",
+                props: {
+                    ClassList: [
+                        new WCssClass(" .ContainerFormWModal", {
+                            "margin-top": "0px",
+                            "width": "100% !important",
+                            "max-height": "auto !important",
+                            "height": "auto !important",
+                            "border-radius": "0cm",
+                        })
+                    ]
+                }
+            }
+
             this.HeadOptions == false;
             this.append(WRender.createElement(this.StyleNoModal()));
+            this.shadowRoot.append(WRender.createElement(StyleScrolls));
+            this.shadowRoot.append(WRender.createElement(StylesControlsV1));
             if (this.ShadowRoot) {
-                this.shadowRoot.append(WRender.createElement({
-                    type: "w-style",
-                    props: {
-                        ClassList: [
-                            new WCssClass(" .ContainerFormWModal", {
-                                "margin-top": "0px",
-                                "width": "100% !important",
-                                "max-height": "auto !important",
-                                "height": "auto !important",
-                                "border-radius": "0cm",
-                            })
-                        ]
-                    }
-                }))
+                this.shadowRoot.append(WRender.createElement(StyleNoM))
             } else {
-                this.append(WRender.createElement({
-                    type: "w-style",
-                    props: {
-                        ClassList: [
-                            new WCssClass(" .ContainerFormWModal", {
-                                "margin-top": "0px",
-                                "width": "100% !important",
-                                "max-height": "auto !important",
-                                "height": "auto !important",
-                                "border-radius": "0cm",
-                            })
-                        ]
-                    }
-                }))
+                this.append(WRender.createElement(StyleNoM))
             }
 
         } else {
+            this.append(WRender.createElement(StyleScrolls));
+            this.append(WRender.createElement(StylesControlsV1));
             this.append(WRender.createElement({
                 type: "w-style",
                 props: {
@@ -206,7 +187,6 @@ class WModalForm extends HTMLElement {
                     const ObjectProxy = new Proxy(NewObject, ObjHandler);
                     this.Modal.children.push(this.CrudForm(ObjectProxy, this.ObjectOptions));
                     this.Modal.children.push(this.SaveOptions(ObjectProxy));
-
                 } else {
                     this.Modal.children.push(this.CrudForm(NewObject, this.ObjectOptions));
                     this.Modal.children.push(this.SaveOptions(NewObject));
@@ -246,9 +226,8 @@ class WModalForm extends HTMLElement {
                     setTimeout(() => {
                         this.parentNode.removeChild(this);
                     }, 1000);
-                }
-            },
-            children: ['x']
+                }, innerText: 'x'
+            }
             //children: ['◄ Back']
         };
         const Section = {
@@ -304,20 +283,17 @@ class WModalForm extends HTMLElement {
                         type: "div",
                         props: {
                             class: "ModalElement"
-                        },
-                        children: [{
+                        }, children: [{
                             type: "label",
                             props: {
                                 innerText: prop + ": "
                             }
-                        },
-                        {
+                        }, {
                             type: "label",
                             props: {
                                 innerHTML: ObjectF[prop]
                             }
-                        }
-                        ]
+                        }]
                     });
                 }
             }
@@ -558,7 +534,7 @@ class WModalForm extends HTMLElement {
                         }, 1000);
                     }
                 },
-                children: ['Guardar']
+                children: ['Aceptar']
             };
             DivOptions.children.push(InputSave);
         }
@@ -579,7 +555,14 @@ class WModalForm extends HTMLElement {
         }
         return DivOptions;
     }
-    FormStyle() {
+    close = () => {
+        ComponentsManager.modalFunction(this);
+        setTimeout(() => {
+            this.parentNode.removeChild(this);
+        }, 1000);
+    }
+    //STYLES----------------------------------------------------------------->
+    FormStyle = () => {
         const Style = {
             type: "w-style",
             props: {
@@ -590,7 +573,7 @@ class WModalForm extends HTMLElement {
                         "margin": "auto",
                         "margin-top": "30px",
                         "background-color": "#fff",
-                        "width": "70%",
+                        "width": this.WidthContainer,
                         "max-height": "calc(100vh - 40px)",
                         "overflow-y": "auto",
                         "min-height": "200px",
@@ -601,37 +584,17 @@ class WModalForm extends HTMLElement {
                         "padding": "10px",
                         "margin": "0px",
                         "background": "#09f",
-                    }), new WCssClass(" divForm", {
+                    }), new WCssClass("divForm", {
                         //display: "flex", "flex-wrap": "wrap",
                         padding: "20px",
                         "display": "grid",
                         "grid-gap": "1rem",
-                        "grid-template-columns": "calc(50% - 10px) calc(50% - 10px)",
+                        "grid-template-columns": this.DivColumns,// "calc(50% - 10px) calc(50% - 10px)",
                         "grid-template-rows": "auto",
                     }), new WCssClass(" divForm .imageGridForm", {
                         "grid-row": "1/5",
                         //width: "calc(50% - 10px)", margin: "5px"
-                    }), new WCssClass(`.ContainerFormWModal input[type=text],
-                                        .ContainerFormWModal input[type=string],
-                                        .ContainerFormWModal input[type=number], 
-                                        .ContainerFormWModal input[type=date],
-                                        .ContainerFormWModal input[type=password],
-                                        .ContainerFormWModal input[type=time],
-                                        .ContainerFormWModal select`, {
-                        padding: "8px",
-                        border: "none",
-                        "border-bottom": "3px solid #999999",
-                        width: "calc(100% - 16px)",
-                        "font-size": "15px",
-                        transition: "all 0.7s"
-                    }), new WCssClass(` textarea`, {
-                        padding: "8px",
-                        border: "none",
-                        "border-bottom": "3px solid #999999",
-                        width: "calc(100% - 16px)",
-                        "font-size": "15px",
-                        transition: "all 0.7s"
-                    }), new WCssClass(` input:-internal-autofill-selected`, {
+                    }),new WCssClass(` input:-internal-autofill-selected`, {
                         "appearance": "menulist-button",
                         "background-color": "none !important",
                         "background-image": "none !important",
@@ -640,12 +603,12 @@ class WModalForm extends HTMLElement {
                     new WCssClass(` input:active,
                                          input:focus,
                                          select:focus`, {
-                        "border-bottom": "3px solid #09f",
+                        "border-bottom": "2px solid #09f",
                         outline: "none",
                     }), new WCssClass(` .DivSaveOptions`, {
                         "margin-top": "10px",
                         "margin-bottom": "10px",
-                        padding: "20px"
+                        padding: "20px", "text-align": "center"
                     }), new WCssClass(` .imgPhotoWModal`, {
                         "grid-column": "1/2",
                         "grid-row": "1/10",
@@ -713,43 +676,8 @@ class WModalForm extends HTMLElement {
                         "width": "50px",
                         "position": "relative",
                         "left": "-10px;",
-                    }),
-                    //BORONES
-                    new WCssClass(` .BtnAlert, .BtnPrimary, 
-                                    .BtnSuccess, .BtnSecundary, .Btn`, {
-                        "font-weight": "bold",
-                        "border": "none",
-                        "padding": "10px",
-                        "text-align": "center",
-                        "display": "inline-block",
-                        "min-width": "100px",
-                        "cursor": "pointer",
-                        "background-color": "#09f",
-                        "color": "#fff",
-                        "border-right": "rgb(3, 106, 175) 5px solid",
-                    }), new WCssClass(` .BtnPrimary`, {
-                        "color": "#fff",
-                        "background-color": "007bff",
-                        "border-right": "rgb(3, 106, 175) 5px solid",
-                    }), new WCssClass(` .BtnAlert`, {
-                        "color": "#fff",
-                        "background-color": "#dc3545",
-                        "border-right": "#7e1b25 5px solid",
-                    }), new WCssClass(` .BtnSuccess`, {
-                        "color": "#fff",
-                        "background-color": "#28a745",
-                        "border-right": "#165c26 5px solid",
-                    }), new WCssClass(` .BtnSecundary`, {
-                        "color": "#fff",
-                        "background-color": "#17a2b8",
-                        "border-right": "#0f5964 5px solid",
-                    }), new WCssClass(` .Btn[type=checkbox]`, {
-                        "height": "20px",
-                        "min-width": "20px",
-                        "margin": "5px",
                     })
-                ],
-                MediaQuery: [{
+                ], MediaQuery: [{
                     condicion: "(max-width: 800px)",
                     ClassList: [
                         new WCssClass(" divForm", {
@@ -796,64 +724,6 @@ class WModalForm extends HTMLElement {
         }
         return Style;
     }
-    StyleColumX1() {
-        const Style = {
-            type: "w-style",
-            props: {
-                ClassList: [
-                    new WCssClass(" .ContainerFormWModal", {
-                        "width": "50%",
-                    }),
-                    new WCssClass(" divForm", {
-                        "grid-template-columns": "calc(100% - 20px) !important",
-                    }),
-                ], MediaQuery: this.MediaQuery
-            }
-        }
-        return Style;
-    }
-    StyleColumX2() {
-        const Style = {
-            type: "w-style",
-            props: {
-                ClassList: [
-
-                ]
-            }
-        }
-        return Style;
-    }
-    StyleColumX3() {
-        const Style = {
-            type: "w-style",
-            props: {
-                ClassList: [
-                    new WCssClass(" .ContainerFormWModal", {
-                        "width": "90%",
-                        "border-radius": "0.2cm",
-                        "max-width": "900px",
-                    }),
-                    new WCssClass(" divForm", {
-                        "grid-template-columns": "calc(30%) calc(30%) calc(30%)",
-                    }),
-                ], MediaQuery: [{
-                    condicion: "(max-width: 800px)",
-                    ClassList: [
-                        new WCssClass(" .ContainerFormWModal", {
-                            "margin-top": "0px",
-                            "width": "100%",
-                            "max-height": "calc(100vh - 0px)",
-                            "height": "calc(100vh - 0px)",
-                            "border-radius": "0cm",
-                        }), new WCssClass("", {
-                            "padding-bottom": "0px",
-                        }),
-                    ]
-                },]
-            }
-        }
-        return Style;
-    }
     async SelectedFile(value) {
         var reader = new FileReader();
         reader.onloadend = function (e) {
@@ -861,26 +731,5 @@ class WModalForm extends HTMLElement {
         }
         reader.readAsDataURL(value);
     }
-    MediaQuery= [{
-        condicion: "(max-width: 800px)",
-        ClassList: [
-            new WCssClass(" divForm", {
-                padding: "20px",
-                "display": "grid",
-                "grid-gap": "1rem",
-                "grid-template-columns": "calc(100% - 20px) !important",
-                "grid-template-rows": "auto",
-                "justify-content": "center"
-            }), new WCssClass(" .ContainerFormWModal", {
-                "margin-top": "0px",
-                "width": "100%",
-                "max-height": "calc(100vh - 0px)",
-                "height": "calc(100vh - 0px)",
-                "border-radius": "0cm",
-            }), new WCssClass("", {
-                "padding-bottom": "0px",
-            }),
-        ]
-    }]
 }
 customElements.define("w-modal-form", WModalForm);

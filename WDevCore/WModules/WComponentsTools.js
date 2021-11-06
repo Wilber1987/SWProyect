@@ -1,24 +1,4 @@
-function DisplayAcordeon(value, SectionId, size = null) {
-    //console.log(value)
-    if (size == null) {
-        size = "500px";
-    }
-    // var ventanaM = document.getElementById(idModal);
-    var acc = document.getElementsByClassName("GroupFormAcordeon");
-    for (var i = 0; i < acc.length; i++) {
-        ventanaM = acc[i];
-        if (ventanaM.id != SectionId) {
-            //  if (ventanaM.style.height != "300px") {
-            ventanaM.style.transition = "all ease 1s";
-            ventanaM.style.height = "0px";
-            //ventanaM.style.overflow = "scroll";
-        } else {
-            ventanaM.style.transition = "all ease 1s";
-            ventanaM.style.height = size;
-            //ventanaM.style.oveflow = "hidden";
-        }
-    }
-}
+
 function type(value) {
     var r;
     if (typeof value === 'object') {
@@ -68,7 +48,7 @@ class WAjaxTools {
         }
     }
     static PostRequest = async (Url, Data = {}, PostConfig = {}) => {
-        console.log(Data)
+        //console.log(Data)
         try {
             let ContentType = "application/json; charset=utf-8";
             let Accept = "*/*";
@@ -126,7 +106,11 @@ class WAjaxTools {
             }
         } else {
             response = await response.json();
-            localStorage.setItem(Url, JSON.stringify(response));
+            try {
+                localStorage.setItem(Url, JSON.stringify(response));
+            } catch (error) {
+                console.log(error);
+            }
             return response;
         }
     }
@@ -159,8 +143,13 @@ class WRender {
                 const element = document.createElement(Node.type);
                 if (Node.props != undefined && Node.props.__proto__ == Object.prototype) {
                     for (const prop in Node.props) {
-                        if (prop == "class") element.className = Node.props[prop];
-                        else element[prop] = Node.props[prop];
+                        if (prop == "class") { element.className = Node.props[prop]; }//CLASSNAME
+                        else if (prop == "style" && Node.props[prop].__proto__ == Object.prototype) {  //STYLE                          
+                            for (const styleProp in Node.props[prop]) {
+                                element[prop][styleProp] = Node.props[prop][styleProp];
+                            }
+                        }
+                        else element[prop] = Node.props[prop];//NORMAL
                     }
                 }
                 if (Node.children != undefined && Node.children.__proto__ == Array.prototype) {
@@ -221,6 +210,67 @@ class WRender {
 
         }
     }
+    static Create = (Node = (new WNode())) => {
+        try {
+            if (typeof Node === "undefined" || Node == null) {
+                return document.createTextNode("Nodo nulo o indefinido.");
+            } else if (typeof Node === "string" || typeof Node === "number") {
+                if (Node.length == 0) {
+                    return "";
+                }else if (Node.length > 100) {
+                    return this.CreateStringNode(`<p>${Node}</p>`);
+                }
+                return this.CreateStringNode(`<label>${Node}</label>`);
+            } else if (Node.__proto__ === HTMLElement.prototype
+                || Node.__proto__.__proto__ === HTMLElement.prototype) {
+                return Node;
+            } else {
+                if (Node.__proto__ == Array.prototype) {
+                    Node = new WNode({ children: Node });
+                } 
+                Node.tagName =  Node.tagName ?? "div";
+                const element = document.createElement(Node.tagName);                
+                for (const prop in Node) {
+                    if (prop == "tagName") { continue;  }
+                    else if (prop == "class") { element.className = Node[prop]; }//CLASSNAME
+                    else if (prop == "style" && Node[prop].__proto__ == Object.prototype) {  //STYLE
+                        this.SetStyle(element, Node[prop]);
+                    }else if (prop == "children") {
+                        if (Node.children != undefined && Node.children.__proto__ == Array.prototype) {
+                            Node.children.forEach(Child => {
+                                element.appendChild(this.Create(Child));
+                            });
+                        } else if(Node.children != undefined && Node.children.__proto__ == Object.prototype) {
+                            Node.children.N = Node.children.N ?? 0;
+                            Node.children.childs = Node.children.childs ?? [];
+                            for (let index = 0; index < Node.children.N; index++) {
+                                const contain = Node.children.childs[index] ?? "";
+                                element.appendChild(this.Create({
+                                    tagName: Node.children.tagName,
+                                    class: Node.children.className,
+                                    children: contain
+                                }));
+                            }
+                        }else {
+                            element.appendChild(this.Create(Node.children));
+                        }
+                    }
+                    else element[prop] = Node[prop];//NORMAL
+                }
+                //children
+                return element;
+            }
+        } catch (error) {
+            console.log(error, Node);
+            return document.createTextNode("Problemas en la construcción del nodo.");
+        }
+    }
+    static SetStyle = (Node, Style = (new ElementStyle())) =>{
+        for (const styleProp in Style) {
+            Node.style[styleProp] = Style[styleProp];
+        }
+    }
+
 }
 class ComponentsManager {
     constructor(Config = {}) {
@@ -244,12 +294,12 @@ class ComponentsManager {
                 }
                 const hashD = window.location.hash.replace("#", "");
                 let navigateComponets = JSON.parse(sessionStorage.getItem("navigateComponets"));
-                if (navigateComponets != null) {                    
+                if (navigateComponets != null) {
                     const newNode = this.DomComponents.find(node => node.id == hashD);
                     //console.log(newNode);
-                    this.NavigateFunction(hashD, newNode , this.MainContainer);
-                }      
-                       
+                    this.NavigateFunction(hashD, newNode, this.MainContainer);
+                }
+
             }
         }
 
@@ -273,7 +323,7 @@ class ComponentsManager {
                 }
             }
         });
-        if (!ContainerNavigate.querySelector("#" + IdComponent)) {  
+        if (!ContainerNavigate.querySelector("#" + IdComponent)) {
             const node = this.DomComponents.find(node => node.id == IdComponent);
             if (node != undefined && node != null) {
                 ContainerNavigate.append(node);
@@ -317,8 +367,6 @@ class ComponentsManager {
         }
     }
     static modalFunction(ventanaM) {
-        //var ventanaM = document.getElementById(DivModal);
-        //console.log(DivModal)
         if (ventanaM.style.opacity == 0) {
             ventanaM.style.transition = "all ease 1s";
             ventanaM.style.display = "block";
@@ -414,44 +462,34 @@ class WArrayF {
         }
         return Arry;
     }
-    static ArrayUnique(DataArray, param, param2 = null, param3 = null) {
-        if (typeof param3 !== 'undefined' && param3 != null && param3 != "") {
-            let DataArraySR = DataArray.filter((ActalValue, ActualIndex, Array) => {
-                return Array.findIndex(ArryValue =>
-                    (JSON.stringify(ArryValue[param3]) ===
-                        JSON.stringify(ActalValue[param3])) &&
-                    (JSON.stringify(ArryValue[param2]) ===
-                        JSON.stringify(ActalValue[param2])) &&
-                    (JSON.stringify(ArryValue[param]) ===
-                        JSON.stringify(ActalValue[param]))
-                ) === ActualIndex
-            });
-            return DataArraySR;
-        } else if (typeof param2 !== 'undefined' && param2 != null && param2 != "") {
-            let DataArraySR = DataArray.filter((ActalValue, ActualIndex, Array) => {
-                return Array.findIndex(ArryValue =>
-                    (JSON.stringify(ArryValue[param2]) ===
-                        JSON.stringify(ActalValue[param2])) &&
-                    (JSON.stringify(ArryValue[param]) ===
-                        JSON.stringify(ActalValue[param]))
-                ) === ActualIndex
-            });
-            return DataArraySR;
-        } else if (typeof param !== 'undefined' && param != null && param != "") {
-            let DataArraySR = [] /* DataArray.filter((ActalValue, ActualIndex, Array) => {
-                return Array.findIndex(ArryValue => JSON.stringify(ArryValue[param]) ===
-                    JSON.stringify(ActalValue[param])) === ActualIndex
-            });*/
-            DataArray.forEach(element => {
-                if (!DataArraySR.find(x => x[param] == element[param])) {
-                    DataArraySR.push(element)
+    static ArrayUnique(DataArray, param, sumParam = null) {
+        let DataArraySR = []
+        DataArray.forEach(element => {
+            const DFilt = DataArraySR.find(x => x[param] == element[param]);
+            if (!DFilt) {
+                const NewElement = {};
+                for (const prop in element) {
+                    NewElement[prop] = element[prop]
                 }
-            });
-            return DataArraySR;
-        }
-        return null;
+                //NewElement[param] =  element[param];
+                if (!element.count) {
+                    NewElement.count = 1;
+                }
+                NewElement.rate = ((1 / DataArray.length) * 100).toFixed(2) + "%";
+                DataArraySR.push(NewElement)
+            } else {
+                if (!element.count) {
+                    DFilt.count = DFilt.count + 1;
+                }
+                DFilt.rate = ((DFilt.count / DataArray.length) * 100).toFixed(2) + "%";
+                if (sumParam != null) {
+                    DFilt[sumParam] = DFilt[sumParam] + element[sumParam];
+                }
+            }
+        });
+        return DataArraySR;
     }
-    static ArrayUniqueByObject(DataArray, param = {}) {
+    static ArrayUniqueByObject(DataArray, param = {}, sumParam = null) {
         let DataArraySR = [];
         DataArray.forEach(element => {
             const DFilt = DataArraySR.find(obj => {
@@ -464,121 +502,45 @@ class WArrayF {
                 return flagObj;
             });
             if (!DFilt) {
-                element.count = 1;
-                element.rate = ((1 / DataArray.length) * 100).toFixed(2) + "%";
-                DataArraySR.push(element)
+                const NewElement = {};
+                for (const prop in element) {
+                    NewElement[prop] = element[prop]
+                }
+                if (!element.count) {
+                    NewElement.count = 1;
+                }
+                NewElement.rate = ((1 / DataArray.length) * 100).toFixed(2) + "%";
+                DataArraySR.push(NewElement)
             } else {
-                DFilt.count = DFilt.count + 1;
+                if (!element.count) {
+                    DFilt.count = DFilt.count + 1;
+                }
                 DFilt.rate = ((DFilt.count / DataArray.length) * 100).toFixed(2) + "%";
+                if (sumParam != null) {
+                    DFilt[sumParam] = DFilt[sumParam] + element[sumParam];
+                }
             }
         });
         return DataArraySR;
     }
-    static DataTotals(Config) {
-        let UniqueTotals = this.ArrayUnique(Config.Datasets, Config.AttNameG1, Config.AttNameG2, Config.AttNameG3);
-        let Totals = [];
-        if (typeof Config.AttNameG3 !== 'undefined' && Config.AttNameG3 != null && Config.AttNameG3 != "") {
-            UniqueTotals.forEach(element => {
-                let suma = 0;
-                Config.Datasets.forEach(elementGroup => {
-
-                    if (element[Config.AttNameG1] == elementGroup[Config.AttNameG1] &&
-                        element[Config.AttNameG2] == elementGroup[Config.AttNameG2] &&
-                        element[Config.AttNameG3] == elementGroup[Config.AttNameG3]) {
-                        suma = suma + parseFloat(elementGroup[Config.EvalValue]);
-                    }
-                });
-                let NewObj = {};
-                NewObj[Config.AttNameG1] = element[Config.AttNameG1];
-                NewObj[Config.AttNameG2] = element[Config.AttNameG2];
-                NewObj[Config.AttNameG3] = element[Config.AttNameG3];
-                NewObj[Config.EvalValue] = suma;
-                Totals.push(NewObj);
-            });
-        } else if (typeof Config.AttNameG2 !== 'undefined' && Config.AttNameG2 != null && Config.AttNameG2 != "") {
-            UniqueTotals.forEach(element => {
-                let suma = 0;
-                Config.Datasets.forEach(elementGroup => {
-
-                    if (element[Config.AttNameG1] == elementGroup[Config.AttNameG1] &&
-                        element[Config.AttNameG2] == elementGroup[Config.AttNameG2]) {
-                        suma = suma + parseFloat(elementGroup[Config.EvalValue]);
-                    }
-                });
-                let NewObj = {};
-                NewObj[Config.AttNameG1] = element[Config.AttNameG1];
-                NewObj[Config.AttNameG2] = element[Config.AttNameG2];
-                NewObj[Config.EvalValue] = suma;
-                Totals.push(NewObj);
-            });
-        } else if (typeof Config.AttNameG1 !== 'undefined' && Config.AttNameG1 != null && Config.AttNameG1 != "") {
-            UniqueTotals.forEach(element => {
-                let suma = 0;
-                Config.Datasets.forEach(elementGroup => {
-
-                    if (element[Config.AttNameG1] == elementGroup[Config.AttNameG1]) {
-                        suma = suma + parseFloat(elementGroup[Config.EvalValue]);
-                    }
-                });
-                let NewObj = {};
-                NewObj[Config.AttNameG1] = element[Config.AttNameG1];
-                NewObj[Config.EvalValue] = suma;
-                Totals.push(NewObj);
-            });
-        }
-        return Totals;
-    }
-    static MaxValue(DataArry, Config) {
+    static MaxValue(Data, MaxParam) {
         var Maxvalue = 0;
-        //Config.TypeChart = "row";
-        //Config.TypeChart = "column"; 
-        let Data = [];
-        if (Config.TypeChart == "column") {
-            Data = DataArry;
-        } else {
-            console.log(Config.Datasets);
-            Data = Config.Datasets;
-        }
-        console.log(Data);
         for (let index = 0; index < Data.length; index++) {
-            if (parseInt(Data[index][Config.EvalValue]) > Maxvalue) {
-                Maxvalue = Data[index][Config.EvalValue];
+            if (parseInt(Data[index][MaxParam]) > Maxvalue) {
+                Maxvalue = Data[index][MaxParam];
             }
         }
-        console.log(Maxvalue);
         return Maxvalue;
-    }
-    static FindInTotal(Elemento, list, Config) {
-        var FindElement = false;
-        for (let index = 0; index < list.length; index++) {
-            if (list[index][Config.AttNameG3]) {
-                if (list[index][Config.AttNameG1] == Elemento[Config.AttNameG1] &&
-                    list[index][Config.AttNameG2] == Elemento[Config.AttNameG2] &&
-                    list[index][Config.AttNameG3] == Elemento[Config.AttNameG3]) {
-                    FindElement = list[index];
-                }
-            } else if (list[index][Config.AttNameG2]) {
-                if (list[index][Config.AttNameG1] == Elemento[Config.AttNameG1] &&
-                    list[index][Config.AttNameG2] == Elemento[Config.AttNameG2]) {
-                    FindElement = list[index];
-                }
-            } else {
-                if (list[index][Config.AttNameG1] == Elemento[Config.AttNameG1]) {
-                    FindElement = list[index];
-                }
-            }
-        }
-        return FindElement;
     }
     //reparar
-    static SumValue(DataArry, Config) {
+    static SumValue(DataArry, EvalValue) {
         var Maxvalue = 0;
         for (let index = 0; index < DataArry.length; index++) {
-            Maxvalue = Maxvalue + parseFloat(DataArry[index][Config.EvalValue]);
+            Maxvalue = Maxvalue + parseFloat(DataArry[index][EvalValue]);
         }
         return Maxvalue;
     }
-    static SumValAtt(DataArry, EvalValue) {
+    static SumValAtt(DataArry, EvalValue) {//retorna la suma 
         var Maxvalue = 0;
         for (let index = 0; index < DataArry.length; index++) {
             if (typeof DataArry[index][EvalValue] === "number") {
@@ -605,10 +567,11 @@ class WArrayF {
         }
         return Maxvalue;
     }
-    static FindInArray(element, Datasets) {
+    //BUSQUEDA Y COMPARACIONES
+    static FindInArray(element, Dataset) {
         let val = false;
-        for (let index = 0; index < Datasets.length; index++) {
-            const Data = Datasets[index];
+        for (let index = 0; index < Dataset.length; index++) {
+            const Data = Dataset[index];
             val = this.compareObj(element, Data)
             if (val == true) {
                 break;
@@ -616,72 +579,254 @@ class WArrayF {
         }
         return val;
     }
-    static compareObj(arrayP, Data) {
+    static compareObj(ComparativeObject, EvalObject) {//compara si dos objetos son iguales en las propiedades        
+        if (typeof ComparativeObject === "string" &&  typeof ComparativeObject === "number" ) {
+            if (ComparativeObject == EvalObject) return true;
+            else return false;
+        }
         let val = true;
-        for (const prop in arrayP) {
-            if (arrayP[prop] !== Data[prop]) {
+        for (const prop in ComparativeObject) {
+            if (ComparativeObject[prop] !== EvalObject[prop]) {
                 val = false;
                 break;
             }
         }
         return val;
     }
-
-}
-function _DispalNav(NavContainerId, NavAnimation) {
-    let NavContainer = document.querySelector("#" + NavContainerId);
-    let Nav = NavContainer.querySelector("ul");
-    NavContainer.style.transition = "all 1s";
-    Nav.style.transition = "all 1s";
-    Nav.style.webkitTransform = "translateX(-100%)";
-    if (NavContainer.style.opacity == 0) {
-        NavContainer.style.pointerEvents = "all";
-        NavContainer.style.opacity = 1;
-        if (NavAnimation == "SlideLeft") {
-            Nav.style.webkitTransform = "translateX(0%)";
+    //STRINGS
+    static Capitalize(str) {
+        if (str == null) {
+            return str;
         }
-        if (NavAnimation == "SlideRight") {
-            Nav.style.webkitTransform = "translateX(0%)";
+        str = str.toString();
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    //verifica que un objeto este dentro de un array
+    static checkDisplay(DisplayData, prop) {
+        let flag = true
+        if (DisplayData != undefined &&
+            DisplayData.__proto__ == Array.prototype) {
+            const findProp = DisplayData.find(x => x == prop);
+            if (!findProp) {
+                flag = false;
+            }
         }
-    } else {
-        NavContainer.style.pointerEvents = "none";
-        NavContainer.style.opacity = 0;
-        if (NavAnimation == "SlideLeft") {
-            Nav.style.webkitTransform = "translateX(-100%)";
-        }
-        if (NavAnimation == "SlideRight") {
-            Nav.style.webkitTransform = "translateX(+100%)";
-        }
+        return flag;
     }
 }
-const ModalNavigateFunction = async (IdComponent, ComponentsInstance, ContainerName) => {
-    const ContainerNavigate = document.querySelector("#" + ContainerName);
-    if (!ContainerNavigate.querySelector("#" + IdComponent)) {
-        if (typeof this.DomComponents[IdComponent] != "undefined") {
-            ContainerNavigate.append(this.DomComponents[IdComponent]);
-            setTimeout(
-                () => {
-                    this.modalFunction(this.DomComponents[IdComponent].id);
-                }, 100
-            );
-            return;
-        }
-        this.DomComponents[IdComponent] = WRender.createElement(ComponentsInstance);
-        ContainerNavigate.append(this.DomComponents[IdComponent]);
-        setTimeout(
-            () => {
-                this.modalFunction(this.DomComponents[IdComponent].id);
-            }, 100
-        );
-        return;
-    } else {
-        this.DomComponents[IdComponent] = ContainerNavigate.querySelector("#" + IdComponent);
-        this.modalFunction(this.DomComponents[IdComponent].id);
-        setTimeout(
-            () => {
-                ContainerNavigate.removeChild(this.DomComponents[IdComponent]);
-            }, 1000
-        );
+//METODOS VARIOS
+const GenerateColor = () => {
+    var hexadecimal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+    var color_aleatorio = "#FF";
+    for (let index = 0; index < 4; index++) {
+        const random = Math.floor(Math.random() * hexadecimal.length);
+        color_aleatorio += hexadecimal[random]
     }
+    return color_aleatorio
 }
-export { WAjaxTools, WRender, ComponentsManager, WArrayF, type }
+export { WAjaxTools, WRender, ComponentsManager, WArrayF, type, GenerateColor }
+class WNode {
+    constructor (props = {}){
+        for (const prop in props) {
+           this[prop] = props[prop]
+        }
+        this.tagName = this.tagName ?? "div";
+        this.children = this.children ?? [];
+    }
+    tagName = "div";
+    style = new ElementStyle(); 
+    className = null;
+    innerText = null;
+    value = null;
+    innerHTML = null;
+    children = [] ?? { tagName: "", N: 0 };
+}
+class ElementStyle {
+    alignContent= null;
+    alignItems= null;
+    alignSelf= null;
+    animation= null;
+    animationDelay= null;
+    animationDirection= null;
+    animationDuration= null;
+    animationFillMode= null;
+    animationIterationCount= null;
+    animationName= null;
+    animationTimingFunction= null;
+    animationPlayState= null;
+    background= null;
+    backgroundAttachment= null;
+    backgroundColor= null;
+    backgroundImage= null;
+    backgroundPosition= null;
+    backgroundRepeat= null;
+    backgroundClip= null;
+    backgroundOrigin= null;
+    backgroundSize= null;
+    backfaceVisibility= null;
+    border= null;
+    borderBottom= null;
+    borderBottomColor= null;
+    borderBottomLeftRadius= null;
+    borderBottomRightRadius= null;
+    borderBottomStyle= null;
+    borderBottomWidth= null;
+    borderCollapse= null;
+    borderColor= null;
+    borderImage= null;
+    borderImageOutset= null;
+    borderImageRepeat= null;
+    borderImageSlice= null;
+    borderImageSource= null;
+    borderImageWidth= null;
+    borderLeft= null;
+    borderLeftColor= null;
+    borderLeftStyle= null;
+    borderLeftWidth= null;
+    borderRadius= null;
+    borderRight= null;
+    borderRightColor= null;
+    borderRightStyle= null;
+    borderRightWidth= null;
+    borderSpacing= null;
+    borderStyle= null;
+    borderTop= null;
+    borderTopColor= null;
+    borderTopLeftRadius= null;
+    borderTopRightRadius= null;
+    borderTopStyle= null;
+    borderTopWidth= null;
+    borderWidth= null;
+    bottom= null;
+    boxDecorationBreak= null;
+    boxShadow= null;
+    boxSizing= null;
+    captionSide= null;
+    caretColor= null;
+    clear= null;
+    clip= null;
+    color= null;
+    columnCount= null;
+    columnFill= null;
+    columnGap= null;
+    columnRule= null;
+    columnRuleColor= null;
+    columnRuleStyle= null;
+    columnRuleWidth= null;
+    columns= null;
+    columnSpan= null;
+    columnWidth= null;
+    content= null;
+    counterIncrement= null;
+    counterReset= null;
+    cursor= null;
+    direction= null;
+    display= null;
+    emptyCells= null;
+    filter= null;
+    flex= null;
+    flexBasis= null;
+    flexDirection= null;
+    flexFlow= null;
+    flexGrow= null;
+    flexShrink= null;
+    flexWrap= null;
+    cssFloat= null;
+    font= null;
+    fontFamily= null;
+    fontSize= null;
+    fontStyle= null;
+    fontVariant= null;
+    fontWeight= null;
+    fontSizeAdjust= null;
+    fontStretch= null;
+    hangingPunctuation= null;
+    height= null;
+    hyphens= null;
+    icon= null;
+    imageOrientation= null;
+    isolation= null;
+    justifyContent= null;
+    left= null;
+    letterSpacing= null;
+    lineHeight= null;
+    listStyle= null;
+    listStyleImage= null;
+    listStylePosition= null;
+    listStyleType= null;
+    margin= null;
+    marginBottom= null;
+    marginLeft= null;
+    marginRight= null;
+    marginTop= null;
+    maxHeight= null;
+    maxWidth= null;
+    minHeight= null;
+    minWidth= null;
+    navDown= null;
+    navIndex= null;
+    navLeft= null;
+    navRight= null;
+    navUp= null;
+    objectFit= null;
+    objectPosition= null;
+    opacity= null;
+    order= null;
+    orphans= null;
+    outline= null;
+    outlineColor= null;
+    outlineOffset= null;
+    outlineStyle= null;
+    outlineWidth= null;
+    overflow= null;
+    overflowX= null;
+    overflowY= null;
+    padding= null;
+    paddingBottom= null;
+    paddingLeft= null;
+    paddingRight= null;
+    paddingTop= null;
+    pageBreakAfter= null;
+    pageBreakBefore= null;
+    pageBreakInside= null;
+    perspective= null;
+    perspectiveOrigin= null;
+    position= null;
+    quotes= null;
+    resize= null;
+    right= null;
+    scrollBehavior= null;
+    tableLayout= null;
+    tabSize= null;
+    textAlign= null;
+    textAlignLast= null;
+    textDecoration= null;
+    textDecorationColor= null;
+    textDecorationLine= null;
+    textDecorationStyle= null;
+    textIndent= null;
+    textJustify= null;
+    textOverflow= null;
+    textShadow= null;
+    textTransform= null;
+    top= null;
+    transform= null;
+    transformOrigin= null;
+    transformStyle= null;
+    transition= null;
+    transitionProperty= null;
+    transitionDuration= null;
+    transitionTimingFunction= null;
+    transitionDelay= null;
+    unicodeBidi= null;
+    userSelect= null;
+    verticalAlign= null;
+    visibility= null;
+    whiteSpace= null;
+    width= null;
+    wordBreak= null;
+    wordSpacing= null;
+    wordWrap= null;
+    widows= null;
+    zIndex= null;
+};

@@ -2,23 +2,25 @@ import { WSecurity } from "../WModules/WSecurity.js";
 import { WRender, ComponentsManager } from "../WModules/WComponentsTools.js";
 import { WCssClass } from "../WModules/WStyledRender.js";
 import { WIcons } from "../WModules/WIcons.js";
+
 class WAppNavigator extends HTMLElement {
-    constructor() {
+    constructor(Elements = []) {
         super();
         this.attachShadow({ mode: "open" });
+        this.Elements = Elements;
     }
     attributeChangedCallBack() {
         this.DrawAppNavigator();
     }
     connectedCallback() {
-        if (this.shadowRoot.innerHTML != "") {            
+        if (this.shadowRoot.innerHTML != "") {
             return;
         }
         if (this.id == undefined) {
             const Rand = Math.random();
             this.id = "Menu" + Rand;
         }
-        this.DrawAppNavigator();       
+        this.DrawAppNavigator();
         if (this.Inicialize == true) {
             this.InitialNav();
         }
@@ -33,7 +35,7 @@ class WAppNavigator extends HTMLElement {
         ev.className = "elementNavActive";
         if (this.NavStyle != "tab") {
             this.shadowRoot.querySelector("#MainNav").className = "navInactive";
-        }       
+        }
     }
     DrawAppNavigator() {
         this.shadowRoot.append(WRender.createElement(this.Style()));
@@ -55,18 +57,16 @@ class WAppNavigator extends HTMLElement {
                     type: "img", props: {
                         src: WIcons.Menu,
                         class: "DisplayBtn",
-                    }, children: []
+                    }
                 }]
             }
-            if (typeof this.title === "string") {
+            if (typeof this.NavTitle === "string") {
+                //console.log( this.NavTitle);
                 header.children.push({
-                    type: "label", props: { class: "title", innerText: this.title }
+                    type: "label", props: { class: "NavTitle", innerText: this.NavTitle }
                 });
             }
             this.shadowRoot.appendChild(WRender.createElement(header));
-        }
-        if (this.Elements == undefined) {
-            this.Elements = [];
         }
         const Nav = { type: "nav", props: { id: "MainNav", className: this.NavStyle }, children: [] };
         this.Elements.forEach((element, Index) => {
@@ -75,9 +75,17 @@ class WAppNavigator extends HTMLElement {
             }
             const elementNav = WRender.createElement({
                 type: "a",
-                props: { class: "elementNav", innerText: element.name },
-               
-            });
+                props: { class: "elementNav" },
+
+            });            
+            if (element.icon) {                
+                elementNav.append(WRender.createElement({
+                    type: 'img', props: {
+                        src: "data:image/png;base64," + element.icon, class: 'IconNav'
+                    }
+                }));
+            }
+            elementNav.append(element.name)
             if (element.url != undefined && element.url != "#") {
                 elementNav.href = element.url
             }
@@ -89,7 +97,7 @@ class WAppNavigator extends HTMLElement {
             }
             Nav.children.push(elementNav);
             if (element.SubNav != undefined) {
-                elementNav.href = null;
+                elementNav.href = "#";
                 const SubMenuId = "SubMenu" + Index + this.id;
                 const SubNav = {
                     type: "section",
@@ -127,7 +135,7 @@ class WAppNavigator extends HTMLElement {
             if (Index == 0 && element.SubNav == undefined) {
                 this.InitialNav = () => {
                     elementNav.onclick();
-                }                
+                }
             }
         });
         this.shadowRoot.append(WRender.createElement(Nav));
@@ -146,11 +154,12 @@ class WAppNavigator extends HTMLElement {
             props: {
                 id: "NavStyle" + this.id,
                 ClassList: [
-                    new WCssClass(`.nav, .navInactive`, {
+                    new WCssClass(`.nav, .navInactive, .navActive`, {
                         display: "flex",
                         "flex-direction": navDirection,
                         padding: "0px 10px",
                         transition: "all 1s",
+                        "justify-content": this.alignItems
                     }), new WCssClass(`.tab`, {
                         display: "flex",
                         "flex-direction": navDirection,
@@ -169,6 +178,7 @@ class WAppNavigator extends HTMLElement {
                         "text-decoration": "none",
                         color: "#444444",
                         padding: "10px",
+                        "border": "solid 1px rgb(0,0,0,0)",
                         "border-bottom": "solid 2px #eee",
                         transition: "all 0.6s",
                         display: "flex", "align-items": "center",
@@ -177,6 +187,7 @@ class WAppNavigator extends HTMLElement {
                         "text-decoration": "none",
                         color: "#444444",
                         padding: "10px",
+                        "border": "solid 1px rgb(0,0,0,0)",
                         "border-bottom": "solid 2px #4da6ff",
                         transition: "all 0.6s",
                         display: "flex", "align-items": "center",
@@ -187,10 +198,20 @@ class WAppNavigator extends HTMLElement {
                     }), new WCssClass(`header`, {
                         display: "flex",
                         "align-items": "center",
-                        "justify-content": "left",
+                        "justify-content": this.alignItems,
                         "box-shadow": "0 1px 1px 0 rgba(0,0,0,0.3)"
-                    }),
-                    new WCssClass(`.title`, {
+                    }), new WCssClass(`.IconNav`, {
+                        height: 20,
+                        width: 20,
+                        margin: 5
+                    }), new WCssClass(`.tab .elementNavActive, .tab .elementNav`, {
+                        display: "flex",
+                        "flex-direction": "column", 
+                        "min-width": 100
+                    }), new WCssClass(`.tab .IconNav`, {
+                        height: 40,
+                        width: 40
+                    }), new WCssClass(`.NavTitle`, {
                         "font-size": "1.1rem",
                         padding: "10px",
                         color: "#888888",
@@ -220,40 +241,11 @@ class WAppNavigator extends HTMLElement {
                     }), new WCssClass(`.navActive`, {
                         overflow: "hidden",
                         "max-height": "5000px",
-                    }), new WCssClass(`.elementNavMedia`, {
-                        display: "none",
-
                     })
                 ],
                 MediaQuery: [{
                     condicion: "(max-width: 1200px)",
-                    ClassList: [
-                        // new WCssClass(`.elementNav`, {
-                        //     display: "none",
-                        // }),new WCssClass(`.elementNavMedia` , {
-                        //     display: "block",
-                        //     "font-size": "26px",                        
-                        //     "text-align": "center",
-                        //     padding: "10px",
-                        //     "text-decoration": "none",
-                        //     "font-weight": "bold",
-                        //     cursor: "pointer",
-                        //     "border-bottom": "solid 2px #eee",
-                        //     margin: "0px"
-                        // }),  new WCssClass(`.elementNavActive` , {
-                        //     display: "block",
-                        //     "font-size": "26px",                        
-                        //     "text-align": "center",
-                        //     padding: "10px",
-                        //     "text-decoration": "none",
-                        //     "font-weight": "bold",
-                        //     cursor: "pointer",
-                        //     "border-bottom": "solid 2px #eee",
-                        //     margin: "0px"
-                        // }),  new WCssClass(`label.elementNavActive` , {
-                        //     display: "none",
-                        // })
-                    ]
+                    ClassList: []
                 }, {
                     condicion: "(max-width: 800px)",
                     ClassList: [
@@ -265,40 +257,30 @@ class WAppNavigator extends HTMLElement {
                             "flex-direction": "column",
                             overflow: "hidden",
                             "max-height": "0px"
-                        }), new WCssClass(`nav`, {
-
-                        }), new WCssClass(`.navActive`, {
+                        }), new WCssClass(`.navActive, .navInactive, .nav`, {
                             overflow: "hidden",
                             "max-height": "5000px",
+                            transition: "all 0.6s",
                             "position": "fixed",
                             "z-index": "999",
                             "background-color": "#fff",
                             "color": "#fff",
                             "width": "80%",
                             "height": "100vh",
-                            top: 0,
-                            transition: "all 0.6s",
-                            "box-shadow": "0 5px 5px 3px rgba(0,0,0,0.3)"
-                        }), new WCssClass(`.navInactive, .nav`, {
-                            overflow: "hidden",
-                            "max-height": "0px",
-                            "max-height": "5000px",
-                            transition: "all 0.6s",
-                            transform: "translateX(-100%)",
-                            "position": "fixed",
-                            "z-index": "999",
-                            "background-color": "#fff",
-                            "color": "#fff",
-                            "width": "80%",
-                            "height": "100vh",
-                            top: 0,
-                            transition: "all 0.6s",
-                            "box-shadow": "0 0 0 0 rgba(0,0,0,0.3)"
+                            top: 0,                            
+                            "box-shadow": "0 5px 5px 3px rgba(0,0,0,0.3)",
+                            "flex-direction": "column",
+                            "justify-content": "initial",
+                            "padding-top": 20
+                        }), new WCssClass(`.navInactive, .nav`, {                            
+                            opacity: "0",
+                            "pointer-events": "none",
+                            transform: "translateX(+100%)",
                         }),
                         new WCssClass(`header`, {
                             display: "flex",
                             "align-items": "center",
-                            "justify-content": "left",
+                            "justify-content": this.alignItems,
                             "box-shadow": "none"
                         }),
                     ]
@@ -309,3 +291,4 @@ class WAppNavigator extends HTMLElement {
     }
 }
 customElements.define("w-app-navigator", WAppNavigator);
+export {WAppNavigator}
