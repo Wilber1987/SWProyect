@@ -17,8 +17,7 @@ export default class MonsterRTAPicks extends HTMLElement {
         this.DrawComponent();
     }
     DrawComponent = async () => {
-        this.shadowRoot.innerHTML = "";
-        
+        this.shadowRoot.innerHTML = "";        
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Picks Info</h2>"));
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
@@ -57,7 +56,7 @@ export default class MonsterRTAPicks extends HTMLElement {
             }
         }]
         var TableConfigG = {
-            Datasets: RTAPicksData,
+            Dataset: RTAPicksData,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
             DisplayData: [
