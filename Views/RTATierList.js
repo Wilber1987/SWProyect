@@ -1,8 +1,36 @@
 import { ComponentsManager, WAjaxTools, WArrayF, WRender } from "../WDevCore/WModules/WComponentsTools.js";
 import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
-import "../WDevCore/WComponents/WTableComponent.js";
+import { WTableComponent } from "../WDevCore/WComponents/WTableComponent.js";
 import "../WDevCore/WComponents/WFilterControls.js";
+import { StyleScrolls, StylesControlsV1 } from "../WDevCore/StyleModules/WStyleComponents.JS";
 
+const EvaluacionWR = [
+    { WinRate: ">= 45", PickRate: ">= 40", Value: "WinRate * 0.75" },
+    { WinRate: ">= 45", PickRate: ">= 25", Value: "WinRate * 0.70" },
+    { WinRate: ">= 45", PickRate: "< 25 AND >= 10", Value: "WinRate * 0.65" },
+    { WinRate: ">= 45", PickRate: "< 10 AND >= 5", Value: "WinRate * 0.60" },
+    //
+    { WinRate: ">= 40", PickRate: ">= 25", Value: "WinRate * 0.65" },
+    { WinRate: ">= 40", PickRate: "< 25 AND >= 10", Value: "WinRate * 0.60" },
+    { WinRate: ">= 40", PickRate: "< 10 AND >= 5", Value: "WinRate * 0.55" },
+    { WinRate: "-", PickRate: ">= 1", Value: "WinRate * 0.50" },
+]
+const EvaluacionBR = [
+    { BannedRate: ">= 30", PickRate: ">= 25", Value: "BannedRate * 0.40" },
+    { BannedRate: ">= 30", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.30" },
+    { BannedRate: ">= 30", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.20" },
+    //
+    { BannedRate: ">= 25", PickRate: ">= 25", Value: "BannedRate * 0.35" },
+    { BannedRate: ">= 25", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.25" },
+    { BannedRate: ">= 25", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.15" },
+    //
+    { BannedRate: ">= 15", PickRate: ">= 25", Value: "BannedRate * 0.20" },
+    { BannedRate: ">= 15", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.15" },
+    { BannedRate: ">= 15", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.10" },
+    //
+    { BannedRate: "-", PickRate: ">= 1", Value: "BannedRate * 0.05" },
+]
+const EvaluacionFR = "0.05 del FirstPickRate"
 export default class RTATierList extends HTMLElement {
     constructor() {
         super();
@@ -18,14 +46,18 @@ export default class RTATierList extends HTMLElement {
     }
     DrawComponent = async () => {
         this.shadowRoot.innerHTML = "";
-        
+        this.shadowRoot.append(WRender.createElement(StyleScrolls));
+        this.shadowRoot.append(WRender.createElement(StylesControlsV1));
+
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
-      
-            
+
+
         let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData");       
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:8080/SWProyect/API/RTAPicksData.php?function=RTAData"); 
+        //console.log(RTAPicksData.find(x => x.com2us_id == 25613));     
+        //console.log(RTAPicksData.find(x => x.com2us_id == "25613"));  
         //console.log(RTAPicksData);
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
@@ -33,7 +65,7 @@ export default class RTATierList extends HTMLElement {
         let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
         GlobalData = await GlobalData.json();
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] };
-     
+
         GlobalData.Fight_Number = RTAPicksData[0].countFilter;
         for (const prop in GlobalData) {
             DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);
@@ -45,7 +77,7 @@ export default class RTATierList extends HTMLElement {
                     this.DrawComponent();
                 }
             }, children: []
-        };        
+        };
         SeasonList.forEach((element, index) => {
             const option = { type: 'option', props: { innerText: element, value: index } };
             if (SeasonList[this.SelectedSeason] == element) {
@@ -54,21 +86,31 @@ export default class RTATierList extends HTMLElement {
             SelectSeason.children.push(option);
         });
         DivCont.children.push([SelectSeason])
-        this.shadowRoot.appendChild(WRender.createElement(DivCont));   
+        DivCont.children.push({//Data
+            type: 'button', props: {
+                class: 'Btn', innerText: 'Evaluation Params', onclick: async () => {
+                    this.shadowRoot.append(WRender.createElement({
+                        type: "w-modal-form",
+                        props: {
+                            title: "Datos",
+                            ObjectModal: [
+                                WRender.CreateStringNode(`<h3>${EvaluacionFR}</h3>`) ,
+                                new WTableComponent({
+                                    Dataset: EvaluacionWR,
+                                }), new WTableComponent({
+                                    Dataset: EvaluacionBR,
+                                })
+                            ]
+                        }
+                    }));
+                }
+            }
+        })
+        this.shadowRoot.appendChild(WRender.createElement(DivCont));
         const TierContainer = {
             type: 'div', props: { id: '', class: 'TierContainer' },
             children: []
         }
-        let topScore = 50
-        let buttomScore = 45
-        /* for (let index = 0; index < 10; index++) {
-            TierContainer.children.push(new TierSection(RTAPicksData, {
-                topScore: topScore,
-                buttomScore: buttomScore
-            }, this))
-            topScore = topScore - 5;
-            buttomScore = buttomScore - 5;
-        } */
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 100,
             buttomScore: 90
@@ -96,11 +138,11 @@ export default class RTATierList extends HTMLElement {
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 40,
             buttomScore: 30
-        }, this));     
+        }, this));
         TierContainer.children.push(new TierSection(RTAPicksData, {
             topScore: 30,
             buttomScore: 0
-        }, this));   
+        }, this));
         this.shadowRoot.append(WRender.createElement(TierContainer));
     }
     Style = {
@@ -111,11 +153,12 @@ export default class RTATierList extends HTMLElement {
                 }), new WCssClass(".DataContainer", {
                     display: "flex",
                     width: "100%",
+                    "align-items": "center"
                 }), new WCssClass(".DataContainer div", {
                     margin: "10px", "justify-content": "center", "align-items": "center", display: "flex"
                 }), new WCssClass(".DataContainer select", {
                     padding: "10px"
-                }),new WCssClass("h2", {
+                }), new WCssClass("h2", {
                     margin: "0px",
                     color: "#999"
                 }),
@@ -149,41 +192,45 @@ class TierSection {
 
         TierData.forEach(Data => {
             if (Data.SeasonScore <= TierScore.topScore && Data.SeasonScore > TierScore.buttomScore) {
-                MobContainer.children.push( { type:'div', props: { onclick: ()=>{
-                    console.log(Data);
-                    const Modal = WRender.createElement({
-                        type: "w-modal-form",
-                        props: {
-                            ObjectDetail: Data,
-                            ImageUrlPath:"https://swarfarm.com/static/herders/images/monsters/",
-                            DisplayData: [
-                                "image_filename",
-                                "name",
-                                "element",
-                                "Pick_Rate",
-                                "Win_Rate",
-                                "Banned_Rate",
-                                "Leader",
-                                "FirstPick",
-                                "FirstPickInTeam",
-                                "LastPick",
-                                "SeasonScore"
-                            ],
-                            //ShadowRoot: false,
-                            title: "Tier Data",
-                            StyleForm: "columnX3"
+                MobContainer.children.push({
+                    type: 'div', props: {
+                        onclick: () => {
+                            console.log(Data);
+                            const Modal = WRender.createElement({
+                                type: "w-modal-form",
+                                props: {
+                                    ObjectDetail: Data,
+                                    ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
+                                    DisplayData: [
+                                        "image_filename",
+                                        "name",
+                                        "element",
+                                        "Pick_Rate",
+                                        "Win_Rate",
+                                        "Banned_Rate",
+                                        "Leader",
+                                        "FirstPick",
+                                        "FirstPickInTeam",
+                                        "LastPick",
+                                        "SeasonScore"
+                                    ],
+                                    //ShadowRoot: false,
+                                    title: "Tier Data",
+                                    StyleForm: "columnX3"
+                                }
+                            });
+                            Parent.shadowRoot.append(WRender.createElement(Modal));
                         }
-                    });
-                    Parent.shadowRoot.append(WRender.createElement(Modal));
-                }}, children:[{
-                    type: "img", props: {
-                        src: "https://swarfarm.com/static/herders/images/monsters/"
-                            + Data.image_filename
-                    }
-                }, {
-                    type: "label",
-                    props: { innerText: `${Data.name}` }
-                }]} );
+                    }, children: [{
+                        type: "img", props: {
+                            src: "https://swarfarm.com/static/herders/images/monsters/"
+                                + Data.image_filename
+                        }
+                    }, {
+                        type: "label",
+                        props: { innerText: `${Data.name}` }
+                    }]
+                });
             }
         });
     }
@@ -227,7 +274,7 @@ class TierSection {
                 }), new WCssClass(".MobContainer div img", {
                     height: "100px", width: "100px"
                 }),
-            ],MediaQuery: [{
+            ], MediaQuery: [{
                 condicion: '(max-width: 600px)',
                 ClassList: [
                     new WCssClass(".MobContainer div img", {
@@ -235,9 +282,9 @@ class TierSection {
                     }), new WCssClass(".MobContainer div label", {
                         position: "absolute",
                         bottom: 0, left: 0,
-                         margin: "0px",                        
+                        margin: "0px",
                         "font-size": "9px"
-                    }),new WCssClass(".TierSection .LabelContainer", {                       
+                    }), new WCssClass(".TierSection .LabelContainer", {
                         "min-width": "40px",
                         "font-size": "11px",
                         "align-items": "flex-start",
