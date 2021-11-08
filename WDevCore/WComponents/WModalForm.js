@@ -19,7 +19,7 @@ class WModalForm extends HTMLElement {
             this.WidthContainer = "40%";
             this.DivColumns = "calc(100% - 20px)";
         } else if (this.StyleForm == "columnX3") {
-            this.WidthContainer = "100%";
+            this.WidthContainer = "80%";
             this.DivColumns = "calc(30%) calc(30%) calc(30%)";
         } else {
             this.WidthContainer = "70%";

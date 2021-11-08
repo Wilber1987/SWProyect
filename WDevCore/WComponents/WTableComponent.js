@@ -423,7 +423,7 @@ class WTableComponent extends HTMLElement {
                     if (!prop.includes("_hidden")) {
                         let value = "";
                         if (element[prop] != null) {
-                            value = element[prop].toString();
+                            value = element[prop];                            
                         }
                         //DEFINICION DE VALORES-------------
                         if (prop.includes("img") || prop.includes("pict") ||
