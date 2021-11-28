@@ -55,7 +55,7 @@ export default class RTATierList extends HTMLElement {
 
         let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData"); 
+       // RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData"); 
         //console.log(RTAPicksData.find(x => x.com2us_id == 25613));     
         //console.log(RTAPicksData.find(x => x.com2us_id == "25613"));  
         //console.log(RTAPicksData);
