@@ -53,16 +53,16 @@ export default class RTATierList extends HTMLElement {
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
 
 
-        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
+        let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:8080/SWProyect/API/RTAPicksData.php?function=RTAData"); 
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData"); 
         //console.log(RTAPicksData.find(x => x.com2us_id == 25613));     
         //console.log(RTAPicksData.find(x => x.com2us_id == "25613"));  
         //console.log(RTAPicksData);
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });
-        let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
+        let GlobalData = await fetch("./DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
         GlobalData = await GlobalData.json();
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] };
 
