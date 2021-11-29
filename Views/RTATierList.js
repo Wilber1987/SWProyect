@@ -16,11 +16,11 @@ const EvaluacionWR = [
     { WinRate: "-", PickRate: ">= 1", Value: "WinRate * 0.50" },
 ]
 const EvaluacionBR = [
-    { BannedRate: ">= 30", PickRate: ">= 25", Value: "BannedRate * 0.40" },
-    { BannedRate: ">= 30", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.30" },
+    { BannedRate: ">= 30", PickRate: ">= 25", Value: "BannedRate * 0.35" },
+    { BannedRate: ">= 30", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.25" },
     { BannedRate: ">= 30", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.20" },
     //
-    { BannedRate: ">= 25", PickRate: ">= 25", Value: "BannedRate * 0.35" },
+    { BannedRate: ">= 25", PickRate: ">= 25", Value: "BannedRate * 0.30" },
     { BannedRate: ">= 25", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.25" },
     { BannedRate: ">= 25", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.15" },
     //
