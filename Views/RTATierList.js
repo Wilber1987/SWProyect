@@ -13,7 +13,9 @@ const EvaluacionWR = [
     { WinRate: ">= 40", PickRate: ">= 25", Value: "WinRate * 0.65" },
     { WinRate: ">= 40", PickRate: "< 25 AND >= 10", Value: "WinRate * 0.60" },
     { WinRate: ">= 40", PickRate: "< 10 AND >= 5", Value: "WinRate * 0.55" },
-    { WinRate: "-", PickRate: ">= 1", Value: "WinRate * 0.50" },
+    { WinRate: "-", PickRate: ">= 2", Value: "WinRate * 0.50" },
+    { WinRate: "-", PickRate: ">= .4", Value: "WinRate * 0.40" },
+    { WinRate: "-", PickRate: ">= .1", Value: "WinRate * 0.30" },
 ]
 const EvaluacionBR = [
     { BannedRate: ">= 30", PickRate: ">= 25", Value: "BannedRate * 0.35" },
@@ -43,29 +45,24 @@ export default class RTATierList extends HTMLElement {
             return;
         }
         this.DrawComponent();
-    }
+    }    
     DrawComponent = async () => {
         this.shadowRoot.innerHTML = "";
         this.shadowRoot.append(WRender.createElement(StyleScrolls));
         this.shadowRoot.append(WRender.createElement(StylesControlsV1));
-
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
-
-
         let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-       // RTAPicksData = await WAjaxTools.PostRequest("http://localhost:3020/SWProyect/API/RTAPicksData.php?function=RTAData"); 
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost/SWProyect/API/RTAPicksData.php?function=RTAData"); 
         //console.log(RTAPicksData.find(x => x.com2us_id == 25613));     
         //console.log(RTAPicksData.find(x => x.com2us_id == "25613"));  
         //console.log(RTAPicksData);
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });
-        let GlobalData = await fetch("./DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
-        GlobalData = await GlobalData.json();
+        let GlobalData = {};
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] };
-
         GlobalData.Fight_Number = RTAPicksData[0].countFilter;
         for (const prop in GlobalData) {
             DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);

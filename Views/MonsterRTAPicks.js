@@ -69,7 +69,7 @@ export default class MonsterRTAPicks extends HTMLElement {
                 "Leader",
                 "FirstPick",
                 "LastPick",
-                "SeasonScore"
+                //  "SeasonScore"
             ],
             Options: {
                 Search: true,
