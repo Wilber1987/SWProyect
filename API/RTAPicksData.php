@@ -140,11 +140,11 @@ function RTAData($request, $pMysqli)
                 $Win_RateScore = $Mon["Win_Rate"] * 0.55;
             } //ENTRE  ---------------> 45 - 40------------------------------------------------------------------->
             else if ( $Mon["Pick_Rate"] >= 2 ){
-                $Win_RateScore = $Mon["Win_Rate"] * 0.5;
-            } else if ( $Mon["Pick_Rate"] >= 0.4 ){
                 $Win_RateScore = $Mon["Win_Rate"] * 0.4;
-            } else  if ( $Mon["Pick_Rate"] >= 0.1 ){
+            } else if ( $Mon["Pick_Rate"] >= 0.4 ){
                 $Win_RateScore = $Mon["Win_Rate"] * 0.3;
+            } else  if ( $Mon["Pick_Rate"] >= 0.1 ){
+                $Win_RateScore = $Mon["Win_Rate"] * 0.2;
             }
             #endregion
             //############# BANNED RATE
