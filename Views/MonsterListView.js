@@ -51,7 +51,6 @@ export default class MonsterListView extends HTMLElement {
         Data.sort(function (a, b) {
             return b.natural_stars - a.natural_stars;
         });
-        
         var TableConfigG = {
             Dataset: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
