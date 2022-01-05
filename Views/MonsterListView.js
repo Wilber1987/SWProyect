@@ -20,12 +20,8 @@ export default class MonsterListView extends HTMLElement {
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>Monster List</h2>"));
-        let Data = [];
-        for (let index = 0; index < 19; index++) {
-            let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
-            response = await response.json();
-            Data = Data.concat(response.results);
-        }
+        let Data = await fetch("../DataBase/monsterlist.json");
+        Data = await Data.json();
         // Data.forEach(Mon => {         
         // });
         const UserActions = [{
@@ -50,7 +46,7 @@ export default class MonsterListView extends HTMLElement {
         Data = Data.filter(x=> x.awakens_from != null);
         Data.sort(function (a, b) {
             return b.natural_stars - a.natural_stars;
-        });
+        });        
         var TableConfigG = {
             Dataset: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",

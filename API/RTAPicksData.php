@@ -11,19 +11,39 @@ $Function = $_GET["function"];
 $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
 $Function($Data, $pMysqli);
 
+function Get($conect, $tableName, $condicion = "")
+{
+    try {
+        $Form = [];
+        mysqli_query($conect, "SET NAMES 'utf8'");
+        $q = $conect->query("SELECT * FROM  $tableName $condicion");
+        //echo "error: SELECT * FROM  $tableName $condicion <hr>";
+        // while ($fila = $q->fetch_object()) {
+        //     $Form[] = $fila;
+        // }
+        foreach ($q as $row) {
+        //$i++;
+            $MonPickData[] = $row;
+        }
+        return $Form;
+    } catch (\Throwable $th) {
+        echo "error: SELECT * FROM  $tableName $condicion <hr>";
+    }
+}
 function RTAData($request, $pMysqli)
 {
     //echo "function: ";
     $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
     $Monsters = [];
     $MonPickData = [];
-    $M = $pMysqli->query("SELECT * FROM  monsterlist");
+    $M = $pMysqli->query("SELECT * FROM  monster");
     foreach ($M as $row) {
         $Monsters[] = $row;
     }
     //echo json_encode($Mon);
     //$q = $pMysqli->query("SELECT * FROM  monpickdataseason18");
-    $q = $pMysqli->query("SELECT * FROM  monpickdata");
+    $q = $pMysqli->query("SELECT * FROM  monpickdata 
+        where temp = 'Season20-P1' and rank <= 12000");
     $i = 0;
     foreach ($q as $row) {
         //$i++;
@@ -35,13 +55,12 @@ function RTAData($request, $pMysqli)
     //$SelectedSeason = "Season18";
     $NPartidos = count($MonPickData) / 10;
     foreach ($Monsters as $Mon) {
+        $MonId = $Mon["com2us_id"];
         //echo print_r($Mon);
         $MonDataPicks = array_filter($MonPickData, function ($mon) use ($Mon) {
             //echo print_r($mon);
             return $mon["unit_master_id"] == $Mon["com2us_id"];
         });
-        //  echo "filtro: ";
-        //echo count($MonDataPicks);
 
         if (count($MonDataPicks) != 0) {
             //echo "count:" . print_r(count($MonDataPicks));
@@ -89,35 +108,7 @@ function RTAData($request, $pMysqli)
             $Win_RateScore = 0;
             $Banned_RateScore = 0;
             $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.05;
-            //EVALUACION
-            #region WINRATE--------------------
-            // if (($Mon["Win_Rate"] >= 55) && 
-            //     ($Mon["Pick_Rate"] >= 25 )) {
-            //     //RATE >55 CON 20
-            //     $Win_RateScore = $Mon["Win_Rate"] * 0.70;
-            // }else if (($Mon["Win_Rate"] >= 55) && 
-            //     ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {                   
-            //     //RATE >55 CON 20-10
-            //     $Win_RateScore = $Mon["Win_Rate"] * 0.65;
-            // }else if (($Mon["Win_Rate"] >= 55) && 
-            //     ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
-            //     //RATE >55 CON 10-5
-            //     $Win_RateScore = $Mon["Win_Rate"] * 0.60;
-            // }//MAYORES ---------------> 55---------------------------------------------------------------------->
-             /* if ($Mon["Win_Rate"] >= 50 &&
-                ($Mon["Pick_Rate"] >= 25 )) {
-                //RATE 55-50 CON 20                
-                $Win_RateScore = $Mon["Win_Rate"] * 0.7;
-            }else if ($Mon["Win_Rate"] >= 50 &&
-                ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {
-                //RATE 55-50 CON > 20 - 10
-                $Win_RateScore = $Mon["Win_Rate"] * 0.65;
-            }else if ($Mon["Win_Rate"] >= 50 &&
-                ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
-                //RATE 55-50 CON > 10 - 5
-                $Win_RateScore = $Mon["Win_Rate"] * 0.60;
-            }//ENTRE  ---------------> 55 - 50------------------------------------------------------------------->
-            else */
+            
             if ($Mon["Win_Rate"] >= 45 &&
                 ($Mon["Pick_Rate"] >= 40 )) {
                     //RATE 50-45 CON 220
@@ -148,8 +139,12 @@ function RTAData($request, $pMysqli)
                 //RATE 50-45 CON > 10 - 5
                 $Win_RateScore = $Mon["Win_Rate"] * 0.55;
             } //ENTRE  ---------------> 45 - 40------------------------------------------------------------------->
-            else if ( $Mon["Pick_Rate"] >= 1 ){
+            else if ( $Mon["Pick_Rate"] >= 2 ){
                 $Win_RateScore = $Mon["Win_Rate"] * 0.5;
+            } else if ( $Mon["Pick_Rate"] >= 0.4 ){
+                $Win_RateScore = $Mon["Win_Rate"] * 0.4;
+            } else  if ( $Mon["Pick_Rate"] >= 0.1 ){
+                $Win_RateScore = $Mon["Win_Rate"] * 0.3;
             }
             #endregion
             //############# BANNED RATE
@@ -157,11 +152,11 @@ function RTAData($request, $pMysqli)
             if (($Mon["Banned_Rate"] > 30) && 
                 ($Mon["Pick_Rate"] >= 25 )) {
                 //RATE >30 CON 20
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.4;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.35;
             }else if (($Mon["Banned_Rate"] > 30) && 
                 ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {
                 //RATE >30 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.30;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.25;
             }else if (($Mon["Banned_Rate"] > 30) && 
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE >30 CON 20-10
@@ -171,11 +166,11 @@ function RTAData($request, $pMysqli)
             else if (($Mon["Banned_Rate"] > 25) && 
                 ($Mon["Pick_Rate"] >= 25 )) {
                 //RATE >25 CON 20
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.35;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.30;
             }else if (($Mon["Banned_Rate"] > 25) && 
                 ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {
                 //RATE >25 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.25;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.20;
             }else if (($Mon["Banned_Rate"] > 25) && 
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE >25 CON 20-10
@@ -194,16 +189,16 @@ function RTAData($request, $pMysqli)
                 //RATE >20 CON 20-10
                 $Banned_RateScore = $Mon["Banned_Rate"] * 0.10;
             }
-            else if ( $Mon["Pick_Rate"] >= 1 ) {
+            else if ( $Mon["Pick_Rate"] >= 0.4 ) {
                 $Banned_RateScore = $Mon["Banned_Rate"] * 0.05;
             }
              #endregion
 
             $Mon["SeasonScore"] =  ($Win_RateScore + $Banned_RateScore + $FirstPickScore) * 2;
-            if ($Mon["SeasonScore"] > 100) {
+            if ($Mon["SeasonScore"] > 100 ) {
                 $Mon["SeasonScore"] = 100;
             }
-            if (($Pick_Rate / $NPartidos * 100) > 0.01) {
+            if ($NPartidos > 100) {
                 array_push($RTAPicksData, $Mon);
             }
             //echo print_r($Mon);

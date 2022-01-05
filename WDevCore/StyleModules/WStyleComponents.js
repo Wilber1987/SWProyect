@@ -91,22 +91,19 @@ const StylesControlsV1 = {
             new WCssClass(`input[type=text], 
             input[type=string], 
             input[type=number],
-            input[type=date]`, {
+            input[type=date], select`, {
                 padding: 10,
                 border: "none",
                 border: "2px solid #dddada",
-                width: "calc(100% - 24px)",
+                width: "calc(100%)",
+                //height: "100%",
                 "font-size": "15px",
-                height: 20,
-                "border-radius": "0.2cm"
-            }), new WCssClass(`input:active, input:focus`, {
+                "border-radius": "0.2cm",
+                "box-sizing": "border-box",
+            }), new WCssClass(`input:active, input:focus, select:active, select:focus`, {
                 "border-bottom": "2px solid #0099cc",
                 outline: "none",
-            }), new WCssClass(`input[type=button]`, {
-                cursor: "pointer",
-                width: "calc(100% - 0px)",
-                height: "initial"
-            }),
+            })
         ]
     }
 }

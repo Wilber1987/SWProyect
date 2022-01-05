@@ -2,11 +2,17 @@ import { WRender, WAjaxTools, ComponentsManager } from "../WModules/WComponentsT
 import { WCssClass } from "../WModules/WStyledRender.js";
 import { StyleScrolls, StylesControlsV1 } from "../StyleModules/WStyleComponents.JS";
 let photoB64;
+class ModalConfig {
+
+}
 class WModalForm extends HTMLElement {
-    constructor() {
+    constructor(Config = (new ModalConfig())) {
         super();
         this.ShadowRoot = true;
         this.DataRequire = true;
+        for (const p in Config) {
+            this[p] = Config[p];
+        }
     }
     attributeChangedCallBack() {
         this.DrawSlide();
@@ -280,9 +286,9 @@ class WModalForm extends HTMLElement {
                     })
                 } else {
                     let value = ObjectF[prop];
-                    if(typeof value === "number"){
-                      value = value.toFixed(2)
-                    } 
+                    if (typeof value === "number") {
+                        value = value.toFixed(2)
+                    }
                     Form.children.push({
                         type: "div",
                         props: {
@@ -598,7 +604,7 @@ class WModalForm extends HTMLElement {
                     }), new WCssClass(" divForm .imageGridForm", {
                         "grid-row": "1/5",
                         //width: "calc(50% - 10px)", margin: "5px"
-                    }),new WCssClass(` input:-internal-autofill-selected`, {
+                    }), new WCssClass(` input:-internal-autofill-selected`, {
                         "appearance": "menulist-button",
                         "background-color": "none !important",
                         "background-image": "none !important",
@@ -737,3 +743,4 @@ class WModalForm extends HTMLElement {
     }
 }
 customElements.define("w-modal-form", WModalForm);
+export { WModalForm }

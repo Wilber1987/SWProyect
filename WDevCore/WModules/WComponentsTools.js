@@ -32,7 +32,8 @@ class WAjaxTools {
                 method: typeRequest,
                 headers: {
                     'Content-Type': ContentType,
-                    'Accept': Accept
+                    'Accept': Accept,
+                    dataType: 'json',
                 }
             }
             if (Data != {}) {
@@ -105,7 +106,8 @@ class WAjaxTools {
                 return [];
             }
         } else {
-            response = await response.json();
+            response = await response.json(response);
+            console.log(response);
             try {
                 localStorage.setItem(Url, JSON.stringify(response));
             } catch (error) {
@@ -217,7 +219,7 @@ class WRender {
             } else if (typeof Node === "string" || typeof Node === "number") {
                 if (Node.length == 0) {
                     return "";
-                }else if (Node.length > 100) {
+                } else if (Node.length > 100) {
                     return this.CreateStringNode(`<p>${Node}</p>`);
                 }
                 return this.CreateStringNode(`<label>${Node}</label>`);
@@ -227,20 +229,20 @@ class WRender {
             } else {
                 if (Node.__proto__ == Array.prototype) {
                     Node = new WNode({ children: Node });
-                } 
-                Node.tagName =  Node.tagName ?? "div";
-                const element = document.createElement(Node.tagName);                
+                }
+                Node.tagName = Node.tagName ?? "div";
+                const element = document.createElement(Node.tagName);
                 for (const prop in Node) {
-                    if (prop == "tagName") { continue;  }
+                    if (prop == "tagName") { continue; }
                     else if (prop == "class") { element.className = Node[prop]; }//CLASSNAME
                     else if (prop == "style" && Node[prop].__proto__ == Object.prototype) {  //STYLE
                         this.SetStyle(element, Node[prop]);
-                    }else if (prop == "children") {
+                    } else if (prop == "children") {
                         if (Node.children != undefined && Node.children.__proto__ == Array.prototype) {
                             Node.children.forEach(Child => {
                                 element.appendChild(this.Create(Child));
                             });
-                        } else if(Node.children != undefined && Node.children.__proto__ == Object.prototype) {
+                        } else if (Node.children != undefined && Node.children.__proto__ == Object.prototype) {
                             Node.children.N = Node.children.N ?? 0;
                             Node.children.childs = Node.children.childs ?? [];
                             for (let index = 0; index < Node.children.N; index++) {
@@ -251,7 +253,7 @@ class WRender {
                                     children: contain
                                 }));
                             }
-                        }else {
+                        } else {
                             element.appendChild(this.Create(Node.children));
                         }
                     }
@@ -265,7 +267,7 @@ class WRender {
             return document.createTextNode("Problemas en la construcción del nodo.");
         }
     }
-    static SetStyle = (Node, Style = (new ElementStyle())) =>{
+    static SetStyle = (Node, Style = (new ElementStyle())) => {
         for (const styleProp in Style) {
             Node.style[styleProp] = Style[styleProp];
         }
@@ -543,7 +545,7 @@ class WArrayF {
     static SumValAtt(DataArry, EvalValue) {//retorna la suma 
         var Maxvalue = 0;
         for (let index = 0; index < DataArry.length; index++) {
-            if (typeof DataArry[index][EvalValue] === "number") {
+            if (typeof DataArry[index][EvalValue] === "number" || parseFloat(DataArry[index][EvalValue]) != "NaN") {
                 Maxvalue = Maxvalue + parseFloat(DataArry[index][EvalValue]);
             } else {
                 Maxvalue = "Error!";
@@ -580,7 +582,7 @@ class WArrayF {
         return val;
     }
     static compareObj(ComparativeObject, EvalObject) {//compara si dos objetos son iguales en las propiedades        
-        if (typeof ComparativeObject === "string" &&  typeof ComparativeObject === "number" ) {
+        if (typeof ComparativeObject === "string" && typeof ComparativeObject === "number") {
             if (ComparativeObject == EvalObject) return true;
             else return false;
         }
@@ -624,17 +626,34 @@ const GenerateColor = () => {
     }
     return color_aleatorio
 }
+//Date
+function pad(number) {
+    if (number < 10) {
+      return '0' + number;
+    }
+    return number;
+}
+Date.prototype.toISO = function() {
+    return this.getUTCFullYear() +
+      '-' + pad(this.getUTCMonth() + 1) +
+      '-' + pad(this.getUTCDate()) /* +
+      'T' + pad(this.getUTCHours()) +
+      ':' + pad(this.getUTCMinutes()) +
+      ':' + pad(this.getUTCSeconds()) +
+      '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+      'Z' */;
+  };
 export { WAjaxTools, WRender, ComponentsManager, WArrayF, type, GenerateColor }
 class WNode {
-    constructor (props = {}){
+    constructor(props = {}) {
         for (const prop in props) {
-           this[prop] = props[prop]
+            this[prop] = props[prop]
         }
         this.tagName = this.tagName ?? "div";
         this.children = this.children ?? [];
     }
     tagName = "div";
-    style = new ElementStyle(); 
+    style = new ElementStyle();
     className = null;
     innerText = null;
     value = null;
@@ -642,191 +661,196 @@ class WNode {
     children = [] ?? { tagName: "", N: 0 };
 }
 class ElementStyle {
-    alignContent= null;
-    alignItems= null;
-    alignSelf= null;
-    animation= null;
-    animationDelay= null;
-    animationDirection= null;
-    animationDuration= null;
-    animationFillMode= null;
-    animationIterationCount= null;
-    animationName= null;
-    animationTimingFunction= null;
-    animationPlayState= null;
-    background= null;
-    backgroundAttachment= null;
-    backgroundColor= null;
-    backgroundImage= null;
-    backgroundPosition= null;
-    backgroundRepeat= null;
-    backgroundClip= null;
-    backgroundOrigin= null;
-    backgroundSize= null;
-    backfaceVisibility= null;
-    border= null;
-    borderBottom= null;
-    borderBottomColor= null;
-    borderBottomLeftRadius= null;
-    borderBottomRightRadius= null;
-    borderBottomStyle= null;
-    borderBottomWidth= null;
-    borderCollapse= null;
-    borderColor= null;
-    borderImage= null;
-    borderImageOutset= null;
-    borderImageRepeat= null;
-    borderImageSlice= null;
-    borderImageSource= null;
-    borderImageWidth= null;
-    borderLeft= null;
-    borderLeftColor= null;
-    borderLeftStyle= null;
-    borderLeftWidth= null;
-    borderRadius= null;
-    borderRight= null;
-    borderRightColor= null;
-    borderRightStyle= null;
-    borderRightWidth= null;
-    borderSpacing= null;
-    borderStyle= null;
-    borderTop= null;
-    borderTopColor= null;
-    borderTopLeftRadius= null;
-    borderTopRightRadius= null;
-    borderTopStyle= null;
-    borderTopWidth= null;
-    borderWidth= null;
-    bottom= null;
-    boxDecorationBreak= null;
-    boxShadow= null;
-    boxSizing= null;
-    captionSide= null;
-    caretColor= null;
-    clear= null;
-    clip= null;
-    color= null;
-    columnCount= null;
-    columnFill= null;
-    columnGap= null;
-    columnRule= null;
-    columnRuleColor= null;
-    columnRuleStyle= null;
-    columnRuleWidth= null;
-    columns= null;
-    columnSpan= null;
-    columnWidth= null;
-    content= null;
-    counterIncrement= null;
-    counterReset= null;
-    cursor= null;
-    direction= null;
-    display= null;
-    emptyCells= null;
-    filter= null;
-    flex= null;
-    flexBasis= null;
-    flexDirection= null;
-    flexFlow= null;
-    flexGrow= null;
-    flexShrink= null;
-    flexWrap= null;
-    cssFloat= null;
-    font= null;
-    fontFamily= null;
-    fontSize= null;
-    fontStyle= null;
-    fontVariant= null;
-    fontWeight= null;
-    fontSizeAdjust= null;
-    fontStretch= null;
-    hangingPunctuation= null;
-    height= null;
-    hyphens= null;
-    icon= null;
-    imageOrientation= null;
-    isolation= null;
-    justifyContent= null;
-    left= null;
-    letterSpacing= null;
-    lineHeight= null;
-    listStyle= null;
-    listStyleImage= null;
-    listStylePosition= null;
-    listStyleType= null;
-    margin= null;
-    marginBottom= null;
-    marginLeft= null;
-    marginRight= null;
-    marginTop= null;
-    maxHeight= null;
-    maxWidth= null;
-    minHeight= null;
-    minWidth= null;
-    navDown= null;
-    navIndex= null;
-    navLeft= null;
-    navRight= null;
-    navUp= null;
-    objectFit= null;
-    objectPosition= null;
-    opacity= null;
-    order= null;
-    orphans= null;
-    outline= null;
-    outlineColor= null;
-    outlineOffset= null;
-    outlineStyle= null;
-    outlineWidth= null;
-    overflow= null;
-    overflowX= null;
-    overflowY= null;
-    padding= null;
-    paddingBottom= null;
-    paddingLeft= null;
-    paddingRight= null;
-    paddingTop= null;
-    pageBreakAfter= null;
-    pageBreakBefore= null;
-    pageBreakInside= null;
-    perspective= null;
-    perspectiveOrigin= null;
-    position= null;
-    quotes= null;
-    resize= null;
-    right= null;
-    scrollBehavior= null;
-    tableLayout= null;
-    tabSize= null;
-    textAlign= null;
-    textAlignLast= null;
-    textDecoration= null;
-    textDecorationColor= null;
-    textDecorationLine= null;
-    textDecorationStyle= null;
-    textIndent= null;
-    textJustify= null;
-    textOverflow= null;
-    textShadow= null;
-    textTransform= null;
-    top= null;
-    transform= null;
-    transformOrigin= null;
-    transformStyle= null;
-    transition= null;
-    transitionProperty= null;
-    transitionDuration= null;
-    transitionTimingFunction= null;
-    transitionDelay= null;
-    unicodeBidi= null;
-    userSelect= null;
-    verticalAlign= null;
-    visibility= null;
-    whiteSpace= null;
-    width= null;
-    wordBreak= null;
-    wordSpacing= null;
-    wordWrap= null;
-    widows= null;
-    zIndex= null;
+    alignContent = null;
+    alignItems = null;
+    alignSelf = null;
+    animation = null;
+    animationDelay = null;
+    animationDirection = null;
+    animationDuration = null;
+    animationFillMode = null;
+    animationIterationCount = null;
+    animationName = null;
+    animationTimingFunction = null;
+    animationPlayState = null;
+    background = null;
+    backgroundAttachment = null;
+    backgroundColor = null;
+    backgroundImage = null;
+    backgroundPosition = null;
+    backgroundRepeat = null;
+    backgroundClip = null;
+    backgroundOrigin = null;
+    backgroundSize = null;
+    backfaceVisibility = null;
+    border = null;
+    borderBottom = null;
+    borderBottomColor = null;
+    borderBottomLeftRadius = null;
+    borderBottomRightRadius = null;
+    borderBottomStyle = null;
+    borderBottomWidth = null;
+    borderCollapse = null;
+    borderColor = null;
+    borderImage = null;
+    borderImageOutset = null;
+    borderImageRepeat = null;
+    borderImageSlice = null;
+    borderImageSource = null;
+    borderImageWidth = null;
+    borderLeft = null;
+    borderLeftColor = null;
+    borderLeftStyle = null;
+    borderLeftWidth = null;
+    borderRadius = null;
+    borderRight = null;
+    borderRightColor = null;
+    borderRightStyle = null;
+    borderRightWidth = null;
+    borderSpacing = null;
+    borderStyle = null;
+    borderTop = null;
+    borderTopColor = null;
+    borderTopLeftRadius = null;
+    borderTopRightRadius = null;
+    borderTopStyle = null;
+    borderTopWidth = null;
+    borderWidth = null;
+    bottom = null;
+    boxDecorationBreak = null;
+    boxShadow = null;
+    boxSizing = null;
+    captionSide = null;
+    caretColor = null;
+    clear = null;
+    clip = null;
+    color = null;
+    columnCount = null;
+    columnFill = null;
+    columnGap = null;
+    columnRule = null;
+    columnRuleColor = null;
+    columnRuleStyle = null;
+    columnRuleWidth = null;
+    columns = null;
+    columnSpan = null;
+    columnWidth = null;
+    content = null;
+    counterIncrement = null;
+    counterReset = null;
+    cursor = null;
+    direction = null;
+    display = null;
+    emptyCells = null;
+    filter = null;
+    flex = null;
+    flexBasis = null;
+    flexDirection = null;
+    flexFlow = null;
+    flexGrow = null;
+    flexShrink = null;
+    flexWrap = null;
+    cssFloat = null;
+    font = null;
+    fontFamily = null;
+    fontSize = null;
+    fontStyle = null;
+    fontVariant = null;
+    fontWeight = null;
+    fontSizeAdjust = null;
+    fontStretch = null;
+    hangingPunctuation = null;
+    height = null;
+    hyphens = null;
+    icon = null;
+    imageOrientation = null;
+    isolation = null;
+    justifyContent = null;
+    left = null;
+    letterSpacing = null;
+    lineHeight = null;
+    listStyle = null;
+    listStyleImage = null;
+    listStylePosition = null;
+    listStyleType = null;
+    margin = null;
+    marginBottom = null;
+    marginLeft = null;
+    marginRight = null;
+    marginTop = null;
+    maxHeight = null;
+    maxWidth = null;
+    minHeight = null;
+    minWidth = null;
+    navDown = null;
+    navIndex = null;
+    navLeft = null;
+    navRight = null;
+    navUp = null;
+    objectFit = null;
+    objectPosition = null;
+    opacity = null;
+    order = null;
+    orphans = null;
+    outline = null;
+    outlineColor = null;
+    outlineOffset = null;
+    outlineStyle = null;
+    outlineWidth = null;
+    overflow = null;
+    overflowX = null;
+    overflowY = null;
+    padding = null;
+    paddingBottom = null;
+    paddingLeft = null;
+    paddingRight = null;
+    paddingTop = null;
+    pageBreakAfter = null;
+    pageBreakBefore = null;
+    pageBreakInside = null;
+    perspective = null;
+    perspectiveOrigin = null;
+    position = null;
+    quotes = null;
+    resize = null;
+    right = null;
+    scrollBehavior = null;
+    tableLayout = null;
+    tabSize = null;
+    textAlign = null;
+    textAlignLast = null;
+    textDecoration = null;
+    textDecorationColor = null;
+    textDecorationLine = null;
+    textDecorationStyle = null;
+    textIndent = null;
+    textJustify = null;
+    textOverflow = null;
+    textShadow = null;
+    textTransform = null;
+    top = null;
+    transform = null;
+    transformOrigin = null;
+    transformStyle = null;
+    transition = null;
+    transitionProperty = null;
+    transitionDuration = null;
+    transitionTimingFunction = null;
+    transitionDelay = null;
+    unicodeBidi = null;
+    userSelect = null;
+    verticalAlign = null;
+    visibility = null;
+    whiteSpace = null;
+    width = null;
+    wordBreak = null;
+    wordSpacing = null;
+    wordWrap = null;
+    widows = null;
+    zIndex = null;
+    gridTemplateColumns = null;
+    gridTemplateRows = null;
+    gridColumn = null;
+    gridRow = null;
+    gridGap = null;
 };
