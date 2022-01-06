@@ -22,10 +22,11 @@ class MasterDomClass extends ComponentsManager {
         super();
         this.props = { className: "App" }
         this.children = [
+            { type: 'img', props: { src: "./Media/logoSG.png", className:"AppImg"} },
             new headerClass(),
             new AsideClass(),
             new MainClass(),
-            new FooterClass(),
+            //new FooterClass(),
             new FooterNavigator(),
             this.MasterStyle,
         ];        
@@ -34,43 +35,34 @@ class MasterDomClass extends ComponentsManager {
         type: "w-style",
         props: {
             ClassList: [
-                new WCssClass(".App", {
-                    display: "grid",
-                    "grid-template-columns": "250px calc(100% - 250px)",
-                    "grid-template-rows": "100px calc(100vh - 150px) 50px"
-                }), new WCssClass(".AppHeader", {
-                    "grid-column": "1/3",
-                    "background-color": "#eee",
-                    "border-bottom": "solid #4da6ff 10px"
-                }), new WCssClass(".AppAside", {
-                    "border-right": "solid #999999 1px"
-                }), new WCssClass(".AppMain", {
-                    overflow: "auto",
-                    padding: "20px"
-                }), new WCssClass(".AppFooter", {
-                    "grid-column": "1/3",
-                    "background-color": "#eee",
-                    "border-top": "solid #4da6ff 5px"
-                }), new WCssClass("body", {
+                new WCssClass("body", {
                     padding: "0px",
                     margin: "0px",
-                    "font-family": "Arial, Helvetica, sans-serif"
-                }), new WCssClass(".FooterNav", {
+                    "font-family": "Arial, Helvetica, sans-serif",
+                    //"background-color": "#3b3a35",
+                    //color: "#fff",
+                }), new WCssClass(".App", {                   
+                    display: "grid",
+                    "grid-template-columns": "250px calc(100% - 250px)",
+                    "grid-template-rows": "100px calc(100vh - 150px)"
+                }),new WCssClass(".AppImg", {
+                    display: "block",
+                    height: "100%"
+                }), new WCssClass(".AppHeader", {
+                    //"grid-column": "1/3",
+                    padding: 20
+                    //"border-bottom": "solid #4da6ff 10px"
+                }), new WCssClass(".AppAside", {
+                    //"border-right": "solid #999999 1px"
+                }), new WCssClass(".AppMain", {
+                    overflow: "auto",
+                    padding: "20px",
+                    //"background-color": "#2c2b27"
+                }),  new WCssClass(".FooterNav", {
                     "grid-column": "1/3",
                     display: "none",
                 }),
             ], MediaQuery: [{
-                condicion: "(max-width: 1200px)",
-                ClassList: [
-                    new WCssClass(`.App`, {
-                        display: "grid",
-                        "grid-template-columns": "100px calc(100% - 100px)",
-                        "grid-template-rows": "100px calc(100vh - 150px) 50px"
-                    }), new WCssClass(".AppAside", {
-                        overflow: "hidden"
-                    }),
-                ]
-            }, {
                 condicion: "(max-width: 600px)",
                 ClassList: [
                     new WCssClass(`.App`, {
@@ -125,9 +117,9 @@ class headerClass {
         this.props = { className: "AppHeader" }
         this.children = [
             this.Style,
-            { type: 'img', props: { src: "./Media/logoSG.png" } },
+            
             WRender.CreateStringNode("<h1>SummonersWar Proyect</h1>"),
-            { type: 'img', props: { src: "./Media/logoSW.png" } }
+            //{ type: 'img', props: { src: "./Media/logoSW.png" } }
         ];
     }
     Style = {
@@ -140,13 +132,10 @@ class headerClass {
                     "align-items": "center",
                     padding: "0px 40px"
                 }), new WCssClass(".AppHeader h1", {
-                    color: "#444",
+                    //color: "#444",
                     width: "100%",
                     "text-align": "center",
-                }), new WCssClass(".AppHeader img", {
-                    display: "block",
-                    height: "100%"
-                }),
+                })
             ]
         }
     };
