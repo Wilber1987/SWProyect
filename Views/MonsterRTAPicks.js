@@ -20,12 +20,9 @@ export default class MonsterRTAPicks extends HTMLElement {
         this.shadowRoot.innerHTML = "";        
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Picks Info</h2>"));
-        let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
-        GlobalData = await GlobalData.json();
-        const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] }
-        for (const prop in GlobalData) {
-            DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);
-        }        
+        //let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
+        
+              
         const SelectSeason = {
             type: 'select', props: {
                 id: '', class: 'className', onchange: (ev) => {
@@ -40,12 +37,19 @@ export default class MonsterRTAPicks extends HTMLElement {
                 option.props.selected = true;
             }
             SelectSeason.children.push(option);
-        });
-        DivCont.children.push([SelectSeason])
-        this.shadowRoot.appendChild(WRender.createElement(DivCont));
+        });   
         //this.shadowRoot.appendChild(WRender.createElement(SelectSeason));
         let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
+        const GlobalData = {
+            Fight_Number: RTAPicksData[0].countFilter
+        };
+        const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] }
+        for (const prop in GlobalData) {
+            DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);
+        } 
+        DivCont.children.push([SelectSeason]) ;
+        this.shadowRoot.appendChild(WRender.createElement(DivCont));
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });

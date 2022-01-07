@@ -29,7 +29,6 @@ class WTableComponent extends HTMLElement {
                 type: 'w-style', props: {
                     id: '', ClassList: [
                         new WCssClass(`w-table`, {
-                            padding: 10,
                             display: "block"
                         }),
                     ]
@@ -230,7 +229,6 @@ class WTableComponent extends HTMLElement {
             return "";
         }
         if (this.Options != undefined) {
-            console.log(this.Options);
             if (this.Options.Search != undefined || this.Options.Add != undefined) {
                 const trOptions = { type: "div", props: { class: "thOptions" }, children: [] }
                 if (this.Options.Search != undefined) {
@@ -263,7 +261,6 @@ class WTableComponent extends HTMLElement {
                                             } catch (error) {
                                                 console.log(element);
                                             }
-
                                         }
                                     })
                                     if (Dataset.length == 0 && this.Options.UrlSearch != undefined) {
@@ -614,7 +611,7 @@ class WTableComponent extends HTMLElement {
                 return;
             }
             let tr = WRender.Create({ tagName: "tr" });
-            this.DrawTRow(tr, element);            
+            this.DrawTRow(tr, element);
             if (this.numPage > 1 && tbody.children[page] &&
                 (this.paginate == true && Dataset.length > this.maxElementByPage)) {
                 tbody.children[page].children.push(tr);
@@ -778,19 +775,21 @@ class WTableComponent extends HTMLElement {
                         width: "100%",
                         "border-collapse": "collapse",
                         "font-size": "12px",
+                        "box-shadow": "0 0 2px 0 rgba(0,0,0,0.5)",
                         position: "relative"
                     }), new WCssClass(`.WTable th`, {
                         "text-align": "left",
-                        border: "1px #ccc solid"
+                        border: "1px rgba(10, 10, 10, 0.5) solid",
                     }), new WCssClass(`.WTable td`, {
                         padding: "0.25rem 0.8rem",
                         "text-align": "left",
-                        border: "1px #ccc solid"
+                        "border-bottom": "1px rgba(10, 10, 10, 0.5) solid",
+                        //border: "1px #ccc solid"
                     }), new WCssClass(`.WTable .tdAction`, {
                         "text-align": "center",
                         "width": "120px",
                     }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
-                        "background-color": "#f5f4f4"
+                        "background-color": "rgba(0,0,0,0.4)"
                     }), new WCssClass(`.icon`, {
                         height: "16px", width: "16px", filter: "invert(1)",
                     }), new WCssClass(`.orderBtn`, {
@@ -806,6 +805,23 @@ class WTableComponent extends HTMLElement {
                         "text-align": "center",
                         "text-overflow": "ellipsis",
                         overflow: "hidden"
+                    }), new WCssClass(`.thOptions`, {
+                        display: "flex",
+                        overflow: "hidden",
+                        padding: "10px 0px",
+                        "justify-content": "space-between"
+                    }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
+                        padding: "5px 10px",
+                        "border": "2px solid #e1d4d4",
+                        width: 300,
+                        "font-size": "15px",
+                    }), new WCssClass(`input:active, input:focus`, {
+                        "border-bottom": "2px solid #0099cc",
+                        outline: "none",
+                    }), new WCssClass(`input[type=button]`, {
+                        cursor: "pointer",
+                        width: "calc(100% - 0px)",
+                        height: "initial"
                     })
                 ],
                 MediaQuery: [{
@@ -826,10 +842,10 @@ class WTableComponent extends HTMLElement {
                             margin: "10px",
                             "border-radius": "0.3cm",
                             overflow: "hidden",
-                            "box-shadow": "0 2px 5px 2px rgba(0,0,0,0.2)"
+                            "box-shadow": "0 2px 5px 2px rgba(0,0,0,0.4)"
                         }), new WCssClass(`.WTable td`, {
                             display: "flex ",
-                            "border-bottom": "1px solid #c5c5c5",
+                            //"border-bottom": "1px solid #c5c5c5",
                             padding: "10px"
                             //width: "100%"
                         }), new WCssClass(`.WTable .tdAction`, {
@@ -839,7 +855,10 @@ class WTableComponent extends HTMLElement {
                             width: "auto",
                             padding: "10px"
                         }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
-                            "background-color": "#fff"
+                            "background-color": "rgba(0,0,0,0.4)"
+                        }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
+                            padding: "5px 10px",
+                            width: "calc(100% - 20px)",
                         }),
 
                     ]
@@ -858,24 +877,6 @@ class WTableComponent extends HTMLElement {
             props: {
                 id: "PaginateTOptionsStyle" + this.id,
                 ClassList: [
-                    new WCssClass(`.thOptions`, {
-                        display: "flex",
-                        overflow: "hidden",
-                        padding: "10px 0px",
-                        "justify-content": "space-between"
-                    }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
-                        padding: 8,
-                        "border": "2px solid #e1d4d4",
-                        width: 300,
-                        "font-size": "15px",
-                    }), new WCssClass(`input:active, input:focus`, {
-                        "border-bottom": "2px solid #0099cc",
-                        outline: "none",
-                    }), new WCssClass(`input[type=button]`, {
-                        cursor: "pointer",
-                        width: "calc(100% - 0px)",
-                        height: "initial"
-                    }),
                     //PAGINACION****************************************************
                     new WCssClass(`.paginateBTN`, {
                         display: "inline-block",
@@ -902,7 +903,7 @@ class WTableComponent extends HTMLElement {
                         "text-align": "center",
                     }), new WCssClass(`.tfooter`, {
                         display: "flex",
-                        border: "1px rgb(185, 185, 185) solid",
+                        border: "1px rgba(10, 10, 10, 0.5) solid",
                         "border-top": "none",
                         "justify-content": "flex-end",
                         "padding-left": "20px",

@@ -54,16 +54,17 @@ export default class RTATierList extends HTMLElement {
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA TierList</h2>"));
         let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
-        RTAPicksData = await WAjaxTools.PostRequest("http://localhost/SWProyect/API/RTAPicksData.php?function=RTAData"); 
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost/SWProyect/API/RTAPicksData.php?function=RTAData"); 
         //console.log(RTAPicksData.find(x => x.com2us_id == 25613));     
         //console.log(RTAPicksData.find(x => x.com2us_id == "25613"));  
         //console.log(RTAPicksData);
         RTAPicksData.sort(function (a, b) {
             return b.SeasonScore - a.SeasonScore;
         });
-        let GlobalData = {};
+        let GlobalData = {
+            Fight_Number: RTAPicksData[0].countFilter
+        };
         const DivCont = { type: 'div', props: { id: '', class: 'DataContainer' }, children: [] };
-        GlobalData.Fight_Number = RTAPicksData[0].countFilter;
         for (const prop in GlobalData) {
             DivCont.children.push([`${prop}: ${GlobalData[prop]}`]);
         }

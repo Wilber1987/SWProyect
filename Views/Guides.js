@@ -36,6 +36,7 @@ export default class Guides extends HTMLElement {
             NavStyle: "tab",
             id: "GuidesNav",
             title: "Menu",
+           DarkMode : true,
             Elements: [
                 {
                     name: "Cairos Dungeon", url: "#",
@@ -44,8 +45,7 @@ export default class Guides extends HTMLElement {
                         const DataGuideAd = this.DataGuides.filter(d => d.categ == "Advanced" && d.place == "Cairos");
                         DOMManager.NavigateFunction("Cairos", new GuidesContainer(DataGuideIn, DataGuideAd), "MainGuides");
                     }
-                },
-                {
+                }, {
                     name: "Rift of Worlds", url: "#",
                     action: async (ev) => {
                         const DataGuideIn = this.DataGuides.filter(d => d.categ == "Initial" && d.place == "RW");
@@ -59,8 +59,7 @@ export default class Guides extends HTMLElement {
                         const DataGuideAd = this.DataGuides.filter(d => d.categ == "Advanced" && d.place == "TOA");
                         DOMManager.NavigateFunction("TOA", new GuidesContainer(DataGuideIn, DataGuideAd), "MainGuides");
                     }
-                },
-                {
+                }, {
                     name: "Dimension Hole", url: "#",
                     action: async (ev) => {
                         const DataGuideIn = this.DataGuides.filter(d => d.categ == "Initial" && d.place == "DH");

@@ -341,7 +341,6 @@ class ComponentsManager {
                 window.location = "#" + IdComponent;
                 const newNode = this.DomComponents.find(node => node.id == IdComponent);
                 let navigateComponets = JSON.parse(sessionStorage.getItem("navigateComponets"));
-                console.log(navigateComponets);
                 if (navigateComponets == null) {
                     navigateComponets = [];
                 }

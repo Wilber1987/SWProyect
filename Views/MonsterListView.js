@@ -13,7 +13,7 @@ export default class MonsterListView extends HTMLElement {
     connectedCallback() {
         if (this.shadowRoot.innerHTML != "") {
             return;
-        }        
+        }
         this.DrawComponent();
     }
     DrawComponent = async () => {
@@ -43,10 +43,10 @@ export default class MonsterListView extends HTMLElement {
                 this.shadowRoot.append(WRender.createElement(Modal))
             }
         }]
-        Data = Data.filter(x=> x.awakens_from != null);
+        Data = Data.filter(x => x.awakens_from != null);
         Data.sort(function (a, b) {
             return b.natural_stars - a.natural_stars;
-        });        
+        });
         var TableConfigG = {
             Dataset: Data,
             ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
@@ -80,18 +80,19 @@ export default class MonsterListView extends HTMLElement {
             }
         });
         const filtOptions = {
-            type: "w-filter-option", props: {Config: {
-                Dataset: Data,
-                DisplayOption: [ 
-                    "element",
-                    "archetype",
-                    //"base_stars",
-                    "natural_stars",                   
-                ],
-            }, FilterFunction : async (FilterData)=>{
-                //WTableReport.Dataset = FilterData;
-                WTableReport.DefineTable(FilterData);
-            }}
+            type: "w-filter-option", props: {
+                Config: {
+                    Dataset: Data,
+                    DisplayOption: [
+                        "element",
+                        "archetype",
+                        //"base_stars",
+                        "natural_stars",
+                    ], FilterFunction: async (FilterData) => {              
+                        WTableReport.DrawTable(FilterData);
+                    }
+                }
+            }
         }
         this.shadowRoot.append(WRender.createElement(filtOptions))
         this.shadowRoot.append(WTableReport);
@@ -101,7 +102,7 @@ export default class MonsterListView extends HTMLElement {
         props: {
             ClassList: [
                 new WCssClass(".DocumentView", {
-                   // display: "grid",
+                    // display: "grid",
                     height: "100%",
                     //padding: "20px",
                     //"grid-template-columns": "100%",
@@ -116,7 +117,7 @@ export default class MonsterListView extends HTMLElement {
                     display: "block",
                     width: "100%",
                     height: "100%"
-                }),new WCssClass("h2", {
+                }), new WCssClass("h2", {
                     margin: "0px",
                     color: "#999"
                 }),
@@ -191,39 +192,39 @@ class BuildsView {
         ];
         this.children.push(DetailMonster)
         if (BuildsData.length == 0) {
-            BuildsData.push({                
+            BuildsData.push({
                 "set1": "",
                 "set2": "",
                 "set3": "",
-                "Stats":"withont builds",
-                "Subs-stats":"withont builds",
+                "Stats": "withont builds",
+                "Subs-stats": "withont builds",
                 "ArtType": "withont builds",
                 "ArtElement": "withont builds",
                 "Description": "withont builds"
-              });
+            });
         }
         BuildsData.forEach(Data => {
-            Data.Set1_image =  `./Media/RuneIcons/${Data.set1}Icon.png`;
-            Data.Set2_image =  `./Media/RuneIcons/${Data.set2}Icon.png`;
-            Data.Set3_image =  `./Media/RuneIcons/${Data.set3}Icon.png`;
+            Data.Set1_image = `./Media/RuneIcons/${Data.set1}Icon.png`;
+            Data.Set2_image = `./Media/RuneIcons/${Data.set2}Icon.png`;
+            Data.Set3_image = `./Media/RuneIcons/${Data.set3}Icon.png`;
         });
         const TableConfigG = {
             Datasets: BuildsData,
             //ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             //Colors: ["#ff6699", "#ffbb99", "#adebad"],
-             DisplayData: [
-                 "Set1_image",
-                 "Set2_image",
-                 "Set3_image",
-                 "archetype", 
-                 "Description", 
-                 "Stats",
-                 "Subs-stats",
-                 "ArtType",
-                 "ArtElement"
+            DisplayData: [
+                "Set1_image",
+                "Set2_image",
+                "Set3_image",
+                "archetype",
+                "Description",
+                "Stats",
+                "Subs-stats",
+                "ArtType",
+                "ArtElement"
             ],
             Options: {
-                Search: true,                
+                Search: true,
             }
         };
         const WTableBuilds = WRender.createElement({
