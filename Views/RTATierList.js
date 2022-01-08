@@ -213,6 +213,7 @@ class TierSection {
                                         "SeasonScore"
                                     ],
                                     //ShadowRoot: false,
+                                    DarkMode: true,
                                     title: "Tier Data",
                                     StyleForm: "columnX2"
                                 }
@@ -258,6 +259,7 @@ class TierSection {
                     "min-height": "50px",
                     //border: "1px #444 solid",
                     width: "100%",
+                    cursor: "pointer",
                     padding: "5px"
                 }), new WCssClass(".MobContainer div", {
                     position: "relative",

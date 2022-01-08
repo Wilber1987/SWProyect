@@ -36,8 +36,9 @@ export default class MonsterListView extends HTMLElement {
                     props: {
                         ObjectModal: BuildView,
                         ShadowRoot: false,
+                        DarkMode: true,
                         title: "Builds",
-                        StyleForm: "columnX3"
+                        StyleForm: "columnX2"
                     }
                 });
                 this.shadowRoot.append(WRender.createElement(Modal))
@@ -168,7 +169,7 @@ class BuildsView {
                         //height: "230px",
                         padding: "10px",
                         width: "calc(100% - 30px)",
-                        border: "solid 1px #cbcbcb",
+                        border: "solid 1px rgba(0,0,0,0.2)",
                         padding: "10px",
                         display: "grid",
                         margin: "auto",
@@ -209,7 +210,7 @@ class BuildsView {
             Data.Set3_image = `./Media/RuneIcons/${Data.set3}Icon.png`;
         });
         const TableConfigG = {
-            Datasets: BuildsData,
+            Dataset: BuildsData,
             //ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
             //Colors: ["#ff6699", "#ffbb99", "#adebad"],
             DisplayData: [

@@ -207,3 +207,14 @@ function RTAData($request, $pMysqli)
     echo json_encode($RTAPicksData);
     return;
 }
+$TEST = "SELECT * FROM `monpickdata`   where temp = 'Season20-P1' and rank <= 12000  GROUP BY id_battle;
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and user = 'NON-TOXIC:' GROUP BY id_battle ORDER BY id_battle;
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and user like '%SeyferXx' GROUP BY id_battle ORDER BY id_battle;
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 GROUP BY id_battle ORDER BY id_battle;
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and id_combat is not null GROUP BY id_battle ORDER BY id_battle;
+
+SELECT * FROM `monpickdata` where temp = 'Season20-P2' and rank <= 12000  GROUP BY id_battle
+
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and user like '%SeyferXx' GROUP BY id_combat ORDER BY id_battle;
+SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and id_combat like '%16153672%' and date like '%2022-01-08%' and id_combat is not null  GROUP BY id_battle ORDER BY id_combat;
+";

@@ -19,7 +19,7 @@ const StyleScrolls = {
             }), new WCssClass("*::-webkit-scrollbar-track ", {
                 "background": " #e1e1e1",
                 "border-radius": " 4px",
-            }),  new WCssClass("*::-webkit-scrollbar-track:active ,*::-webkit-scrollbar-track:hover", {
+            }), new WCssClass("*::-webkit-scrollbar-track:active ,*::-webkit-scrollbar-track:hover", {
                 "background": " #d4d4d4",
             })
         ]
@@ -100,6 +100,7 @@ const StylesControlsV1 = {
                 "font-size": "15px",
                 "border-radius": "0.2cm",
                 "box-sizing": "border-box",
+                "border-radius": 10
             }), new WCssClass(`input:active, input:focus, select:active, select:focus`, {
                 "border-bottom": "2px solid #0099cc",
                 outline: "none",
@@ -109,4 +110,4 @@ const StylesControlsV1 = {
 }
 //#endregion  #################################################################################################
 
-export { StyleScrolls , StylesControlsV1}
+export { StyleScrolls, StylesControlsV1 }

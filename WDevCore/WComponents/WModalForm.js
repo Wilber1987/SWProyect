@@ -111,6 +111,7 @@ class WModalForm extends HTMLElement {
         return flag;
     }
     DrawComponent = async () => {
+        this.DarkMode = this.DarkMode ?? false;
         if (this.id == undefined || this.id == "") {
             this.id = "TempModal";
         }
@@ -577,7 +578,7 @@ class WModalForm extends HTMLElement {
                         "overflow": "hidden",
                         "margin": "auto",
                         "margin-top": "30px",
-                        "background-color": "#fff",
+                        "background-color": this.DarkMode ? "#444444":"#fff",
                         "width": this.WidthContainer,
                         "max-height": "calc(100vh - 40px)",
                         "overflow-y": "auto",
@@ -651,15 +652,13 @@ class WModalForm extends HTMLElement {
                     }),
                     //encabezado
                     new WCssClass(` .ModalHeader`, {
-                        "text-align": "center",
-                        "color": "var(--main-color)",
+                        "color": this.DarkMode ? "#fff":"#444",
                         "font-weight": "bold",
                         "font-size": "20px",
                         "display": "flex",
                         "justify-content": "space-between",
                         "align-items": "center",
                         padding: "10px 30px",
-                        color: "#7b7b7b",
                         "margin-top": "10px"
                     }),new WCssClass(` .ModalElement`, {
                        "background-color": "#4da6ff",
@@ -678,7 +677,7 @@ class WModalForm extends HTMLElement {
                         //"transform": "translateY(-5px)",
                         border: "none",
                         //float: "right",
-                        "background-color": "#fff"
+                        "background-color": "rgba(0,0,0,0.2)"
                     }), new WCssClass(` .HeaderIcon`, {
                         "height": "50px",
                         "width": "50px",

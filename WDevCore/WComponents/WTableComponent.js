@@ -84,6 +84,7 @@ class WTableComponent extends HTMLElement {
         this.RunTable();
     }
     RunTable() {
+        this.DarkMode = this.DarkMode ?? false;
         this.GroupsData = [];
         this.ProcessData = [];
         this.EvalArray = WArrayF.ArrayUnique(this.TableConfig.Dataset, this.AttNameEval);
@@ -776,7 +777,10 @@ class WTableComponent extends HTMLElement {
                         "border-collapse": "collapse",
                         "font-size": "12px",
                         "box-shadow": "0 0 2px 0 rgba(0,0,0,0.5)",
-                        position: "relative"
+                        border: "1px rgba(10, 10, 10, 0.5) solid",
+                        position: "relative",
+                        //overflow: "hidden",
+                        //"border-radius": 10
                     }), new WCssClass(`.WTable th`, {
                         "text-align": "left",
                         border: "1px rgba(10, 10, 10, 0.5) solid",
@@ -789,7 +793,7 @@ class WTableComponent extends HTMLElement {
                         "text-align": "center",
                         "width": "120px",
                     }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
-                        "background-color": "rgba(0,0,0,0.4)"
+                        "background-color": "rgba(0,0,0,0.2)"
                     }), new WCssClass(`.icon`, {
                         height: "16px", width: "16px", filter: "invert(1)",
                     }), new WCssClass(`.orderBtn`, {
@@ -811,10 +815,11 @@ class WTableComponent extends HTMLElement {
                         padding: "10px 0px",
                         "justify-content": "space-between"
                     }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
-                        padding: "5px 10px",
-                        "border": "2px solid #e1d4d4",
+                        padding: 10,
+                        "border": "2px solid rgba(0,0,0,0.6)",
                         width: 300,
                         "font-size": "15px",
+                        "border-radius": 10
                     }), new WCssClass(`input:active, input:focus`, {
                         "border-bottom": "2px solid #0099cc",
                         outline: "none",
@@ -855,7 +860,7 @@ class WTableComponent extends HTMLElement {
                             width: "auto",
                             padding: "10px"
                         }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
-                            "background-color": "rgba(0,0,0,0.4)"
+                            "background-color": "rgba(0,0,0,0.2)"
                         }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
                             padding: "5px 10px",
                             width: "calc(100% - 20px)",
