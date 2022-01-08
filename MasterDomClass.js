@@ -53,12 +53,14 @@ class MasterDomClass extends ComponentsManager {
                     display: "flex",
                     padding: 10,
                     "background-color": "#121518",
-                    "align-items": "center", "justify-content": "center"
+                    "align-items": "center", "justify-content": "center",
+                    "border-bottom": "solid 5px #4da6ff"
                 }), new WCssClass(".AppLogo img", {
                     display: "block",
                     height: "100%"
                 }), new WCssClass(".AppHeader", {
                     "background-color": "#121518",
+                    "border-bottom": "solid 5px #4da6ff"
                 }), new WCssClass(".AppAside", {
                     "background-color": "#121518",
                 }), new WCssClass(".AppMain", {
@@ -89,6 +91,7 @@ class MasterDomClass extends ComponentsManager {
                         "grid-row": "1/2",
                         "border-right": "none",
                         "align-items": "center",
+                        "border-bottom": "solid 5px #4da6ff",
                         display: "flex"
                     }), new WCssClass(".AppHeader", {
                         display: "none"

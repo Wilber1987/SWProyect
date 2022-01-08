@@ -201,15 +201,15 @@ class TierSection {
                                     ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
                                     DisplayData: [
                                         "image_filename",
-                                        "name",
+                                        //"name",
                                         "element",
                                         "Pick_Rate",
                                         "Win_Rate",
                                         "Banned_Rate",
                                         "Leader",
                                         "FirstPick",
-                                        "FirstPickInTeam",
-                                        "LastPick",
+                                        //"FirstPickInTeam",
+                                        //"LastPick",
                                         "SeasonScore"
                                     ],
                                     //ShadowRoot: false,

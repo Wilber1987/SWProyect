@@ -107,7 +107,7 @@ function RTAData($request, $pMysqli)
             $SeasonScore = 0;
             $Win_RateScore = 0;
             $Banned_RateScore = 0;
-            $FirstPickScore = ($FirstPickInTeam / $Pick_Rate * 100) * 0.05;
+            $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.05;
             
             if ($Mon["Win_Rate"] >= 45 &&
                 ($Mon["Pick_Rate"] >= 40 )) {

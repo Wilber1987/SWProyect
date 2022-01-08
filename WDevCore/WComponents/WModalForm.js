@@ -296,12 +296,7 @@ class WModalForm extends HTMLElement {
                         }, children: [{
                             type: "label",
                             props: {
-                                innerText: prop + ": "
-                            }
-                        }, {
-                            type: "label",
-                            props: {
-                                innerHTML: value
+                                innerText: prop + ": "+value
                             }
                         }]
                     });
@@ -666,8 +661,11 @@ class WModalForm extends HTMLElement {
                         padding: "10px 30px",
                         color: "#7b7b7b",
                         "margin-top": "10px"
-                    }),
-                    new WCssClass(` .BtnClose`, {
+                    }),new WCssClass(` .ModalElement`, {
+                       "background-color": "#4da6ff",
+                       padding: 10,
+                       "border-radius": 5
+                    }), new WCssClass(` .BtnClose`, {
                         "font-size": "18pt",
                         "color": "#b9b2b3",
                         "cursor": "pointer",
