@@ -533,6 +533,15 @@ class WArrayF {
         }
         return Maxvalue;
     }
+    static MinValue(Data, MaxParam) {
+        var MinValue = Data[0][MaxParam];
+        for (let index = 0; index < Data.length; index++) {
+            if (parseInt(Data[index][MaxParam]) < MinValue) {
+                MinValue = Data[index][MaxParam];
+            }
+        }
+        return MinValue;
+    }
     //reparar
     static SumValue(DataArry, EvalValue) {
         var Maxvalue = 0;

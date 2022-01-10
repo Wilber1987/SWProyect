@@ -53,6 +53,7 @@ class ColumChart extends HTMLElement {
         });
         this.Totals = WArrayF.ArrayUniqueByObject(this.ChartInstance.Dataset, object, this.EvalValue);
         this.MaxVal = WArrayF.MaxValue(this.Totals, this.EvalValue);
+        this.MinVal = WArrayF.MinValue(this.Totals, this.EvalValue);
         this.EvalArray = WArrayF.ArrayUnique(this.ChartInstance.Dataset, this.AttNameEval);
         let ChartFragment = WRender.createElement({ type: 'div', props: { id: '', class: 'WChartContainer' } });
         ChartFragment.append(this.DrawSeries(this.EvalArray, this.ChartInstance.Colors));
@@ -147,7 +148,7 @@ class ColumChart extends HTMLElement {
     DrawBar(DataValue, Config, index, SerieName = "") {
         var Size = Config.ContainerSize;
         var Size = 180;
-        var BarSize = DataValue == "n/a" ? 0 : (DataValue / this.MaxVal); //% de tamaño
+        var BarSize = DataValue == "n/a" ? 0 : ((DataValue - this.MinVal) / this.MaxVal); //% de tamaño
         var labelCol = DataValue;
         var styleP = "";
         if (Config.ColumnLabelDisplay == 1) {
@@ -159,7 +160,7 @@ class ColumChart extends HTMLElement {
             labelCol = number + '%';
         }
         var Bars = WRender.CreateStringNode(`<Bars class="Bars"
-                name="${SerieName}"
+                name="${SerieName.replaceAll(" ", "_")}"
                 style="${styleP}height:${Size * BarSize}px;background:${Config.Colors[index]}">
                 <label>
                     ${labelCol}
@@ -168,7 +169,7 @@ class ColumChart extends HTMLElement {
         if (this.ChartInstance.TypeChart == "Line") {
             WRender.SetStyle(Bars, {
                 margin: "0px 10px",
-                opacity: 0
+                //opacity: 0
             });
         }
         return Bars;
@@ -176,7 +177,8 @@ class ColumChart extends HTMLElement {
     _DrawBackgroundLine(value, size = 600, ValP, label = true) {
         //console.log(value)
         var countLine = 0;
-        var val = parseFloat(value / 7);
+        var val  = parseFloat((value - this.MinVal) / 7);
+        console.log( value, this.MinVal);
         //%
         countLine = 7
         if (ValP == 1) {
@@ -186,7 +188,7 @@ class ColumChart extends HTMLElement {
         }
         var ContainerLine = document.createElement('section');
         ContainerLine.className = "BackGrounLineX";
-        var valueLabel = 0;
+        var valueLabel = this.MinVal;
 
         for (let index = 0; index < countLine; index++) {
             if (label) {
@@ -271,12 +273,13 @@ class ColumChart extends HTMLElement {
             if (!color) {
                 Colors.push(GenerateColor());
             }
-            const bars = ChartFragment.querySelectorAll(`bars[name=${element[this.AttNameEval]}]`);
+            const serie = element[this.AttNameEval].replaceAll(" ", "_");
+            const bars = ChartFragment.querySelectorAll(`bars[name=${serie}]`);
             const Path = WRender.createElementNS({
                 type: "path",
                 props: {
-                    id: "path_" + element[this.AttNameEval],
-                    name: element[this.AttNameEval],
+                    id: "path_" + serie,
+                    name: serie,
                     class: "PathLine",
                     stroke: color,
                     "fill-opacity": 0,
@@ -286,7 +289,7 @@ class ColumChart extends HTMLElement {
             });
             LineChart.append(Path);
             setTimeout(() => {
-                LineChart.querySelectorAll(`path[name=${element[this.AttNameEval]}]`).forEach(path => {
+                LineChart.querySelectorAll(`path[name=${serie}]`).forEach(path => {
                     let M00 = "";
                     let DPropiety = "";
                     let ABar = null;
@@ -559,7 +562,7 @@ const WChartStyle = (ChartInstance) => {
                     //"flex-grow": " 1",
                     "border-left": " solid 1px #d4d4d4",
                     "align-items": "center",
-                    position: "relative"
+                    position: ChartInstance.TypeChart == "Line" ? "initial" : "relative"
                 }), new WCssClass(".ContainerBars ", {
                     "display": " flex",
                     "width": " 100%",
@@ -602,7 +605,7 @@ const WChartStyle = (ChartInstance) => {
                     "height": " 180px",
                     "right": " 0px",
                 }), new WCssClass(".groupBars .BackGrounLineXNumber ", {
-                    "left": " -40px",
+                    "left": ChartInstance.TypeChart == "Line" ? 0 : -40 ,
                 }),
                 new WCssClass(".groupBars .IconsGroup ", {
                     "left": " -25px",

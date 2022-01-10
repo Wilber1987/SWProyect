@@ -3,6 +3,7 @@ import { WCssClass } from "../WDevCore/WModules/WStyledRender.js";
 import { WTableComponent } from "../WDevCore/WComponents/WTableComponent.js";
 import "../WDevCore/WComponents/WFilterControls.js";
 import { StyleScrolls, StylesControlsV1 } from "../WDevCore/StyleModules/WStyleComponents.JS";
+import { DetailsRTAPicks } from "./ViewComponents/DetailsRTAPicks.js";
 
 const EvaluacionWR = [
     { WinRate: ">= 45", PickRate: ">= 40", Value: "WinRate * 0.75" },
@@ -197,25 +198,10 @@ class TierSection {
                             const Modal = WRender.createElement({
                                 type: "w-modal-form",
                                 props: {
-                                    ObjectDetail: Data,
-                                    ImageUrlPath: "https://swarfarm.com/static/herders/images/monsters/",
-                                    DisplayData: [
-                                        "image_filename",
-                                        //"name",
-                                        "element",
-                                        "Pick_Rate",
-                                        "Win_Rate",
-                                        "Banned_Rate",
-                                        "Leader",
-                                        "FirstPick",
-                                        //"FirstPickInTeam",
-                                        //"LastPick",
-                                        "SeasonScore"
-                                    ],
-                                    //ShadowRoot: false,
+                                    ObjectModal: new DetailsRTAPicks(Data),                                    
                                     DarkMode: true,
                                     title: "Tier Data",
-                                    StyleForm: "columnX2"
+                                    StyleForm: "FullScreen"
                                 }
                             });
                             Parent.shadowRoot.append(WRender.createElement(Modal));

@@ -33,6 +33,7 @@ function Get($conect, $tableName, $condicion = "")
 function RTAData($request, $pMysqli)
 {
     //echo "function: ";
+    $SelectedSeason = "Season20";
     $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
     $Monsters = [];
     $MonPickData = [];
@@ -43,7 +44,7 @@ function RTAData($request, $pMysqli)
     //echo json_encode($Mon);
     //$q = $pMysqli->query("SELECT * FROM  monpickdataseason18");
     //$q = $pMysqli->query("SELECT * FROM  monpickdata where temp = 'Season20-P1' and rank <= 12000");
-    $q = $pMysqli->query("SELECT * FROM `monpickdata` where temp = 'Season20-P2' and rank <= 12000  GROUP BY id_battle");
+    $q = $pMysqli->query("SELECT * FROM `monpickdata` where temp = '$SelectedSeason' and rank <= 12000  GROUP BY id_battle");
     $i = 0;
     foreach ($q as $row) {
         //$i++;
@@ -51,7 +52,7 @@ function RTAData($request, $pMysqli)
     }
     //echo print_r($MonPickData);
     $RTAPicksData = [];
-    $SelectedSeason = "Season19";
+    
     //$SelectedSeason = "Season18";
     $NPartidos = count($MonPickData) / 10;
     foreach ($Monsters as $Mon) {
@@ -108,7 +109,7 @@ function RTAData($request, $pMysqli)
             $Win_RateScore = 0;
             $Banned_RateScore = 0;
             $FirstPickScore = ($FirstPick / $Pick_Rate * 100) * 0.05;
-            
+            #region WINN
             if ($Mon["Win_Rate"] >= 45 &&
                 ($Mon["Pick_Rate"] >= 40 )) {
                     //RATE 50-45 CON 220
@@ -218,4 +219,5 @@ SELECT * FROM `monpickdata` where temp = 'Season20-P2' and rank <= 12000  GROUP 
 SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 and user like '%SeyferXx' GROUP BY id_combat ORDER BY id_battle;
 SELECT * FROM `monpickdata`   where temp = 'Season20-P2' and rank <= 12000 -- and id_combat like '%16153672%' 
 and date like '%2022-01-09%' and id_combat is not null  GROUP BY id_battle ORDER BY id_combat;
+SELECT * FROM `rta_combats` GROUP BY id_combat;
 ";

@@ -25,10 +25,13 @@ class WModalForm extends HTMLElement {
             this.WidthContainer = "40%";
             this.DivColumns = "calc(100% - 20px)";
         } else if (this.StyleForm == "columnX3") {
+            this.WidthContainer = "80%";
+            this.DivColumns = "calc(30%) calc(30%) calc(30%)";
+        } else if (this.StyleForm == "FullScreen") {
             this.WidthContainer = "100%";
             this.DivColumns = "calc(30%) calc(30%) calc(30%)";
-        } else {
-            this.WidthContainer = "70%";
+        }else {
+            this.WidthContainer = "60%";
             this.DivColumns = "calc(50% - 10px) calc(50% - 10px)";
         }
         if (this.ShadowRoot) {
@@ -53,7 +56,6 @@ class WModalForm extends HTMLElement {
                     ]
                 }
             }
-
             this.HeadOptions == false;
             this.append(WRender.createElement(this.StyleNoModal()));
             this.shadowRoot.append(WRender.createElement(StyleScrolls));
@@ -84,7 +86,7 @@ class WModalForm extends HTMLElement {
                             "box-shadow": "0 0px 1px 0px #000",
                             "z-index": "200 !important",
                             "overflow-y": "auto",
-                            "padding-bottom": "50px",
+                            "padding-bottom":  this.StyleForm == "FullScreen" ? 0 : 50
                         })
                     ], MediaQuery: [{
                         condicion: "(max-width: 800px)",
@@ -577,12 +579,12 @@ class WModalForm extends HTMLElement {
                         "display": "block",
                         "overflow": "hidden",
                         "margin": "auto",
-                        "margin-top": "30px",
+                        "margin-top": this.StyleForm == "FullScreen" ? 0 : 30,
                         "background-color": this.DarkMode ? "#444444":"#fff",
                         "width": this.WidthContainer,
                         "max-height": "calc(100vh - 40px)",
                         "overflow-y": "auto",
-                        "min-height": "200px",
+                        "min-height": this.StyleForm == "FullScreen" ? "100vh" : 200,
                         "border-radius": "0.3cm",
                         "position": "relative",
                         "box-shadow": "0 0px 3px 0px #000",
