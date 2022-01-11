@@ -62,7 +62,6 @@ function RTAData($request, $pMysqli)
             //echo print_r($mon);
             return $mon["unit_master_id"] == $Mon["com2us_id"];
         });
-
         if (count($MonDataPicks) != 0) {
             //echo "count:" . print_r(count($MonDataPicks));
             $Pick_Rate = count($MonDataPicks);
@@ -199,7 +198,24 @@ function RTAData($request, $pMysqli)
             if ($Mon["SeasonScore"] > 100 ) {
                 $Mon["SeasonScore"] = 100;
             }
-            if ($NPartidos > 100) {
+            if ($Mon["Pick_Rate"] > 0.1) {
+                $id = $Mon["com2us_id"];
+                $combats = $pMysqli->query("SELECT  count( RTC.temp ) AS count, RTC.*, SUM( win ) AS win_rate 
+                    FROM
+                        ( SELECT * FROM rta_combats GROUP BY id_combat ORDER BY id_combat ) AS RTC 
+                    WHERE
+                        temp = '$SelectedSeason' 
+                        AND picks LIKE '%$id%' 
+                    GROUP BY
+                        picks
+                        order by count desc");
+                $i = 0;
+                $MonCombats = [];                
+                foreach ($combats as $row) {
+                    //$i++;
+                    $MonCombats[] = $row;
+                }
+                $Mon["combats"] = $MonCombats;
                 array_push($RTAPicksData, $Mon);
             }
             //echo print_r($Mon);

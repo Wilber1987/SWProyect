@@ -36,7 +36,7 @@ class DetailsRTAPicks extends HTMLElement {
                 display: "grid",
                 padding: "20px",
                 width: "calc(100% - 40px)",
-                gridTemplateRows: "auto 50px 350px 200px"
+                gridTemplateRows: "auto 50px 310px 200px"
             }, children: [this.GeneralContainer, this.OptionsContainer, this.Rendimiento, this.DetailContainer]
         });
         this.shadowRoot.append(this.DetailContainer);
@@ -47,12 +47,16 @@ class DetailsRTAPicks extends HTMLElement {
     }
     DrawComponent = async () => {
         let Data = [];
+        let DataSeason = [];
         for (let index = 0; index < SeasonList.length; index++) {
-            let response = await fetch("../..//DataBase/RTAPicks/DataPickRate" + SeasonList[index] + ".json");
+            let response = await fetch("../../DataBase/RTAPicks/DataPickRate" + SeasonList[index] + ".json");
             response = await response.json();
+            if (index == 0) {
+                DataSeason = response;
+            }
             Data = Data.concat(response);
         }
-        console.log(Data.filter(x => x.com2us_id == this.Data.com2us_id));
+        //console.log(Data.filter(x => x.com2us_id == this.Data.com2us_id));
         this.Rendimiento.appendChild(new ColumChart({
             Dataset: Data.filter(x => x.com2us_id == this.Data.com2us_id), 
             Colors: ["#ff6699", "#ffbb99", "#adebad"],
@@ -61,7 +65,11 @@ class DetailsRTAPicks extends HTMLElement {
             AttNameEval: "name",
             EvalValue: "SeasonScore",
             groupParams: ["Season"]
-        }))
+        }));
+        console.log(this.Rendimiento);
+        this.Data.combats.forEach(combat => {
+            console.log(combat);
+        });
     }
     Style = ()=>{
         return { type: 'w-style', props: {id: '', ClassList: [

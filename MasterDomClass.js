@@ -221,7 +221,7 @@ class MainClass {
         this.type = "main";
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
-            new RTATierList(),
+            //new RTATierList(),
             //new ForosView(),
             //new HomeClass(this.ImgData)
         ];

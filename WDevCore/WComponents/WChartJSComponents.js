@@ -148,7 +148,7 @@ class ColumChart extends HTMLElement {
     DrawBar(DataValue, Config, index, SerieName = "") {
         var Size = Config.ContainerSize;
         var Size = 180;
-        var BarSize = DataValue == "n/a" ? 0 : ((DataValue - this.MinVal) / this.MaxVal); //% de tamaño
+        var BarSize = DataValue == "n/a" ? 0 : ((DataValue - this.MinVal) / (this.MaxVal - this.MinVal)); //% de tamaño
         var labelCol = DataValue;
         var styleP = "";
         if (Config.ColumnLabelDisplay == 1) {
