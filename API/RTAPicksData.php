@@ -160,7 +160,7 @@ function RTAData($request, $pMysqli)
             }else if (($Mon["Banned_Rate"] > 30) && 
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE >30 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.15;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.20;
             }
             
             else if (($Mon["Banned_Rate"] > 25) && 
@@ -170,11 +170,11 @@ function RTAData($request, $pMysqli)
             }else if (($Mon["Banned_Rate"] > 25) && 
                 ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {
                 //RATE >25 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.20;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.25;
             }else if (($Mon["Banned_Rate"] > 25) && 
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE >25 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.10;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.15;
             }
             else if (($Mon["Banned_Rate"] > 15) && 
                 ($Mon["Pick_Rate"] >= 25 )) {
