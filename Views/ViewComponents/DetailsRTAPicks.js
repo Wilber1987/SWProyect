@@ -146,7 +146,7 @@ class DetailsRTAPicks extends HTMLElement {
                         "border-radius": "50%",
                         top: 5,
                         right: 5,
-                        "z-index": 2,
+                        "z-index": "2",
                         padding: 5,
                         "font-size": 8,
                         width: 10,
@@ -158,7 +158,7 @@ class DetailsRTAPicks extends HTMLElement {
                         "border-radius": "50%",
                         top: 5,
                         left: 5,
-                        "z-index": 2,
+                        "z-index": "2",
                         padding: 5,
                         "font-size": 8,
                         width: 10,
@@ -167,7 +167,7 @@ class DetailsRTAPicks extends HTMLElement {
                     }), new WCssClass(".isLead", {
                         display: "flex",
                     }), new WCssClass(".isBAN", {
-                        fliter: "grayscale(100%)"
+                        filter: "grayscale(1)"
                     }), new WCssClass(".CompsContainer div img", {
                         height: 100, width: 100
                     }),new WCssClass(".CompsContainer div label", {
