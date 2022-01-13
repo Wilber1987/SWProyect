@@ -41,7 +41,7 @@ class DetailsRTAPicks extends HTMLElement {
                 display: "grid",
                 //padding: "20px",
                 width: "calc(100%)",
-                gridTemplateRows: "150px 50px 310px 30px 200px",
+                gridTemplateRows: "150px 50px 310px 30px auto",
                 gridTemplateColumns: "100%",
                 //justifyItems: "center"
             }, children: [this.GeneralContainer, this.OptionsContainer, this.Rendimiento, WRender.Create({tagName: "h3", innerText: "RTA Teams"}) ,this.CompsContainer]
