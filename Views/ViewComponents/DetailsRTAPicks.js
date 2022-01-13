@@ -10,7 +10,7 @@ class DetailsRTAPicks extends HTMLElement {
         this.shadowRoot.appendChild(WRender.createElement(this.Style()));
         this.shadowRoot.appendChild(WRender.createElement(StyleScrolls));
         WRender.SetStyle(this, {
-            
+
         })
         this.GeneralContainer = WRender.Create({
             className: "GeneralContainer",
@@ -44,7 +44,7 @@ class DetailsRTAPicks extends HTMLElement {
                 gridTemplateRows: "150px 50px 310px 30px auto",
                 gridTemplateColumns: "100%",
                 //justifyItems: "center"
-            }, children: [this.GeneralContainer, this.OptionsContainer, this.Rendimiento, WRender.Create({tagName: "h3", innerText: "RTA Teams"}) ,this.CompsContainer]
+            }, children: [this.GeneralContainer, this.OptionsContainer, this.Rendimiento, WRender.Create({ tagName: "h3", innerText: "RTA Teams" }), this.CompsContainer]
         });
         this.shadowRoot.append(this.DetailContainer);
 
@@ -83,15 +83,15 @@ class DetailsRTAPicks extends HTMLElement {
                 console.log(PickInfo);
                 if (PickInfo != null) {
                     combatDiv.append(WRender.Create({
-                        className: "", children: [
-                            {
-                                tagName: "img", src: this.ImageUrlPath + PickInfo.image_filename,
-                                className:
-                                    (combat.first_pick == pick ? " isFP" : "") +
-                                    (combat.leader_pick == pick ? " isLead" : "") +
-                                    (combat.pick_banned == pick ? " isBAN" : "")
-                            }, { tagName: "label", innerText: `${PickInfo.name}` }
-                        ]
+                        className:
+                            (combat.first_pick == pick ? " isFP" : "") +
+                            (combat.leader_pick == pick ? " isLead" : "") +
+                            (combat.pick_banned == pick ? " isBAN" : ""), children: [
+                                {
+                                    tagName: "img", src: this.ImageUrlPath + PickInfo.image_filename,
+                                    //className:,
+                                }, { tagName: "label", innerText: `${PickInfo.name}` }
+                            ]
                     }))
                 }
             });
@@ -138,6 +138,7 @@ class DetailsRTAPicks extends HTMLElement {
                         overflow: "hidden",
                         "overflow-y": "auto",
                         "font-size": 10,
+                        "padding-bottom": 30
                     }), new WCssClass(".DivCombat", {
                         display: "flex",
                     }), new WCssClass(".isFP::after", {
@@ -170,9 +171,9 @@ class DetailsRTAPicks extends HTMLElement {
                         filter: "grayscale(1)"
                     }), new WCssClass(".CompsContainer div img", {
                         height: 100, width: 100
-                    }),new WCssClass(".CompsContainer div label", {
+                    }), new WCssClass(".CompsContainer div label", {
                         "font-size": 9
-                    }), 
+                    }),
                 ], MediaQuery: [{
                     condicion: '(max-width: 600px)',
                     ClassList: [new WCssClass(".CompsContainer div img", {
