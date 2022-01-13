@@ -711,7 +711,7 @@ class WModalForm extends HTMLElement {
                         }), new WCssClass("", {
                             "padding-bottom": "0px",
                         }), new WCssClass( `.ObjectModalContainer`, {
-                            "max-height": "calc(100vh - 80px)"
+                            "max-height": "calc(100% - 80px)"
                         }),
                     ]
                 },]
