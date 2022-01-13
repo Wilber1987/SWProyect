@@ -148,7 +148,7 @@ class ColumChart extends HTMLElement {
     DrawBar(DataValue, Config, index, SerieName = "") {
         var Size = Config.ContainerSize;
         var Size = 180;
-        var BarSize = DataValue == "n/a" ? 0 : ((DataValue - this.MinVal) / (this.MaxVal - this.MinVal)); //% de tamaño
+        var BarSize = DataValue == "n/a" ? 0 : ((DataValue - this.MinVal) / (this.MaxVal + 10  - this.MinVal)); //% de tamaño
         var labelCol = DataValue;
         var styleP = "";
         if (Config.ColumnLabelDisplay == 1) {
@@ -176,11 +176,11 @@ class ColumChart extends HTMLElement {
     }
     _DrawBackgroundLine(value, size = 600, ValP, label = true) {
         //console.log(value)
-        var countLine = 0;
-        var val  = parseFloat((value - this.MinVal) / 7);
+        var countLine = 8;
+        var val  = parseFloat((value + 10 - this.MinVal) / countLine);
         console.log( value, this.MinVal);
         //%
-        countLine = 7
+        //countLine = 7
         if (ValP == 1) {
             countLine = 7
             //var value = parseInt(value / 10) * 10 + 10;
