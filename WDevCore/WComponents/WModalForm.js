@@ -30,7 +30,7 @@ class WModalForm extends HTMLElement {
         } else if (this.StyleForm == "FullScreen") {
             this.WidthContainer = "100%";
             this.DivColumns = "calc(30%) calc(30%) calc(30%)";
-        }else {
+        } else {
             this.WidthContainer = "60%";
             this.DivColumns = "calc(50% - 10px) calc(50% - 10px)";
         }
@@ -87,7 +87,7 @@ class WModalForm extends HTMLElement {
                             "box-shadow": "0 0px 1px 0px #000",
                             "z-index": "200 !important",
                             "overflow-y": "auto",
-                            "padding-bottom":  this.StyleForm == "FullScreen" ? 0 : 50
+                            "padding-bottom": this.StyleForm == "FullScreen" ? 0 : 50
                         })
                     ], MediaQuery: [{
                         condicion: "(max-width: 800px)",
@@ -128,7 +128,7 @@ class WModalForm extends HTMLElement {
         };
         this.Modal.children.push(this.DrawModalHead());
         if (this.ObjectModal) { //AGREGA UN OBJETO AL MODAL ENVIDO DESDE LA CONFIGURACION
-            this.Modal.children.push( { type: "div",props: { class: "ObjectModalContainer"}, children: [this.ObjectModal]} );
+            this.Modal.children.push({ type: "div", props: { class: "ObjectModalContainer" }, children: [this.ObjectModal] });
             if (this.ObjectOptions != undefined) {
                 if (this.ObjectOptions.SaveFunction != undefined || this.UserActions != undefined) {
                     this.Modal.children.push(this.SaveOptions());
@@ -300,7 +300,7 @@ class WModalForm extends HTMLElement {
                         }, children: [{
                             type: "label",
                             props: {
-                                innerText: prop + ": "+value
+                                innerText: prop + ": " + value
                             }
                         }]
                     });
@@ -581,7 +581,7 @@ class WModalForm extends HTMLElement {
                         "overflow": "hidden",
                         "margin": "auto",
                         "margin-top": this.StyleForm == "FullScreen" ? 0 : 30,
-                        "background-color": this.DarkMode ? "#444444":"#fff",
+                        "background-color": this.DarkMode ? "#444444" : "#fff",
                         "width": this.WidthContainer,
                         "max-height": "calc(100vh - 40px)",
                         "overflow-y": "auto",
@@ -655,7 +655,7 @@ class WModalForm extends HTMLElement {
                     }),
                     //encabezado
                     new WCssClass(` .ModalHeader`, {
-                        "color": this.DarkMode ? "#fff":"#444",
+                        "color": this.DarkMode ? "#fff" : "#444",
                         "font-weight": "bold",
                         "font-size": "20px",
                         "display": "flex",
@@ -663,10 +663,10 @@ class WModalForm extends HTMLElement {
                         "align-items": "center",
                         padding: "10px 30px",
                         "margin-top": "10px"
-                    }),new WCssClass(` .ModalElement`, {
-                       "background-color": "#4da6ff",
-                       padding: 10,
-                       "border-radius": 5
+                    }), new WCssClass(` .ModalElement`, {
+                        "background-color": "#4da6ff",
+                        padding: 10,
+                        "border-radius": 5
                     }), new WCssClass(` .BtnClose`, {
                         "font-size": "18pt",
                         "color": "#b9b2b3",
@@ -686,7 +686,7 @@ class WModalForm extends HTMLElement {
                         "width": "50px",
                         "position": "relative",
                         "left": "-10px;",
-                    }), new WCssClass( `.ObjectModalContainer`, {
+                    }), new WCssClass(`.ObjectModalContainer`, {
                         overflow: "hidden",
                         "overflow-y": 'auto',
                         "max-height": "calc(100vh - 120px)",
@@ -694,25 +694,28 @@ class WModalForm extends HTMLElement {
                     }),
                 ], MediaQuery: [{
                     condicion: "(max-width: 800px)",
-                    ClassList: [
-                        new WCssClass(" divForm", {
-                            padding: "20px",
-                            "display": "grid",
-                            "grid-gap": "1rem",
-                            "grid-template-columns": "calc(100% - 20px) !important",
-                            "grid-template-rows": "auto",
-                            "justify-content": "center"
-                        }), new WCssClass(" .ContainerFormWModal", {
-                            "margin-top": "0px",
-                            "width": "100%",
-                            "max-height": "calc(100vh - 0px)",
-                            "height": "calc(100vh - 0px)",
-                            "border-radius": "0cm",
-                        }), new WCssClass("", {
-                            "padding-bottom": "0px",
-                        }), new WCssClass( `.ObjectModalContainer`, {
-                            "max-height": "calc(100% - 80px)"
-                        }),
+                    ClassList: [new WCssClass(" .ContainerFormWModal", {
+                        position:"fixed",
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        height: "100%"
+                    }), new WCssClass(" divForm", {
+                        padding: "20px",
+                        "display": "grid",
+                        "grid-gap": "1rem",
+                        "grid-template-columns": "calc(100% - 20px) !important",
+                        "grid-template-rows": "auto",
+                        "justify-content": "center"
+                    }), new WCssClass(" .ContainerFormWModal", {
+                        "margin-top": "0px",
+                        "width": "100%",
+                        "max-height": "calc(100vh - 0px)",
+                        "height": "calc(100vh - 0px)",
+                        "border-radius": "0cm",
+                    }), new WCssClass("", {
+                        "padding-bottom": "0px",
+                    }), new WCssClass(`.ObjectModalContainer`, {
+                        "max-height": "calc(100% - 80px)"
+                    }),
                     ]
                 },]
             }
