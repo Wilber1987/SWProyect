@@ -36,6 +36,7 @@ class WModalForm extends HTMLElement {
         }
         if (this.ShadowRoot) {
             this.attachShadow({ mode: "open" });
+            this.shadowRoot.append(WRender.createElement(StyleScrolls));
             this.shadowRoot.append(WRender.createElement(this.FormStyle()));
         } else {
             this.append(WRender.createElement(this.FormStyle()));
@@ -127,7 +128,7 @@ class WModalForm extends HTMLElement {
         };
         this.Modal.children.push(this.DrawModalHead());
         if (this.ObjectModal) { //AGREGA UN OBJETO AL MODAL ENVIDO DESDE LA CONFIGURACION
-            this.Modal.children.push(this.ObjectModal);
+            this.Modal.children.push( { type: "div",props: { class: "ObjectModalContainer"}, children: [this.ObjectModal]} );
             if (this.ObjectOptions != undefined) {
                 if (this.ObjectOptions.SaveFunction != undefined || this.UserActions != undefined) {
                     this.Modal.children.push(this.SaveOptions());
@@ -685,7 +686,12 @@ class WModalForm extends HTMLElement {
                         "width": "50px",
                         "position": "relative",
                         "left": "-10px;",
-                    })
+                    }), new WCssClass( `.ObjectModalContainer`, {
+                        overflow: "hidden",
+                        "overflow-y": 'auto',
+                        "max-height": "calc(100vh - 120px)",
+                        margin: 10
+                    }),
                 ], MediaQuery: [{
                     condicion: "(max-width: 800px)",
                     ClassList: [
@@ -704,6 +710,8 @@ class WModalForm extends HTMLElement {
                             "border-radius": "0cm",
                         }), new WCssClass("", {
                             "padding-bottom": "0px",
+                        }), new WCssClass( `.ObjectModalContainer`, {
+                            "max-height": "calc(100vh - 50px)"
                         }),
                     ]
                 },]

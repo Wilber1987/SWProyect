@@ -201,7 +201,7 @@ class TierSection {
                                     ObjectModal: new DetailsRTAPicks(Data),                                    
                                     DarkMode: true,
                                     title: "Tier Data",
-                                    StyleForm: "FullScreen"
+                                    //StyleForm: "FullScreen"
                                 }
                             });
                             Parent.shadowRoot.append(WRender.createElement(Modal));
