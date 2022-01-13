@@ -17,6 +17,17 @@ import { WSecurity } from "./WDevCore/WModules/WSecurity.js";
 import "./WDevCore/WComponents/WLoginTemplate.js";
 //const Auth = new WSecurity();
 const DOMManager = new ComponentsManager({ SPAManage: true });
+class MainClass {
+    constructor() {
+        this.type = "main";
+        this.props = { className: "AppMain", id: "AppMain" }
+        this.children = [
+            new RTATierList(),
+            //new ForosView(),
+            //new HomeClass(this.ImgData)
+        ];
+    }
+}
 class MasterDomClass extends ComponentsManager {
     constructor() {
         super();
@@ -214,17 +225,6 @@ class AsideClass {
                 }
             ]
         }
-    }
-}
-class MainClass {
-    constructor() {
-        this.type = "main";
-        this.props = { className: "AppMain", id: "AppMain" }
-        this.children = [
-            //new RTATierList(),
-            //new ForosView(),
-            //new HomeClass(this.ImgData)
-        ];
     }
 }
 class FooterClass {

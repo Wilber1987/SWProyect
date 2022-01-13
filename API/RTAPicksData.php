@@ -179,18 +179,18 @@ function RTAData($request, $pMysqli)
             else if (($Mon["Banned_Rate"] > 15) && 
                 ($Mon["Pick_Rate"] >= 25 )) {
                 //RATE >20 CON 20
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.20;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.25;
             }else if (($Mon["Banned_Rate"] > 15) && 
                 ($Mon["Pick_Rate"] < 25 && $Mon["Pick_Rate"] >= 10)) {
                 //RATE >20 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.15;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.20;
             }else if (($Mon["Banned_Rate"] > 15) && 
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE >20 CON 20-10
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.10;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.15;
             }
             else if ( $Mon["Pick_Rate"] >= 0.4 ) {
-                $Banned_RateScore = $Mon["Banned_Rate"] * 0.05;
+                $Banned_RateScore = $Mon["Banned_Rate"] * 0.10;
             }
              #endregion
 
@@ -208,7 +208,7 @@ function RTAData($request, $pMysqli)
                         AND picks LIKE '%$id%' 
                     GROUP BY
                         picks
-                        order by count desc");
+                        order by count desc limit 20");
                 $i = 0;
                 $MonCombats = [];                
                 foreach ($combats as $row) {
