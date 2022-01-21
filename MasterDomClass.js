@@ -23,6 +23,7 @@ class MainClass {
         this.props = { className: "AppMain", id: "AppMain" }
         this.children = [
             //new RTATierList(),
+            //new RTACompsView(),
             //new ForosView(),
             //new HomeClass(this.ImgData)
         ];

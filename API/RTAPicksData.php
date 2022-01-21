@@ -11,23 +11,17 @@ $Function = $_GET["function"];
 $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
 $Function($Data, $pMysqli);
 
-function Get($conect, $tableName, $condicion = "")
+function GetQuery($conect, $Query)
 {
     try {
         $Form = [];
-        mysqli_query($conect, "SET NAMES 'utf8'");
-        $q = $conect->query("SELECT * FROM  $tableName $condicion");
-        //echo "error: SELECT * FROM  $tableName $condicion <hr>";
-        // while ($fila = $q->fetch_object()) {
-        //     $Form[] = $fila;
-        // }
-        foreach ($q as $row) {
-        //$i++;
-            $MonPickData[] = $row;
+        $q = $conect->query($Query);
+        while ($fila = $q->fetch_object()) {
+            $Form[] = $fila;
         }
         return $Form;
     } catch (\Throwable $th) {
-        echo "error: SELECT * FROM  $tableName $condicion <hr>";
+        echo "error: $Query <hr>";
     }
 }
 function RTAData($request, $pMysqli)
@@ -221,6 +215,27 @@ function RTAData($request, $pMysqli)
             //echo print_r($Mon);
         }
     }
+    echo json_encode($RTAPicksData);
+    return;
+}
+
+function RTCombats($request, $pMysqli)
+{
+    $CM_Con = new mysqli('localhost', 'root', '', 'sw_proyect');
+    mysqli_query($CM_Con, "SET NAMES 'utf8'");
+    $SelectedSeason = "Season20";
+    $Query = "SELECT A2.*, 
+        A1.picks AS picks_2, 
+        A1.`user` as user_2, 
+        A1.win as win_2, 
+        A1.leader_pick as leader_pick_2, 
+        A1.pick_banned as pick_banned_2, 
+        A1.first_pick as first_pick_2
+        FROM rta_combats AS A1 
+        INNER JOIN rta_combats AS A2 ON A1.id_combat = A2.id_combat AND A1.picks != A2.picks 
+        WHERE A1.temp = '$SelectedSeason'
+        GROUP BY A1.id_combat";
+    $RTAPicksData = GetQuery($CM_Con, $Query);
     echo json_encode($RTAPicksData);
     return;
 }
