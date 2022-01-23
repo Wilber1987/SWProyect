@@ -27,7 +27,7 @@ export default class Guides extends HTMLElement {
             props: { id: 'MainGuides', class: 'className' },
             children: []
         }));
-        this.DataGuides = await WAjaxTools.GetRequest("../DataBase/Guides/GuideList.json");
+        this.DataGuides = await WAjaxTools.GetRequest("./DataBase/Guides/GuideList.json");
         this.GuideNav.InitialNav()
     }
     GuideNav = WRender.createElement({

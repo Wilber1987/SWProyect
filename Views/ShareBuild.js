@@ -36,7 +36,7 @@ export default class ShareBuildsView extends HTMLElement {
             Description: "Excelente para RTA"
         };
         for (let index = 0; index < 19; index++) {
-            let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
+            let response = await fetch("./DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
             response = await response.json();
             Data = Data.concat(response.results);
         }
@@ -83,7 +83,7 @@ export default class ShareBuildsView extends HTMLElement {
         });
         this.shadowRoot.append(WRender.createElement({
             type: 'img', 
-            props: { class: 'bannerImg', src: "../Media/img/wall10.jpg" }
+            props: { class: 'bannerImg', src: "./Media/img/wall10.jpg" }
         }))
         this.shadowRoot.append(WRender.createElement(Modal))
         //this.SaveBuild(ModelObject)

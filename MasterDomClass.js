@@ -218,12 +218,12 @@ class AsideClass {
                     action: (ev) => {
                         DOMManager.NavigateFunction("ForosView", new ForosView(), "AppMain");
                     }
-                }, */ {
+                },  {
                     name: "RTA ETL", url: "#",
                     action: (ev) => {
                         DOMManager.NavigateFunction("RtaETL", new MonsterETL(), "AppMain");
                     }
-                }
+                }*/
             ]
         }
     }

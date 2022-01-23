@@ -21,8 +21,6 @@ export default class MonsterRTAPicks extends HTMLElement {
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Picks Info</h2>"));
         //let GlobalData = await fetch("../DataBase/RTAPicks/GlobalData" + SeasonList[this.SelectedSeason] + ".json");
-        
-              
         const SelectSeason = {
             type: 'select', props: {
                 id: '', class: 'className', onchange: (ev) => {
@@ -39,7 +37,7 @@ export default class MonsterRTAPicks extends HTMLElement {
             SelectSeason.children.push(option);
         });   
         //this.shadowRoot.appendChild(WRender.createElement(SelectSeason));
-        let RTAPicksData = await fetch("../DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
+        let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickRate" + SeasonList[this.SelectedSeason] + ".json");
         RTAPicksData = await RTAPicksData.json();
         const GlobalData = {
             Fight_Number: RTAPicksData[0].countFilter

@@ -7,7 +7,7 @@ export default class RTACompsView extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this.className = "DocumentView";        
+        this.className = "DocumentView";
         this.SelectedSeason = 0;
     }
     connectedCallback() {
@@ -25,39 +25,99 @@ export default class RTACompsView extends HTMLElement {
             overflow: "hidden"
         });
         this.shadowRoot.append(WRender.createElement(this.Style));
-        this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Teams Info</h2>"));
-        let MonsterList = await fetch("../DataBase/MonsterList.json");
-        const RTAPicksData = await WAjaxTools.PostRequest("http://localhost/SWProyect/API/RTAPicksData.php?function=RTCombats");
-        MonsterList = await MonsterList.json();       
-        const DivCont = {
+        this.shadowRoot.append(WRender.CreateStringNode("<h2>RTA Combats</h2>"));
+        let MonsterList = await fetch("./DataBase/MonsterList.json");        
+        MonsterList = await MonsterList.json();        
+        let RTAPicksData = await fetch("./DataBase/RTAPicks/DataPickComps"+ SeasonList[this.SelectedSeason] +".json");        
+        RTAPicksData = await RTAPicksData.json();
+        //RTAPicksData = await WAjaxTools.PostRequest("http://localhost/SWProyect/API/RTAPicksData.php?function=RTCombats");
+        this.MonsterListFilt = WRender.Create({
+            style: {
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center"
+            }
+        });
+        const SelectSeason = {
+            type: 'select', props: {
+                id: '', class: 'className', onchange: (ev) => {
+                    this.SelectedSeason = ev.target.value;
+                    this.DrawComponent();
+                }
+            }, children: []
+        };
+        SeasonList.forEach((element, index) => {
+            const option = { type: 'option', props: { innerText: element, value: index } };
+            if (SeasonList[this.SelectedSeason] == element) {
+                option.props.selected = true;
+            }
+            SelectSeason.children.push(option);
+        });
+        const CompsB = new DetailCombats(RTAPicksData, MonsterList);
+        const DivCont = WRender.Create({
             class: 'DataContainer', children: [
                 {
-                    children: [{
+                    children: [WRender.createElement(SelectSeason), {
                         tagName: 'input',
                         type: 'text',
                         class: 'className',
                         placeholder: "Search by Monster Name",
-                        onchange: async () => {
-
+                        onchange: async (ev) => {
+                            if (ev.target.value.length < 3) {
+                                CompsB.Data = RTAPicksData;
+                                CompsB.DrawComponent();
+                                return;
+                            } 
+                            const val = ev.target.value.toUpperCase();
+                            const mobs = MonsterList.filter(x => x.name.toUpperCase().includes(val));
+                            this.MonsterListFilt.innerHTML = "";
+                            mobs.forEach(mob => {
+                                const NNode = WRender.CreateStringNode(`<div class="imageCont">
+                                    <img onclick="" src="https://swarfarm.com/static/herders/images/monsters/${mob.image_filename}">
+                                    <label>${mob.name}</label>
+                                </div>`);
+                                NNode.onclick = () => {
+                                    this.shadowRoot.removeChild(Modal);
+                                    const RtaP = RTAPicksData.filter(x => x.picks.includes(mob.com2us_id) || x.picks_2.includes(mob.com2us_id));
+                                    if (RtaP.length != 0) {
+                                        CompsB.Data = RtaP;
+                                    } 
+                                    CompsB.DrawComponent();
+                                }
+                                this.MonsterListFilt.append(NNode);
+                            });
+                            const Modal = WRender.createElement({
+                                type: "w-modal-form",
+                                props: {
+                                    ObjectModal: this.MonsterListFilt,
+                                    DarkMode: true,
+                                    ShadowRoot: false,
+                                    title: "Select Monster",
+                                }
+                            });
+                            this.shadowRoot.append(Modal);                            
                         }
-                    }, {tagName: "label", innerText: "Win", style: {
-                        padding: "10px",
-                        margin: "5px",
-                        width: "100px",
-                        borderRadius: "10px",
-                        background: "#4da6ff"
-                    }}, {tagName: "label", innerText: "Lose", style: {
-                        padding: "10px",
-                        margin: "5px",
-                        width: "100px",
-                        borderRadius: "10px",
-                        background: "#f50000"
-                    }}]
-                },
-                new DetailCombats(RTAPicksData, MonsterList)
+                    }, {
+                        tagName: "label", innerText: "Win", style: {
+                            padding: "10px",
+                            margin: "5px",
+                            width: "100px",
+                            borderRadius: "10px",
+                            background: "#4da6ff"
+                        }
+                    }, {
+                        tagName: "label", innerText: "Lose", style: {
+                            padding: "10px",
+                            margin: "5px",
+                            width: "100px",
+                            borderRadius: "10px",
+                            background: "#f50000"
+                        }
+                    }]
+                }, CompsB
             ]
-        }
-        this.shadowRoot.appendChild(WRender.Create(DivCont));
+        });     
+        this.shadowRoot.appendChild(DivCont);
     }
     Style = {
         type: "w-style",
@@ -77,7 +137,19 @@ export default class RTACompsView extends HTMLElement {
                 }), new WCssClass("h2", {
                     margin: "0px",
                     color: "#999"
-                }),
+                }), new WCssClass(".imageCont", {
+                    position: "relative",
+                }), new WCssClass(".imageCont label", {
+                    position: "absolute",
+                    bottom: 0, left: 0, margin: "5px",
+                    "background-color": "rgba(0,0,0,0.6)",
+                    padding: "5px",
+                    "border-radius": "0.1cm",
+                    color: "#fff",
+                    "font-size": 9
+                }), new WCssClass(".imageCont img", {
+                    cursor: "pointer"
+                })
             ], MediaQuery: [{
                 condicion: '(max-width: 600px)',
                 ClassList: [
@@ -103,26 +175,6 @@ class DetailCombats extends HTMLElement {
             display: "block",
             overflow: "auto"
         });
-        this.GeneralContainer = WRender.Create({
-            className: "GeneralContainer",
-            children: [
-                {
-                    className: "imageCont", children: [
-                        //{ tagName: "img", src: this.ImageUrlPath + Data.image_filename },
-                        //{ tagName: "label", innerText: `${Data.name}` }
-                    ]
-                }, {
-                    className: "details", children: [
-                        // { tagName: "label", innerText: `SeasonScore: ${Data.SeasonScore.toFixed(2)}` },
-                        // { tagName: "label", innerText: `PickRate: ${Data.Pick_Rate.toFixed(2)} %` },
-                        // { tagName: "label", innerText: `WinRate: ${Data.Win_Rate.toFixed(2)} %` },
-                        // { tagName: "label", innerText: `BannedRate: ${Data.Banned_Rate.toFixed(2)} %` },
-                        // { tagName: "label", innerText: `Leader: ${Data.Leader.toFixed(2)} %` },
-                        // { tagName: "label", innerText: `FirstPick: ${Data.FirstPick.toFixed(2)} %` },
-                    ]
-                }
-            ]
-        });
         this.Data = Data;
         this.MonsterList = MonsterList;
         this.CompsContainer = WRender.Create({ className: "CompsContainer" });
@@ -130,10 +182,10 @@ class DetailCombats extends HTMLElement {
             className: "DetailContainer", style: {
                 display: "grid",
                 height: "calc(100% - 40px)",
-                gridTemplateRows: "100px 50px calc(100% - 150px)",
+                gridTemplateRows: "50px calc(100% - 50px)",
                 overflow: "hidden",
                 gridTemplateColumns: "100%",
-            }, children: [this.GeneralContainer, WRender.Create({ tagName: "h3", innerText: "RTA Teams" }), this.CompsContainer]
+            }, children: [WRender.Create({ tagName: "h3", innerText: "RTA Teams" }), this.CompsContainer]
         });
         this.shadowRoot.append(this.DetailContainer);
 
@@ -142,6 +194,7 @@ class DetailCombats extends HTMLElement {
         this.DrawComponent();
     }
     DrawComponent = async () => {
+        this.CompsContainer.innerHTML = "";
         this.Data.forEach((combat, index) => {
             if (index > 50) {
                 return;
@@ -157,7 +210,7 @@ class DetailCombats extends HTMLElement {
                 const PickInfo = this.MonsterList.find(p => p.com2us_id == pick);
                 if (PickInfo != null) {
                     combatDiv1.append(WRender.Create({
-                        className:
+                        className: "imageCont" +
                             (combat.first_pick == pick ? " isFP" : "") +
                             (combat.leader_pick == pick ? " isLead" : "") +
                             (combat.pick_banned == pick ? " isBAN" : ""), children: [
@@ -171,7 +224,7 @@ class DetailCombats extends HTMLElement {
                 const PickInfo = this.MonsterList.find(p => p.com2us_id == pick);
                 if (PickInfo != null) {
                     combatDiv2.append(WRender.Create({
-                        className:
+                        className: "imageCont" +
                             (combat.first_pick_2 == pick ? " isFP" : "") +
                             (combat.leader_pick_2 == pick ? " isLead" : "") +
                             (combat.pick_banned_2 == pick ? " isBAN" : ""), children: [
@@ -181,7 +234,7 @@ class DetailCombats extends HTMLElement {
                     }));
                 }
             });
-            combatDiv.append(combatDiv1, "VS" ,combatDiv2)
+            combatDiv.append(combatDiv1, "VS", combatDiv2)
             this.CompsContainer.appendChild(combatDiv);
         });
     }
@@ -204,18 +257,18 @@ class DetailCombats extends HTMLElement {
                         display: "flex",
                         "align-items": "center",
                         "font-size": 10
-                    }), new WCssClass(".imageCont, .CompsContainer div", {
+                    }), new WCssClass(".imageCont", {
                         position: "relative",
-                    }), new WCssClass(".imageCont label, .CompsContainer div label", {
+                    }), new WCssClass(".imageCont label", {
                         position: "absolute",
                         bottom: 0, left: 0, margin: "5px",
                         "background-color": "rgba(0,0,0,0.6)",
                         padding: "5px",
                         "border-radius": "0.1cm",
                         color: "#fff",
-                        "font-size": "12px"
+                        "font-size": 9
                     }), new WCssClass(".imageCont img", {
-                        height: 150, width: 150
+                        height: 80, width: 80
                     }), new WCssClass(".CompsContainer", {
                         display: "flex",
                         "flex-direction": "column",
@@ -266,16 +319,12 @@ class DetailCombats extends HTMLElement {
                         display: "flex",
                     }), new WCssClass(".isBAN", {
                         filter: "grayscale(1)"
-                    }), new WCssClass(".CompsContainer div img", {
-                        height: 100, width: 100
-                    }), new WCssClass(".CompsContainer div label", {
-                        "font-size": 9
-                    }),
+                    })
                 ], MediaQuery: [{
                     condicion: '(max-width: 600px)',
-                    ClassList: [new WCssClass(".CompsContainer div img", {
+                    ClassList: [new WCssClass(".imageCont img", {
                         height: 60, width: 60
-                    }),new WCssClass(".DivCombat", {
+                    }), new WCssClass(".DivCombat", {
                         display: "flex",
                         "align-items": "center",
                         "justify-content": "center",

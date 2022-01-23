@@ -20,14 +20,14 @@ export default class MonsterListView extends HTMLElement {
         this.shadowRoot.append(WRender.createElement(this.Style));
         this.append(WRender.createElement(this.Style));
         this.shadowRoot.append(WRender.CreateStringNode("<h2>Monster List</h2>"));
-        let Data = await fetch("../DataBase/monsterlist.json");
+        let Data = await fetch("./DataBase/monsterlist.json");
         Data = await Data.json();
         // Data.forEach(Mon => {         
         // });
         const UserActions = [{
             name: "Builds",
             Function: async (Param) => {
-                let response = await fetch("../DataBase/Monsters/Builds.json");
+                let response = await fetch("./DataBase/Monsters/Builds.json");
                 response = await response.json();
                 const Builds = response.filter((item) => item.monsterId == Param.com2us_id);
                 const BuildView = new BuildsView(Param, Builds);
