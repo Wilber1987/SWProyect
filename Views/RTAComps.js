@@ -2,6 +2,7 @@ import { WRender, WArrayF, ComponentsManager, WAjaxTools } from '../WDevcore/WMo
 import { WCssClass } from '../WDevCore/WModules/WStyledRender.js';
 import { ColumChart } from "../WDevCore/WComponents/WChartJSComponents.js";
 import { StyleScrolls, StylesControlsV1 } from "../WDevCore/StyleModules/WStyleComponents.JS";
+import { WModalForm } from "../WDevCore/WComponents/WModalForm.js";
 
 export default class RTACompsView extends HTMLElement {
     constructor() {
@@ -71,29 +72,29 @@ export default class RTACompsView extends HTMLElement {
                             const val = ev.target.value.toUpperCase();
                             const mobs = MonsterList.filter(x => x.name.toUpperCase().includes(val));
                             this.MonsterListFilt.innerHTML = "";
+                            if (mobs.length == 0) {
+                                return;
+                            }
                             mobs.forEach(mob => {
                                 const NNode = WRender.CreateStringNode(`<div class="imageCont">
                                     <img onclick="" src="https://swarfarm.com/static/herders/images/monsters/${mob.image_filename}">
                                     <label>${mob.name}</label>
                                 </div>`);
                                 NNode.onclick = () => {
-                                    this.shadowRoot.removeChild(Modal);
+                                    Modal.close();
                                     const RtaP = RTAPicksData.filter(x => x.picks.includes(mob.com2us_id) || x.picks_2.includes(mob.com2us_id));
                                     if (RtaP.length != 0) {
                                         CompsB.Data = RtaP;
                                     } 
-                                    CompsB.DrawComponent();
+                                    CompsB.DrawComponent(mob);
                                 }
                                 this.MonsterListFilt.append(NNode);
                             });
-                            const Modal = WRender.createElement({
-                                type: "w-modal-form",
-                                props: {
-                                    ObjectModal: this.MonsterListFilt,
-                                    DarkMode: true,
-                                    ShadowRoot: false,
-                                    title: "Select Monster",
-                                }
+                            const Modal = new WModalForm({
+                                ObjectModal: this.MonsterListFilt,
+                                DarkMode: true,
+                                ShadowRoot: false,
+                                title: "Select Monster",
                             });
                             this.shadowRoot.append(Modal);                            
                         }
@@ -193,7 +194,7 @@ class DetailCombats extends HTMLElement {
     connectedCallback() {
         this.DrawComponent();
     }
-    DrawComponent = async () => {
+    DrawComponent = async (unit = {}) => {
         this.CompsContainer.innerHTML = "";
         this.Data.forEach((combat, index) => {
             if (index > 50) {
@@ -213,6 +214,7 @@ class DetailCombats extends HTMLElement {
                         className: "imageCont" +
                             (combat.first_pick == pick ? " isFP" : "") +
                             (combat.leader_pick == pick ? " isLead" : "") +
+                            (unit.com2us_id == pick ? " isSelected" : "") +
                             (combat.pick_banned == pick ? " isBAN" : ""), children: [
                                 { tagName: "img", src: this.ImageUrlPath + PickInfo.image_filename },
                                 { tagName: "label", innerText: `${PickInfo.name}` }
@@ -227,6 +229,7 @@ class DetailCombats extends HTMLElement {
                         className: "imageCont" +
                             (combat.first_pick_2 == pick ? " isFP" : "") +
                             (combat.leader_pick_2 == pick ? " isLead" : "") +
+                            (unit.com2us_id == pick ? " isSelected" : "") +
                             (combat.pick_banned_2 == pick ? " isBAN" : ""), children: [
                                 { tagName: "img", src: this.ImageUrlPath + PickInfo.image_filename },
                                 { tagName: "label", innerText: `${PickInfo.name}` }
@@ -291,6 +294,9 @@ class DetailCombats extends HTMLElement {
                         "border-bottom": "5px #f50000 solid"
                     }), new WCssClass(".teamW", {
                         "border-bottom": "5px #4da6ff solid"
+                    }), new WCssClass(".isSelected", {
+                        "box-shadow":" 0 0 10px 1px #1684ff",
+                        border: "solid 2px #94c6ff"
                     }), new WCssClass(".isFP::after", {
                         position: "absolute",
                         content: "'FP'",

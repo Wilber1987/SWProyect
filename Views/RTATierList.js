@@ -14,9 +14,9 @@ const EvaluacionWR = [
     { WinRate: ">= 40", PickRate: ">= 25", Value: "WinRate * 0.65" },
     { WinRate: ">= 40", PickRate: "< 25 AND >= 10", Value: "WinRate * 0.60" },
     { WinRate: ">= 40", PickRate: "< 10 AND >= 5", Value: "WinRate * 0.55" },
-    { WinRate: "-", PickRate: ">= 2", Value: "WinRate * 0.50" },
-    { WinRate: "-", PickRate: ">= .4", Value: "WinRate * 0.40" },
-    { WinRate: "-", PickRate: ">= .1", Value: "WinRate * 0.30" },
+    { WinRate: "-", PickRate: ">= 2", Value: "WinRate * 0.40" },
+    { WinRate: "-", PickRate: ">= 0.4", Value: "WinRate * 0.30" },
+    { WinRate: "-", PickRate: ">= 0.1", Value: "WinRate * 0.20" },
 ]
 const EvaluacionBR = [
     { BannedRate: ">= 30", PickRate: ">= 25", Value: "BannedRate * 0.35" },
@@ -24,14 +24,14 @@ const EvaluacionBR = [
     { BannedRate: ">= 30", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.20" },
     //
     { BannedRate: ">= 25", PickRate: ">= 25", Value: "BannedRate * 0.30" },
-    { BannedRate: ">= 25", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.25" },
+    { BannedRate: ">= 25", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.20" },
     { BannedRate: ">= 25", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.15" },
     //
-    { BannedRate: ">= 15", PickRate: ">= 25", Value: "BannedRate * 0.20" },
-    { BannedRate: ">= 15", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.15" },
-    { BannedRate: ">= 15", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.10" },
+    { BannedRate: ">= 15", PickRate: ">= 25", Value: "BannedRate * 0.25" },
+    { BannedRate: ">= 15", PickRate: "< 25 AND >= 10", Value: "BannedRate * 0.20" },
+    { BannedRate: ">= 15", PickRate: "< 10 AND >= 5", Value: "BannedRate * 0.15" },
     //
-    { BannedRate: "-", PickRate: ">= 1", Value: "BannedRate * 0.05" },
+    { BannedRate: "-", PickRate: ">= 1", Value: "BannedRate * 0.10" },
 ]
 const EvaluacionFR = "0.05 del FirstPickRate"
 export default class RTATierList extends HTMLElement {
@@ -92,6 +92,7 @@ export default class RTATierList extends HTMLElement {
                         type: "w-modal-form",
                         props: {
                             title: "Datos",
+                            DarkMode: true,
                             ObjectModal: [
                                 WRender.CreateStringNode(`<h3>${EvaluacionFR}</h3>`) ,
                                 new WTableComponent({
