@@ -1,4 +1,4 @@
-
+import { WSecurity } from "./WSecurity.js";
 function type(value) {
     var r;
     if (typeof value === 'object') {
@@ -49,6 +49,7 @@ class WAjaxTools {
         }
     }
     static PostRequest = async (Url, Data = {}, PostConfig = {}) => {
+
         //console.log(Data)
         try {
             let ContentType = "application/json; charset=utf-8";
@@ -74,9 +75,10 @@ class WAjaxTools {
             const ProcessRequest = await this.ProcessRequest(response, Url);
             return ProcessRequest;
         } catch (error) {
-            if (error == "TypeError: Failed to fetch") {
+            console.log(error);
+            //if (error == "TypeError: Failed to fetch" ) {
                 return this.LocalData(Url);
-            }
+            //}
         }
     }
     static GetRequest = async (Url) => {
@@ -106,19 +108,21 @@ class WAjaxTools {
                 return [];
             }
         } else {
-            response = await response.json(response);
-            console.log(response);
             try {
+                response = await response.json(response);
                 localStorage.setItem(Url, JSON.stringify(response));
+                return response;
             } catch (error) {
                 console.log(error);
             }
-            return response;
         }
     }
     static LocalData = (Url) => {
         let responseLocal = localStorage.getItem(Url);
-        return JSON.parse(responseLocal);
+        if (responseLocal != null) {
+            return JSON.parse(responseLocal);
+        }
+        return {};
     }
 }
 class WRender {
@@ -637,20 +641,20 @@ const GenerateColor = () => {
 //Date
 function pad(number) {
     if (number < 10) {
-      return '0' + number;
+        return '0' + number;
     }
     return number;
 }
-Date.prototype.toISO = function() {
+Date.prototype.toISO = function () {
     return this.getUTCFullYear() +
-      '-' + pad(this.getUTCMonth() + 1) +
-      '-' + pad(this.getUTCDate()) /* +
+        '-' + pad(this.getUTCMonth() + 1) +
+        '-' + pad(this.getUTCDate()) /* +
       'T' + pad(this.getUTCHours()) +
       ':' + pad(this.getUTCMinutes()) +
       ':' + pad(this.getUTCSeconds()) +
       '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
       'Z' */;
-  };
+};
 export { WAjaxTools, WRender, ComponentsManager, WArrayF, type, GenerateColor }
 class WNode {
     constructor(props = {}) {

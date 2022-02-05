@@ -513,7 +513,7 @@ const ArticleStyle = {
                 display: "flex",
                 "align-items": "center",
                 "font-size": 13,
-                "font-family": "system-ui",
+                "font-family": '"Poppins", sans-serif',
                 "box-shadow": "0 0px 2px 0 rgba(0,0,0,0.3)",
                 "justify-content": "space-between"
             }), new WCssClass(`.WArticles .ArticleBody`, {
@@ -521,7 +521,7 @@ const ArticleStyle = {
                 display: "flex",
                 "flex-direction": "column",
                 "font-size": 12,
-                "font-family": "system-ui",
+                "font-family": '"Poppins", sans-serif',
                 position: "relative",
                 "min-height": 150,
                 "border": "solid 1px rgba(0,0,0,0.3)",

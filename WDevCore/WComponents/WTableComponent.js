@@ -1,6 +1,6 @@
 import { WRender, WArrayF, ComponentsManager, WAjaxTools } from "../WModules/WComponentsTools.js";
 import { WCssClass } from "../WModules/WStyledRender.js";
-import "./WModalForm.js";
+import { WModalForm } from "./WModalForm.js";
 class WTableComponent extends HTMLElement {
     constructor(TableConfig = {}) {
         super();
@@ -282,13 +282,12 @@ class WTableComponent extends HTMLElement {
                     const BtnOptions = {
                         type: "button",
                         props: {
-                            class: "Btn",
+                            class: "BtnTableSR",
                             type: "button",
                             innerText: "Add+",
                             onclick: async () => {
-                                this.shadowRoot.append(WRender.createElement({
-                                    type: "w-modal-form",
-                                    props: {
+                                this.shadowRoot.append(
+                                    new WModalForm({
                                         ObjectModel: this.ModelObject,
                                         AddItemsFromApi: this.AddItemsFromApi,
                                         Dataset: this.Dataset,
@@ -305,8 +304,8 @@ class WTableComponent extends HTMLElement {
                                                 this.DrawTable();
                                             }
                                         }
-                                    }
-                                }));
+                                    })
+                                );
                             }
                         }
                     }
@@ -489,15 +488,13 @@ class WTableComponent extends HTMLElement {
                             class: "BtnTable",
                             type: "button",
                             onclick: async () => {
-                                this.shadowRoot.append(WRender.createElement({
-                                    type: "w-modal-form",
-                                    props: {
+                                this.shadowRoot.append(
+                                    new WModalForm({
                                         icon: this.TableConfig.icon,
                                         ImageUrlPath: this.TableConfig.ImageUrlPath,
                                         title: "Detalle",
                                         ObjectDetail: element,
-                                    }
-                                }));
+                                    }));
                             }
                         }
                     })
@@ -510,9 +507,8 @@ class WTableComponent extends HTMLElement {
                             class: "BtnTableS",
                             type: "button",
                             onclick: async () => {
-                                this.shadowRoot.append(WRender.createElement({
-                                    type: "w-modal-form",
-                                    props: {
+                                this.shadowRoot.append(
+                                    new WModalForm({
                                         ObjectModel: this.ModelObject,
                                         EditObject: element,
                                         icon: this.TableConfig.icon,
@@ -525,8 +521,7 @@ class WTableComponent extends HTMLElement {
                                                 this.DrawTRow(tr, element);
                                             }
                                         }
-                                    }
-                                }));
+                                    }));
                             }
                         }
                     })
@@ -539,9 +534,8 @@ class WTableComponent extends HTMLElement {
                             class: "BtnTableA",
                             type: "button",
                             onclick: async () => {
-                                this.shadowRoot.append(WRender.createElement({
-                                    type: "w-modal-form",
-                                    props: {
+                                this.shadowRoot.append(
+                                    new WModalForm({
                                         icon: this.TableConfig.icon,
                                         title: "Eliminar",
                                         id: "Alert" + this.id,
@@ -556,8 +550,7 @@ class WTableComponent extends HTMLElement {
                                                 } else { console.log("No Object") }
                                             }
                                         }
-                                    }
-                                }));
+                                    }));
                             }
                         }
                     })
@@ -777,23 +770,23 @@ class WTableComponent extends HTMLElement {
                         "border-collapse": "collapse",
                         "font-size": "12px",
                         "box-shadow": "0 0 2px 0 rgba(0,0,0,0.5)",
-                        border: "1px rgba(10, 10, 10, 0.5) solid",
+                        border: "1px rgba(10, 10, 10, 0.3) solid",
                         position: "relative",
                         //overflow: "hidden",
                         //"border-radius": 10
                     }), new WCssClass(`.WTable th`, {
                         "text-align": "left",
-                        border: "1px rgba(10, 10, 10, 0.5) solid",
+                        border: "1px rgba(10, 10, 10, 0.3) solid",
                     }), new WCssClass(`.WTable td`, {
                         padding: "0.25rem 0.8rem",
                         "text-align": "left",
-                        "border-bottom": "1px rgba(10, 10, 10, 0.5) solid",
+                        //"border-bottom": "1px rgba(10, 10, 10, 0.5) solid",
                         //border: "1px #ccc solid"
                     }), new WCssClass(`.WTable .tdAction`, {
                         "text-align": "center",
                         "width": "120px",
                     }), new WCssClass(`.WTable tbody tr:nth-child(odd)`, {
-                        "background-color": "rgba(0,0,0,0.2)"
+                        "background-color": "rgba(0,0,0,0.1)"
                     }), new WCssClass(`.icon`, {
                         height: "16px", width: "16px", filter: "invert(1)",
                     }), new WCssClass(`.orderBtn`, {
@@ -816,12 +809,12 @@ class WTableComponent extends HTMLElement {
                         "justify-content": "space-between"
                     }), new WCssClass(`input[type=text], input[type=string], input[type=number], input[type=date]`, {
                         padding: 10,
-                        "border": "2px solid rgba(0,0,0,0.6)",
+                        "border": "2px solid rgba(0,0,0,0.2)",
                         width: 300,
                         "font-size": "15px",
                         "border-radius": 10
                     }), new WCssClass(`input:active, input:focus`, {
-                        "border-bottom": "2px solid #0099cc",
+                        //"border-bottom": "2px solid #0099cc",
                         outline: "none",
                     }), new WCssClass(`input[type=button]`, {
                         cursor: "pointer",
@@ -847,10 +840,10 @@ class WTableComponent extends HTMLElement {
                             margin: "10px",
                             "border-radius": "0.3cm",
                             overflow: "hidden",
-                            "box-shadow": "0 2px 5px 2px rgba(0,0,0,0.4)"
+                            "box-shadow": "0 0 5px 2px rgba(0,0,0,0.4)"
                         }), new WCssClass(`.WTable td`, {
                             display: "flex ",
-                            //"border-bottom": "1px solid #c5c5c5",
+                            "border-bottom": "1px rgba(10, 10, 10, 0.3) solid",
                             padding: "10px"
                             //width: "100%"
                         }), new WCssClass(`.WTable .tdAction`, {
@@ -920,7 +913,7 @@ class WTableComponent extends HTMLElement {
                         "white-space": "nowrap",
                     }),
                     //BTN OPTIONS BOTONES               
-                    new WCssClass(`.Btn,.BtnTable, .BtnTableA, .BtnTableS, .BtnTableSR`, {
+                    new WCssClass(`.BtnTable, .BtnTableA, .BtnTableS, .BtnTableSR`, {
                         "font-weight": "bold",
                         "border": "none",
                         "padding": "5px",
@@ -942,6 +935,7 @@ class WTableComponent extends HTMLElement {
                     }), new WCssClass(`.BtnTableSR`, {
                         "background-color": "#4894aa",
                         width: "inherit",
+                        "min-width": 100
                     }), new WCssClass(`.Btn[type=checkbox]`, {
                         "height": "20px",
                         "min-width": "20px",
