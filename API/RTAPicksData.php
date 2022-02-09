@@ -28,6 +28,7 @@ function RTAData($request, $pMysqli)
 {
     //echo "function: ";
     $SelectedSeason = "Season20";
+    //$SelectedSeason = "S-20(P6.5)";
     $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
     $Monsters = [];
     $MonPickData = [];
@@ -118,7 +119,7 @@ function RTAData($request, $pMysqli)
             } else if ($Mon["Win_Rate"] >= 45 &&
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE 50-45 CON > 10 - 5
-                $Win_RateScore = $Mon["Win_Rate"] * 0.55;
+                $Win_RateScore = $Mon["Win_Rate"] * 0.60;
             }//ENTRE  ---------------> 50 - 45------------------------------------------------------------------->
             else if ($Mon["Win_Rate"] >= 40 &&
                 ($Mon["Pick_Rate"] >= 25 )) {
@@ -131,7 +132,7 @@ function RTAData($request, $pMysqli)
             }else if ($Mon["Win_Rate"] >= 40 &&
                 ($Mon["Pick_Rate"] < 10 && $Mon["Pick_Rate"] >= 5)) {
                 //RATE 50-45 CON > 10 - 5
-                $Win_RateScore = $Mon["Win_Rate"] * 0.50;
+                $Win_RateScore = $Mon["Win_Rate"] * 0.55;
             } //ENTRE  ---------------> 45 - 40------------------------------------------------------------------->
             else if ( $Mon["Pick_Rate"] >= 2 ){
                 $Win_RateScore = $Mon["Win_Rate"] * 0.4;
@@ -210,8 +211,8 @@ function RTAData($request, $pMysqli)
                     $MonCombats[] = $row;
                 }
                 $Mon["combats"] = $MonCombats;
-                array_push($RTAPicksData, $Mon);
             }
+            array_push($RTAPicksData, $Mon);
             //echo print_r($Mon);
         }
     }
@@ -223,7 +224,7 @@ function RTCombats($request, $pMysqli)
 {
     $CM_Con = new mysqli('localhost', 'root', '', 'sw_proyect');
     mysqli_query($CM_Con, "SET NAMES 'utf8'");
-    $SelectedSeason = "Season20";
+    $SelectedSeason = "S-20(P6.5)";
     $Query = "SELECT A2.*, 
         A1.picks AS picks_2, 
         A1.`user` as user_2, 
