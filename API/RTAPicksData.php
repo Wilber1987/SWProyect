@@ -28,7 +28,7 @@ function RTAData($request, $pMysqli)
 {
     //echo "function: ";
     $SelectedSeason = "Season20";
-    //$SelectedSeason = "S-20(P6.5)";
+    $SelectedSeason = "S-20(P6.5)";
     $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
     $Monsters = [];
     $MonPickData = [];
@@ -235,7 +235,7 @@ function RTCombats($request, $pMysqli)
         FROM rta_combats AS A1 
         INNER JOIN rta_combats AS A2 ON A1.id_combat = A2.id_combat AND A1.picks != A2.picks 
         WHERE A1.temp = '$SelectedSeason'
-        GROUP BY A1.id_combat";
+        GROUP BY A1.id_combat limit 10000";
     $RTAPicksData = GetQuery($CM_Con, $Query);
     echo json_encode($RTAPicksData);
     return;
