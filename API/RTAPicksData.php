@@ -29,6 +29,7 @@ function RTAData($request, $pMysqli)
     //echo "function: ";
     $SelectedSeason = "Season20";
     $SelectedSeason = "S-20(P6.5)";
+    $SelectedSeason = "S-21(P6.5)";
     $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
     $Monsters = [];
     $MonPickData = [];
