@@ -8,7 +8,7 @@ $JSONData = file_get_contents("php://input");
 $Data = json_decode($JSONData);
 //echo json_encode($Data);
 $Function = $_GET["function"];
-$pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
+$pMysqli = new mysqli('localhost', 'root', '', 'swproy2');
 $Function($Data, $pMysqli);
 
 function GetQuery($conect, $Query)
@@ -28,8 +28,8 @@ function RTAData($request, $pMysqli)
 {
     //echo "function: ";
     $SelectedSeason = "Season20";
-    $SelectedSeason = "S-20(P6.5)";
-    $pMysqli = new mysqli('localhost', 'root', '', 'sw_proyect');
+    $SelectedSeason = "S-21(P6.5)";
+    $pMysqli = new mysqli('localhost', 'root', '', 'swproy2');
     $Monsters = [];
     $MonPickData = [];
     $M = $pMysqli->query("SELECT * FROM  monster");
