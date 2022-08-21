@@ -305,7 +305,6 @@ class ComponentsManager {
                     //console.log(newNode);
                     this.NavigateFunction(hashD, newNode, this.MainContainer);
                 }
-
             }
         }
 

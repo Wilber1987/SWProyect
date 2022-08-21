@@ -45,7 +45,7 @@ export default class MonsterETL extends HTMLElement {
                 }
             }, {
                 type: 'input', props: {
-                    id: '', type: 'button', class: 'className', value: 'Database',
+                    id: '', type: 'button', class: 'className', value: 'Database monster',
                     onclick: async () => {
                         this.CreateDatabaseMonster();
                     }
