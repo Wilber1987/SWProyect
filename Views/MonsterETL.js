@@ -247,7 +247,7 @@ export default class MonsterETL extends HTMLElement {
     CreateDatabaseMonster = async()=>{      
         
         let Data = [];
-        for (let index = 0; index < 20; index++) {
+        for (let index = 0; index < 21; index++) {
             let response = await fetch("../DataBase/Monsters/MonsterDataBase" + (index + 1) + ".json");
             response = await response.json();
             Data = Data.concat(response.results);
